@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_shuffle"
+        android:icon="?attr/shuffle"
+        android:title="@string/download.menu_shuffle"
+        compat:showAsAction="always|withText"/>
+
+	<item
+        android:id="@+id/menu_remove_all"
+        android:icon="?attr/remove"
+        android:title="@string/download.menu_remove_all"
+        compat:showAsAction="ifRoom|withText"/>
+
+	<item
+		android:id="@+id/menu_equalizer"
+		android:title="@string/equalizer.label"
+		android:checkable="true"/>
+
+	<item
+		android:id="@+id/menu_batch_mode"
+		android:title="@string/download.batch_mode"
+		android:checkable="true"/>
+	
+	<item
+		android:id="@+id/menu_remove_played"
+		android:title="@string/download.menu_remove_played_songs"
+		android:checkable="true"/>
+</menu>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="github.nvllsvm.audinaut"
+          android:installLocation="internalOnly">
+
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+		android:targetPackage="github.nvllsvm.audinaut"
+		android:label="Tests" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+	<uses-feature android:name="android.hardware.microphone" android:required="false" />
+	<uses-feature android:name="android.hardware.wifi" android:required="false" />
+	<uses-feature android:name="android.software.leanback" android:required="false"/>
+
+    <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
+
+    <application android:label="@string/common.appname"
+    	android:backupAgent="github.nvllsvm.audinaut.util.SettingsBackupAgent"
+    	android:icon="@drawable/launch"
+    	android:theme="@style/Theme.Audinaut.Light">
+    	
+        <uses-library android:name="android.test.runner" />
+
+		<activity android:name="github.nvllsvm.audinaut.activity.SubsonicFragmentActivity"
+				  android:configChanges="orientation|keyboardHidden"
+				  android:launchMode="singleTask">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+				<category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+			</intent-filter>
+		</activity>
+
+        <activity android:name="github.nvllsvm.audinaut.activity.SettingsActivity"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="github.nvllsvm.audinaut.activity.VoiceQueryReceiverActivity"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="github.nvllsvm.audinaut.activity.QueryReceiverActivity"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+        </activity>
+
+		<activity
+			android:name="github.nvllsvm.audinaut.activity.EditPlayActionActivity"
+			android:label="@string/tasker.start_playing"
+			android:icon="@drawable/launch">
+
+			<intent-filter>
+				<action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+			</intent-filter>
+		</activity>
+
+        <service android:name=".service.DownloadService"
+                 android:label="Audinaut Playback Service"/>
+
+		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
+		<service android:name="github.nvllsvm.audinaut.service.sync.AuthenticatorService">
+			<intent-filter>
+				<action android:name="android.accounts.AccountAuthenticator"/>
+			</intent-filter>
+
+			<meta-data android:name="android.accounts.AccountAuthenticator"
+				android:resource="@xml/authenticator" />
+		</service>
+
+		<service android:name="github.nvllsvm.audinaut.service.HeadphoneListenerService"
+			android:label="Audinaut Headphone Listener"/>
+		<receiver
+			android:name="github.nvllsvm.audinaut.receiver.BootReceiver">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+
+        <receiver android:name="github.nvllsvm.audinaut.receiver.MediaButtonIntentReceiver">
+        	<intent-filter>
+				<action android:name="android.intent.action.MEDIA_BUTTON" />
+			</intent-filter>
+        </receiver>
+
+		<receiver android:name="github.nvllsvm.audinaut.receiver.AudioNoisyReceiver">
+			<intent-filter android:priority="999">
+				<action android:name="android.media.AUDIO_BECOMING_NOISY" />
+			</intent-filter>
+		</receiver>
+		
+		<receiver android:name="github.nvllsvm.audinaut.receiver.A2dpIntentReceiver">
+			<intent-filter>
+				<action android:name="android.music.playstatusrequest"/>
+			</intent-filter>
+		</receiver>
+
+        <receiver
+			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x1"
+			android:label="@string/widget.4x1">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
+        </receiver>
+		<receiver
+			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x2"
+			android:label="@string/widget.4x2">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
+        </receiver>
+		<receiver
+			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x3"
+			android:label="@string/widget.4x3">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
+        </receiver>
+		<receiver
+			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x4"
+			android:label="@string/widget.4x4">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x4"/>
+        </receiver>
+
+		<receiver
+			android:name="github.nvllsvm.audinaut.receiver.PlayActionReceiver">
+
+			<intent-filter>
+				<action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+			</intent-filter>
+		</receiver>
+
+        <provider android:name="github.nvllsvm.audinaut.provider.AudinautSearchProvider"
+                  android:authorities="github.nvllsvm.audinaut.provider.AudinautSearchProvider"/>
+
+        <meta-data android:name="android.app.default_searchable"
+                   android:value="github.nvllsvm.audinaut.activity.QueryReceiverActivity"/>
+	</application>
+
+</manifest>

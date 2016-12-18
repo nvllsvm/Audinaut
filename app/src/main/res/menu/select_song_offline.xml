@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:compat="http://schemas.android.com/apk/res-auto">
+	<item 
+		android:id="@+id/menu_play_now"
+		android:icon="?attr/actionbar_start"
+		android:title="@string/menu.play"
+		compat:showAsAction="always|withText"/>
+		
+	<item 
+		android:id="@+id/menu_shuffle"
+		android:icon="?attr/shuffle"
+		android:title="@string/menu.shuffle"
+		compat:showAsAction="ifRoom|withText"/>
+		
+	<item 
+		android:id="@+id/menu_delete"
+		android:title="@string/menu.delete_cache"/>
+
+	<item
+		android:id="@+id/menu_play_next"
+		android:title="@string/common.play_next"/>
+
+	<item
+		android:id="@+id/menu_play_last"
+		android:title="@string/menu.play_last"/>
+</menu>

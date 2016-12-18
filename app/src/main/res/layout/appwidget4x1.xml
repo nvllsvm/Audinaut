@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="250dp"
+    android:minHeight="40dp"
+    android:background="@drawable/appwidget_bg"
+    android:orientation="horizontal"
+	android:id="@+id/widget_root">
+
+    <ImageView
+        android:id="@+id/appwidget_coverart"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/appwidget_art_default" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/appwidget_top"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+			style="@style/NotificationButton">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="20dip"
+                android:minHeight="16sp"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:paddingTop="4dip"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:text="Title"
+                android:textColor="@color/appwidget_text"
+                android:textSize="16sp"
+                android:textStyle="bold"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:scrollHorizontally="true"
+				android:marqueeRepeatLimit="marquee_forever">
+
+				<requestFocus android:focusable="true"
+					android:focusableInTouchMode="true"
+					android:duplicateParentState="true" />
+			</TextView>
+
+            <TextView
+                android:id="@+id/artist"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="10dip"
+                android:minHeight="12sp"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:singleLine="true"
+                android:gravity="center_horizontal"
+                android:text="Artist"
+                android:textColor="@color/appwidget_text"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/control_previous"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                style="@style/NotificationButton"
+                android:src="@drawable/media_backward_dark" />
+
+            <ImageButton
+                android:id="@+id/control_play"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/media_start_dark"
+				style="@style/NotificationButton" />
+
+            <ImageButton
+                android:id="@+id/control_next"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/media_forward_dark"
+				style="@style/NotificationButton" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

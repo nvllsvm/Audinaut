@@ -1,0 +1,16 @@
+.classpath
+.project
+bin/*
+gen/*
+private/*
+nbandroid/*
+.idea
+subsonic-android.iml
+releases/
+proguard_logs/
+/gen/
+/out/
+.gradle/*
+/build/
+local.properties
+*Thumbs.db
