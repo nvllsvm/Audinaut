@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.content.SharedPreferences;
 import android.media.audiofx.BassBoost;
@@ -37,12 +37,12 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.audiofx.EqualizerController;
-import github.nvllsvm.audinaut.audiofx.LoudnessEnhancerController;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.audiofx.EqualizerController;
+import net.nullsum.audinaut.audiofx.LoudnessEnhancerController;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Created by Scott on 10/27/13.

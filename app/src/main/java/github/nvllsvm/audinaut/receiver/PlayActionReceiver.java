@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.receiver;
+package net.nullsum.audinaut.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,8 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.Constants;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.Constants;
 
 public class PlayActionReceiver extends BroadcastReceiver {
 	private static final String TAG = PlayActionReceiver.class.getSimpleName();

@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 
 public class DetailsAdapter extends ArrayAdapter<String> {
 	private List<String> headers;

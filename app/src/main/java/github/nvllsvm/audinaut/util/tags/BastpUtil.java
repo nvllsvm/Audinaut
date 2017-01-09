@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>. 
  */
  
-package github.nvllsvm.audinaut.util.tags;
+package net.nullsum.audinaut.util.tags;
 
 import android.support.v4.util.LruCache;
 import java.util.HashMap;

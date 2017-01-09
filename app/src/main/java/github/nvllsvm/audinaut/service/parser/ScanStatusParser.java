@@ -13,15 +13,15 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.ProgressListener;
 
 public class ScanStatusParser extends AbstractParser {
 

@@ -1,6 +1,6 @@
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
 
 /**
  * @author Sindre Mehus

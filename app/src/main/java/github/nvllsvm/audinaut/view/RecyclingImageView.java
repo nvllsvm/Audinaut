@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;

@@ -13,21 +13,21 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.adapter.GenreAdapter;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.adapter.GenreAdapter;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.List;
 

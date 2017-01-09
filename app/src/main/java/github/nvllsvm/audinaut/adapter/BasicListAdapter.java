@@ -13,15 +13,15 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.view.BasicListView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.view.BasicListView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class BasicListAdapter extends SectionAdapter<String> {
 	public static int VIEW_TYPE_LINE = 1;

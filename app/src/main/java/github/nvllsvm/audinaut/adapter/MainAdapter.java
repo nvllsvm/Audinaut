@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -23,12 +23,12 @@ import android.widget.CompoundButton;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.AlbumListCountView;
-import github.nvllsvm.audinaut.view.BasicHeaderView;
-import github.nvllsvm.audinaut.view.BasicListView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.AlbumListCountView;
+import net.nullsum.audinaut.view.BasicHeaderView;
+import net.nullsum.audinaut.view.BasicListView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class MainAdapter extends SectionAdapter<Integer> {
 	public static final int VIEW_TYPE_ALBUM_LIST = 1;

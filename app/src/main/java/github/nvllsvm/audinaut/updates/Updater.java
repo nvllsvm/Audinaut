@@ -16,14 +16,14 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.updates;
+package net.nullsum.audinaut.updates;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 
-import github.nvllsvm.audinaut.activity.SubsonicActivity;
+import net.nullsum.audinaut.activity.SubsonicActivity;
 
 /**
  * @author Sindre Mehus

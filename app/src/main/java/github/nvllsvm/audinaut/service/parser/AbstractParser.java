@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,10 +26,10 @@ import org.xmlpull.v1.XmlPullParser;
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Version;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Version;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

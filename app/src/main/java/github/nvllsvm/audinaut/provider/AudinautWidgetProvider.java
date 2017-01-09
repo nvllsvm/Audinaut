@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.provider;
+package net.nullsum.audinaut.provider;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -38,17 +38,17 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicActivity;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerQueue;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.DownloadServiceLifecycleSupport;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicActivity;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerQueue;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.DownloadServiceLifecycleSupport;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Simple widget to show currently playing album art along
@@ -273,7 +273,7 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
     /**
      * Link up various button actions using {@link PendingIntent}.
      *
-     * @param playerActive @param playerActive True if player is active in background.  Launch {@link github.nvllsvm.audinaut.activity.SubsonicFragmentActivity}.
+     * @param playerActive @param playerActive True if player is active in background.  Launch {@link net.nullsum.audinaut.activity.SubsonicFragmentActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
 		Intent intent = new Intent(context, SubsonicFragmentActivity.class);

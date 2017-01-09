@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import java.io.Reader;
 import java.util.HashMap;
@@ -28,14 +28,14 @@ import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.Indexes;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.Indexes;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.ProgressListener;
 import android.util.Log;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

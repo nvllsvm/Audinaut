@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,14 +36,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.MenuUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.BasicHeaderView;
-import github.nvllsvm.audinaut.view.UpdateView;
-import github.nvllsvm.audinaut.view.UpdateView.UpdateViewHolder;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.MenuUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.BasicHeaderView;
+import net.nullsum.audinaut.view.UpdateView;
+import net.nullsum.audinaut.view.UpdateView.UpdateViewHolder;
 
 public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewHolder<T>> {
 	private static String TAG = SectionAdapter.class.getSimpleName();

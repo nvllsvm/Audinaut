@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,23 +12,23 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.SyncUtil;
-import github.nvllsvm.audinaut.util.CacheCleaner;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.adapter.PlaylistAdapter;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SyncUtil;
+import net.nullsum.audinaut.util.CacheCleaner;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.adapter.PlaylistAdapter;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.Arrays;

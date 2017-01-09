@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,11 +27,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Util;
 
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
 	private static final String TAG = PlaylistSongView.class.getSimpleName();

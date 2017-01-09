@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -31,8 +31,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.Constants;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.Constants;
 
 /**
  * SeekBar preference to set the shake force threshold.

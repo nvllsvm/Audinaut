@@ -16,17 +16,17 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.SyncUtil;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.SyncUtil;
 
 /**
  * Used to display albums in a {@code ListView}.

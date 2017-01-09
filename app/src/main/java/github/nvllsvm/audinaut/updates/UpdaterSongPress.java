@@ -13,13 +13,13 @@
 	Copyright 2016 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.updates;
+package net.nullsum.audinaut.updates;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 public class UpdaterSongPress extends Updater {
 	public UpdaterSongPress() {

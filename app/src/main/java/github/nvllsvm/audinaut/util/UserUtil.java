@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
@@ -31,16 +31,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.User;
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.adapter.SettingsAdapter;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.adapter.SettingsAdapter;
+import net.nullsum.audinaut.view.UpdateView;
 
 public final class UserUtil {
 	private static final String TAG = UserUtil.class.getSimpleName();

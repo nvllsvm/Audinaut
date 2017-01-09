@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 /**
  * @author Sindre Mehus

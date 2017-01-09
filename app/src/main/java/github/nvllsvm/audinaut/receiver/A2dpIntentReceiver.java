@@ -1,10 +1,10 @@
-package github.nvllsvm.audinaut.receiver;
+package net.nullsum.audinaut.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import github.nvllsvm.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.DownloadService;
 
 public class A2dpIntentReceiver extends BroadcastReceiver {
 	private static final String PLAYSTATUS_RESPONSE = "com.android.music.playstatusresponse";

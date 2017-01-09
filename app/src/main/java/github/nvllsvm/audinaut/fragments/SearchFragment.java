@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,23 +19,23 @@ import android.view.View;
 import android.view.MenuItem;
 import android.net.Uri;
 import android.view.ViewGroup;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.ArtistAdapter;
-import github.nvllsvm.audinaut.adapter.EntryGridAdapter;
-import github.nvllsvm.audinaut.adapter.SearchAdapter;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.SearchCritera;
-import github.nvllsvm.audinaut.domain.SearchResult;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.BackgroundTask;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.TabBackgroundTask;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.ArtistAdapter;
+import net.nullsum.audinaut.adapter.EntryGridAdapter;
+import net.nullsum.audinaut.adapter.SearchAdapter;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.SearchCritera;
+import net.nullsum.audinaut.domain.SearchResult;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.BackgroundTask;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.TabBackgroundTask;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class SearchFragment extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<Serializable> {
 	private static final String TAG = SearchFragment.class.getSimpleName();

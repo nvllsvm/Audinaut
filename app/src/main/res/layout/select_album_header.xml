@@ -71,7 +71,7 @@
 
 		</LinearLayout>
 
-		<github.nvllsvm.audinaut.view.RecyclingImageView
+		<net.nullsum.audinaut.view.RecyclingImageView
 			android:id="@+id/select_album_art"
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"

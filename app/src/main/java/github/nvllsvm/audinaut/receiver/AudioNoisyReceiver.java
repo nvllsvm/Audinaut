@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.receiver;
+package net.nullsum.audinaut.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,10 +22,10 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.util.Log;
 
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 public class AudioNoisyReceiver extends BroadcastReceiver {
 	private static final String TAG = AudioNoisyReceiver.class.getSimpleName();

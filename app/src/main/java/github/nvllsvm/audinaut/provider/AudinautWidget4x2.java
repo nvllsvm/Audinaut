@@ -16,9 +16,9 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.provider;
+package net.nullsum.audinaut.provider;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 
 public class AudinautWidget4x2 extends AudinautWidgetProvider {
 	@Override

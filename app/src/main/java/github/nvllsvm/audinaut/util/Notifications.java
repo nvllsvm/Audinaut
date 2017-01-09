@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -33,15 +33,15 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicActivity;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.provider.AudinautWidgetProvider;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicActivity;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.provider.AudinautWidgetProvider;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.view.UpdateView;
 
 public final class Notifications {
 	private static final String TAG = Notifications.class.getSimpleName();

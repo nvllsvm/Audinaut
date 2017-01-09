@@ -17,7 +17,7 @@
 	 Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,8 +38,8 @@ import android.widget.ListView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.Constants;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.Constants;
 
 public abstract class PreferenceCompatFragment extends SubsonicFragment {
 	private static final String TAG = PreferenceCompatFragment.class.getSimpleName();

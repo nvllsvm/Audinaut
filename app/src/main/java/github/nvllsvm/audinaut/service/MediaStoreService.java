@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import java.io.File;
 
@@ -27,9 +27,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

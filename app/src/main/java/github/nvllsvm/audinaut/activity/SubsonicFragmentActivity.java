@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -52,27 +52,27 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerQueue;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.fragments.DownloadFragment;
-import github.nvllsvm.audinaut.fragments.NowPlayingFragment;
-import github.nvllsvm.audinaut.fragments.SearchFragment;
-import github.nvllsvm.audinaut.fragments.SelectArtistFragment;
-import github.nvllsvm.audinaut.fragments.SelectDirectoryFragment;
-import github.nvllsvm.audinaut.fragments.SelectPlaylistFragment;
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.updates.Updater;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerQueue;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.fragments.DownloadFragment;
+import net.nullsum.audinaut.fragments.NowPlayingFragment;
+import net.nullsum.audinaut.fragments.SearchFragment;
+import net.nullsum.audinaut.fragments.SelectArtistFragment;
+import net.nullsum.audinaut.fragments.SelectDirectoryFragment;
+import net.nullsum.audinaut.fragments.SelectPlaylistFragment;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.updates.Updater;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Created by Scott on 10/14/13.

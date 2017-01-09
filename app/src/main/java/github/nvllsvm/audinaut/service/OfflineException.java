@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 /**
  * Thrown by service methods that are not available in offline mode.

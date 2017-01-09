@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.nvllsvm.audinaut"
+          package="net.nullsum.audinaut"
           android:installLocation="internalOnly">
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-		android:targetPackage="github.nvllsvm.audinaut"
+		android:targetPackage="net.nullsum.audinaut"
 		android:label="Tests" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -33,13 +33,13 @@
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
     <application android:label="@string/common.appname"
-    	android:backupAgent="github.nvllsvm.audinaut.util.SettingsBackupAgent"
+    	android:backupAgent="net.nullsum.audinaut.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
     	android:theme="@style/Theme.Audinaut.Light">
     	
         <uses-library android:name="android.test.runner" />
 
-		<activity android:name="github.nvllsvm.audinaut.activity.SubsonicFragmentActivity"
+		<activity android:name="net.nullsum.audinaut.activity.SubsonicFragmentActivity"
 				  android:configChanges="orientation|keyboardHidden"
 				  android:launchMode="singleTask">
 			<intent-filter>
@@ -49,11 +49,11 @@
 			</intent-filter>
 		</activity>
 
-        <activity android:name="github.nvllsvm.audinaut.activity.SettingsActivity"
+        <activity android:name="net.nullsum.audinaut.activity.SettingsActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.nvllsvm.audinaut.activity.VoiceQueryReceiverActivity"
+        <activity android:name="net.nullsum.audinaut.activity.VoiceQueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="github.nvllsvm.audinaut.activity.QueryReceiverActivity"
+        <activity android:name="net.nullsum.audinaut.activity.QueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -70,7 +70,7 @@
         </activity>
 
 		<activity
-			android:name="github.nvllsvm.audinaut.activity.EditPlayActionActivity"
+			android:name="net.nullsum.audinaut.activity.EditPlayActionActivity"
 			android:label="@string/tasker.start_playing"
 			android:icon="@drawable/launch">
 
@@ -83,7 +83,7 @@
                  android:label="Audinaut Playback Service"/>
 
 		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
-		<service android:name="github.nvllsvm.audinaut.service.sync.AuthenticatorService">
+		<service android:name="net.nullsum.audinaut.service.sync.AuthenticatorService">
 			<intent-filter>
 				<action android:name="android.accounts.AccountAuthenticator"/>
 			</intent-filter>
@@ -92,36 +92,36 @@
 				android:resource="@xml/authenticator" />
 		</service>
 
-		<service android:name="github.nvllsvm.audinaut.service.HeadphoneListenerService"
+		<service android:name="net.nullsum.audinaut.service.HeadphoneListenerService"
 			android:label="Audinaut Headphone Listener"/>
 		<receiver
-			android:name="github.nvllsvm.audinaut.receiver.BootReceiver">
+			android:name="net.nullsum.audinaut.receiver.BootReceiver">
 			<intent-filter>
 				<action
 					android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
 
-        <receiver android:name="github.nvllsvm.audinaut.receiver.MediaButtonIntentReceiver">
+        <receiver android:name="net.nullsum.audinaut.receiver.MediaButtonIntentReceiver">
         	<intent-filter>
 				<action android:name="android.intent.action.MEDIA_BUTTON" />
 			</intent-filter>
         </receiver>
 
-		<receiver android:name="github.nvllsvm.audinaut.receiver.AudioNoisyReceiver">
+		<receiver android:name="net.nullsum.audinaut.receiver.AudioNoisyReceiver">
 			<intent-filter android:priority="999">
 				<action android:name="android.media.AUDIO_BECOMING_NOISY" />
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name="github.nvllsvm.audinaut.receiver.A2dpIntentReceiver">
+		<receiver android:name="net.nullsum.audinaut.receiver.A2dpIntentReceiver">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>
 			</intent-filter>
 		</receiver>
 
         <receiver
-			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x1"
+			android:name="net.nullsum.audinaut.provider.AudinautWidget4x1"
 			android:label="@string/widget.4x1">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -129,7 +129,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
         </receiver>
 		<receiver
-			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x2"
+			android:name="net.nullsum.audinaut.provider.AudinautWidget4x2"
 			android:label="@string/widget.4x2">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -137,7 +137,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
         </receiver>
 		<receiver
-			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x3"
+			android:name="net.nullsum.audinaut.provider.AudinautWidget4x3"
 			android:label="@string/widget.4x3">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -145,7 +145,7 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
         </receiver>
 		<receiver
-			android:name="github.nvllsvm.audinaut.provider.AudinautWidget4x4"
+			android:name="net.nullsum.audinaut.provider.AudinautWidget4x4"
 			android:label="@string/widget.4x4">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -154,18 +154,18 @@
         </receiver>
 
 		<receiver
-			android:name="github.nvllsvm.audinaut.receiver.PlayActionReceiver">
+			android:name="net.nullsum.audinaut.receiver.PlayActionReceiver">
 
 			<intent-filter>
 				<action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
 			</intent-filter>
 		</receiver>
 
-        <provider android:name="github.nvllsvm.audinaut.provider.AudinautSearchProvider"
-                  android:authorities="github.nvllsvm.audinaut.provider.AudinautSearchProvider"/>
+        <provider android:name="net.nullsum.audinaut.provider.AudinautSearchProvider"
+                  android:authorities="net.nullsum.audinaut.provider.AudinautSearchProvider"/>
 
         <meta-data android:name="android.app.default_searchable"
-                   android:value="github.nvllsvm.audinaut.activity.QueryReceiverActivity"/>
+                   android:value="net.nullsum.audinaut.activity.QueryReceiverActivity"/>
 	</application>
 
 </manifest>

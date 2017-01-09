@@ -16,7 +16,7 @@
 	
 	Copyright 2009 (C) Sindre Mehus
 */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
@@ -26,7 +26,7 @@ import android.os.ParcelFileDescriptor;
 import java.io.IOError;
 import java.io.IOException;
 
-import github.nvllsvm.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Constants;
 
 public class SettingsBackupAgent extends BackupAgentHelper {
 	@Override

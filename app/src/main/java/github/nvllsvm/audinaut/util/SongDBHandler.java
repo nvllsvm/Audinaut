@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,8 +25,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.DownloadFile;
 
 public class SongDBHandler extends SQLiteOpenHelper {
 	private static final String TAG = SongDBHandler.class.getSimpleName();

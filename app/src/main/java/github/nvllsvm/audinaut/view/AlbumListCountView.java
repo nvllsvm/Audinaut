@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,13 +24,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Util;
 
 public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	private final String TAG = AlbumListCountView.class.getSimpleName();

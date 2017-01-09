@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.DrawableTint;
 
 public class CardView extends FrameLayout{
 	private static final String TAG = CardView.class.getSimpleName();

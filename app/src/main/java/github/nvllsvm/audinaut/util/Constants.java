@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 /**
  * @author Sindre Mehus
@@ -161,15 +161,15 @@ public final class Constants {
 	public static final String FRAGMENT_POSITION = "fragmentPosition";
 
     // Name of the preferences file.
-    public static final String PREFERENCES_FILE_NAME = "github.nvllsvm.audinaut_preferences";
-	public static final String OFFLINE_SYNC_NAME = "github.nvllsvm.audinaut.offline";
+    public static final String PREFERENCES_FILE_NAME = "net.nullsum.audinaut_preferences";
+	public static final String OFFLINE_SYNC_NAME = "net.nullsum.audinaut.offline";
 	public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
 
 	// Account prefs
 	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
 	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
-	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.nvllsvm.audinaut.playlists.provider";
-	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "github.nvllsvm.audinaut.mostrecent.provider";
+	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "net.nullsum.audinaut.playlists.provider";
+	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "net.nullsum.audinaut.mostrecent.provider";
 
 	public static final String TASKER_EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
 

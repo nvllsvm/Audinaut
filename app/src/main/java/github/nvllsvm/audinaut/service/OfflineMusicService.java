@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import java.io.File;
 import java.io.Reader;
@@ -36,25 +36,25 @@ import android.util.Log;
 
 import org.apache.http.HttpResponse;
 
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.domain.Indexes;
-import github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
-import github.nvllsvm.audinaut.domain.PlayerQueue;
-import github.nvllsvm.audinaut.domain.RemoteStatus;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.MusicFolder;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.domain.SearchCritera;
-import github.nvllsvm.audinaut.domain.SearchResult;
-import github.nvllsvm.audinaut.domain.User;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Pair;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.SongDBHandler;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.domain.Indexes;
+import net.nullsum.audinaut.domain.MusicDirectory.Entry;
+import net.nullsum.audinaut.domain.PlayerQueue;
+import net.nullsum.audinaut.domain.RemoteStatus;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.MusicFolder;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.domain.SearchCritera;
+import net.nullsum.audinaut.domain.SearchResult;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Pair;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.SongDBHandler;
+import net.nullsum.audinaut.util.Util;
 import java.io.*;
 import java.util.Comparator;
 import java.util.SortedSet;

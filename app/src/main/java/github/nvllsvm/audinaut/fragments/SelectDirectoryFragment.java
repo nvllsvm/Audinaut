@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.annotation.TargetApi;
 import android.support.v7.app.AlertDialog;
@@ -28,44 +28,44 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.AlphabeticalAlbumAdapter;
-import github.nvllsvm.audinaut.adapter.EntryInfiniteGridAdapter;
-import github.nvllsvm.audinaut.adapter.EntryGridAdapter;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.CachedMusicService;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.DrawableTint;
-import github.nvllsvm.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.AlphabeticalAlbumAdapter;
+import net.nullsum.audinaut.adapter.EntryInfiniteGridAdapter;
+import net.nullsum.audinaut.adapter.EntryGridAdapter;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.CachedMusicService;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.util.ImageLoader;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.Pair;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.TabBackgroundTask;
-import github.nvllsvm.audinaut.util.UpdateHelper;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.GridSpacingDecoration;
-import github.nvllsvm.audinaut.view.MyLeadingMarginSpan2;
-import github.nvllsvm.audinaut.view.RecyclingImageView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.Pair;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.TabBackgroundTask;
+import net.nullsum.audinaut.util.UpdateHelper;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.GridSpacingDecoration;
+import net.nullsum.audinaut.view.MyLeadingMarginSpan2;
+import net.nullsum.audinaut.view.RecyclingImageView;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
+import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
 
 public class SelectDirectoryFragment extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<Entry> {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();

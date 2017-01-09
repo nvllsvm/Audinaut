@@ -16,7 +16,7 @@
 
  Copyright 2014 (C) Scott Jackson
 */
-package github.nvllsvm.audinaut.audiofx;
+package net.nullsum.audinaut.audiofx;
 
 import android.content.Context;
 import android.media.MediaPlayer;

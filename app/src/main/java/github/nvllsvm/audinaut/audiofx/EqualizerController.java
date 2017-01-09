@@ -16,7 +16,7 @@
 
  Copyright 2011 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.audiofx;
+package net.nullsum.audinaut.audiofx;
 
 import java.io.Serializable;
 
@@ -25,7 +25,7 @@ import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.util.Log;
-import github.nvllsvm.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.FileUtil;
 
 /**
  * Backward-compatible wrapper for {@link Equalizer}, which is API Level 9.

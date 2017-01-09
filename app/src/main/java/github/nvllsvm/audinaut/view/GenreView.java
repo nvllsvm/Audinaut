@@ -16,14 +16,14 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Genre;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Genre;
 
 public class GenreView extends UpdateView<Genre> {
 	private static final String TAG = GenreView.class.getSimpleName();

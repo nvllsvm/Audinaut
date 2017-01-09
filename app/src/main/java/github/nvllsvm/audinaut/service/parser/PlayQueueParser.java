@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 
@@ -25,9 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerQueue;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerQueue;
+import net.nullsum.audinaut.util.ProgressListener;
 
 public class PlayQueueParser extends MusicDirectoryEntryParser {
 	private static final String TAG = PlayQueueParser.class.getSimpleName();

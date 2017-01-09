@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -45,13 +45,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.domain.Indexes;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.MusicFolder;
-import github.nvllsvm.audinaut.service.MediaStoreService;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.domain.Indexes;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.MusicFolder;
+import net.nullsum.audinaut.service.MediaStoreService;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;

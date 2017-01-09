@@ -17,7 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
-package github.nvllsvm.audinaut.provider;
+package net.nullsum.audinaut.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -35,10 +35,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.UpdateHelper;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.UpdateHelper;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

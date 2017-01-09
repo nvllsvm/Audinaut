@@ -16,12 +16,12 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;

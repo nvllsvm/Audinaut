@@ -13,15 +13,15 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
-import github.nvllsvm.audinaut.receiver.HeadphonePlugReceiver;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.receiver.HeadphonePlugReceiver;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Created by Scott on 4/6/2015.

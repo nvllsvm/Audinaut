@@ -1,15 +1,15 @@
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
-import static github.nvllsvm.audinaut.domain.PlayerState.COMPLETED;
-import static github.nvllsvm.audinaut.domain.PlayerState.IDLE;
-import static github.nvllsvm.audinaut.domain.PlayerState.PAUSED;
-import static github.nvllsvm.audinaut.domain.PlayerState.STARTED;
-import static github.nvllsvm.audinaut.domain.PlayerState.STOPPED;
+import static net.nullsum.audinaut.domain.PlayerState.COMPLETED;
+import static net.nullsum.audinaut.domain.PlayerState.IDLE;
+import static net.nullsum.audinaut.domain.PlayerState.PAUSED;
+import static net.nullsum.audinaut.domain.PlayerState.STARTED;
+import static net.nullsum.audinaut.domain.PlayerState.STOPPED;
 import java.util.List;
 
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerState;
 
 import java.util.LinkedList;
 import android.test.ActivityInstrumentationTestCase2;

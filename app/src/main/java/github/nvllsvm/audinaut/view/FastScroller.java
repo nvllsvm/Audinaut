@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,7 +34,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 
 import static android.support.v7.widget.RecyclerView.OnScrollListener;
 

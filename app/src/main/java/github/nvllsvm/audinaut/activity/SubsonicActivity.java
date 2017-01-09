@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
 import android.app.UiModeManager;
 import android.content.Context;
@@ -67,20 +67,20 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.HeadphoneListenerService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.DrawableTint;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.ThemeUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.UpdateView;
-import github.nvllsvm.audinaut.util.UserUtil;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.HeadphoneListenerService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.ThemeUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.UpdateView;
+import net.nullsum.audinaut.util.UserUtil;
 
 import static android.Manifest.*;
 
@@ -1032,7 +1032,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			PrintWriter printWriter = null;
 			try {
 
-				PackageInfo packageInfo = context.getPackageManager().getPackageInfo("github.nvllsvm.audinaut", 0);
+				PackageInfo packageInfo = context.getPackageManager().getPackageInfo("net.nullsum.audinaut", 0);
 				file = new File(Environment.getExternalStorageDirectory(), "audinaut-stacktrace.txt");
 				printWriter = new PrintWriter(file);
 				printWriter.println("Android API level: " + Build.VERSION.SDK);

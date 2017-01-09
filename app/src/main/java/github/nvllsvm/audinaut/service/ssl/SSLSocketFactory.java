@@ -25,7 +25,7 @@
  *
  */
 
-package github.nvllsvm.audinaut.service.ssl;
+package net.nullsum.audinaut.service.ssl;
 
 import android.os.Build;
 import android.util.Log;

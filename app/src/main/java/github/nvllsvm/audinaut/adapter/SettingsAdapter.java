@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,16 +24,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.User;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.view.BasicHeaderView;
-import github.nvllsvm.audinaut.view.RecyclingImageView;
-import github.nvllsvm.audinaut.view.SettingView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.view.BasicHeaderView;
+import net.nullsum.audinaut.view.RecyclingImageView;
+import net.nullsum.audinaut.view.SettingView;
+import net.nullsum.audinaut.view.UpdateView;
 
-import static github.nvllsvm.audinaut.domain.User.Setting;
+import static net.nullsum.audinaut.domain.User.Setting;
 
 public class SettingsAdapter extends SectionAdapter<Setting> {
 	private static final String TAG = SettingsAdapter.class.getSimpleName();

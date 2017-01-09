@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,13 +24,13 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.domain.MusicFolder;
-import github.nvllsvm.audinaut.domain.User;
-import github.nvllsvm.audinaut.domain.User.MusicFolderSetting;
-import github.nvllsvm.audinaut.domain.User.Setting;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.domain.MusicFolder;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.domain.User.MusicFolderSetting;
+import net.nullsum.audinaut.domain.User.Setting;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.ProgressListener;
 
 public class UserParser extends AbstractParser {
 	private static final String TAG = UserParser.class.getSimpleName();

@@ -16,11 +16,11 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.MusicDirectory;
 
 /**
  * @author Sindre Mehus

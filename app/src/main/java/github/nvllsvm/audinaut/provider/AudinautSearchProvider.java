@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.provider;
+package net.nullsum.audinaut.provider;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -31,14 +31,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.SearchCritera;
-import github.nvllsvm.audinaut.domain.SearchResult;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.SearchCritera;
+import net.nullsum.audinaut.domain.SearchResult;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Provides search suggestions based on recent searches.
@@ -48,7 +48,7 @@ import github.nvllsvm.audinaut.util.Util;
 public class AudinautSearchProvider extends ContentProvider {
 	private static final String TAG = AudinautSearchProvider.class.getSimpleName();
 
-	private static final String RESOURCE_PREFIX = "android.resource://github.nvllsvm.audinaut/";
+	private static final String RESOURCE_PREFIX = "android.resource://net.nullsum.audinaut/";
 	private static final String[] COLUMNS = {"_id",
 			SearchManager.SUGGEST_COLUMN_TEXT_1,
 			SearchManager.SUGGEST_COLUMN_TEXT_2,

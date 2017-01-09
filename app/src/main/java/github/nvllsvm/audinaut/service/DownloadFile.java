@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,12 +30,12 @@ import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.Log;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.util.CacheCleaner;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.util.CacheCleaner;
 import github.daneren2005.serverproxy.BufferFile;
 
 import org.apache.http.Header;

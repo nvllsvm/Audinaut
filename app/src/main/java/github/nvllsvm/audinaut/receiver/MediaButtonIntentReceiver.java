@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.receiver;
+package net.nullsum.audinaut.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import github.nvllsvm.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.DownloadService;
 
 /**
  * @author Sindre Mehus

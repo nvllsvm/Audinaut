@@ -17,7 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
-package github.nvllsvm.audinaut.service.sync;
+package net.nullsum.audinaut.service.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

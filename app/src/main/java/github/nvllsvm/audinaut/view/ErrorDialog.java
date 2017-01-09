@@ -16,16 +16,16 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

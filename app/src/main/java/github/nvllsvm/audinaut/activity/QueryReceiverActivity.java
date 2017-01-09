@@ -17,7 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -26,10 +26,10 @@ import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.provider.AudinautSearchProvider;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.provider.AudinautSearchProvider;
 
 /**
  * Receives search queries and forwards to the SearchFragment.

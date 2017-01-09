@@ -6,7 +6,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.playback_title">
 
-		<github.nvllsvm.audinaut.view.SeekBarPreference
+		<net.nullsum.audinaut.view.SeekBarPreference
 			android:title="@string/settings.playlist_random_size_title"
 			android:key="randomSize"
 			android:defaultValue="20"
@@ -70,7 +70,7 @@
 			android:entryValues="@array/replayGainTypeValues"
 			android:entries="@array/replayGainTypeNames"/>
 
-		<github.nvllsvm.audinaut.view.SeekBarPreference
+		<net.nullsum.audinaut.view.SeekBarPreference
 			android:key="replayGainBump2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_bump"
@@ -80,7 +80,7 @@
 			myns:stepSize="10"
 			myns:display="%+.1f dB"/>
 
-		<github.nvllsvm.audinaut.view.SeekBarPreference
+		<net.nullsum.audinaut.view.SeekBarPreference
 			android:key="replayGainUntagged2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_untagged"

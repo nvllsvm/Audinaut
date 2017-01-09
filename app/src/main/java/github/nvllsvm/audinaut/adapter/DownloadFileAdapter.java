@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.Menu;
@@ -25,12 +25,12 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;

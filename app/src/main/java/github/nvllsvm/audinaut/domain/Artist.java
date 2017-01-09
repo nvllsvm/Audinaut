@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import android.util.Log;
 

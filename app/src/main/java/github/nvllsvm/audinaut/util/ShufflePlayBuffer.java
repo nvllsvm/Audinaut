@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,11 +28,11 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.FileUtil;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.FileUtil;
 
 /**
  * @author Sindre Mehus

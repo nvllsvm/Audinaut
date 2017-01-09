@@ -13,7 +13,7 @@
 	Copyright 2016 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 public final class EnvironmentVariables {
 	public static final String PASTEBIN_DEV_KEY = "";

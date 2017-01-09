@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 public class Genre implements Serializable {
 	private String name;

@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.widget.ImageView;

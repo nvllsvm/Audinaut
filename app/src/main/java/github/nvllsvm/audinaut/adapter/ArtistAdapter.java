@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
@@ -26,16 +26,16 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
-import github.nvllsvm.audinaut.domain.MusicFolder;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.ArtistView;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.MusicDirectory.Entry;
+import net.nullsum.audinaut.domain.MusicFolder;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.ArtistView;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_SONG = 3;

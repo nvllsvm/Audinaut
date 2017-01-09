@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -8,12 +8,12 @@ import org.eclipse.jetty.util.ArrayQueue;
 
 import java.util.Queue;
 
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.fragments.SubsonicFragment;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.fragments.SubsonicFragment;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallback {
 	private static final String TAG = DownloadFileItemHelperCallback.class.getSimpleName();

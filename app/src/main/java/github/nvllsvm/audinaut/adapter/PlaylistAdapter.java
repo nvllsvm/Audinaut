@@ -12,18 +12,18 @@
 	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
 	Copyright 2015 (C) Scott Jackson
 */
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 
 import java.util.List;
 
 import android.view.ViewGroup;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.PlaylistView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.PlaylistView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_PLAYLIST = 1;

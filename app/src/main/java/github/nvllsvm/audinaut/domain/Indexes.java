@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * @author Sindre Mehus

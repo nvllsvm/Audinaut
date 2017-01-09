@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -54,38 +54,38 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicActivity;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.Artist;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MediaStoreService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.MenuUtil;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.SongDBHandler;
-import github.nvllsvm.audinaut.util.UpdateHelper;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.AlbumView;
-import github.nvllsvm.audinaut.view.ArtistEntryView;
-import github.nvllsvm.audinaut.view.ArtistView;
-import github.nvllsvm.audinaut.view.GridSpacingDecoration;
-import github.nvllsvm.audinaut.view.PlaylistSongView;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicActivity;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.Artist;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MediaStoreService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.MenuUtil;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.SongDBHandler;
+import net.nullsum.audinaut.util.UpdateHelper;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.AlbumView;
+import net.nullsum.audinaut.view.ArtistEntryView;
+import net.nullsum.audinaut.view.ArtistView;
+import net.nullsum.audinaut.view.GridSpacingDecoration;
+import net.nullsum.audinaut.view.PlaylistSongView;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -99,7 +99,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
+import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
 
 public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();

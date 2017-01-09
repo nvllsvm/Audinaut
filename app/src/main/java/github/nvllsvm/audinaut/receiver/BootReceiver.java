@@ -13,14 +13,14 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.receiver;
+package net.nullsum.audinaut.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import github.nvllsvm.audinaut.service.HeadphoneListenerService;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.service.HeadphoneListenerService;
+import net.nullsum.audinaut.util.Util;
 
 public class BootReceiver  extends BroadcastReceiver {
 	@Override

@@ -16,7 +16,7 @@
  */
 
 
-package github.nvllsvm.audinaut.util.tags;
+package net.nullsum.audinaut.util.tags;
 
 import java.io.RandomAccessFile;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import java.util.ArrayList;
 import java.util.List;

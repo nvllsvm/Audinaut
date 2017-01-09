@@ -13,7 +13,7 @@
 	Copyright 2016 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,9 +21,9 @@ import android.content.res.Configuration;
 
 import java.util.Locale;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SettingsActivity;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SettingsActivity;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
 
 public final class ThemeUtil {
 	public static final String THEME_DARK = "dark";

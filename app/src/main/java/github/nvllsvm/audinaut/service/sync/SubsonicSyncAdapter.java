@@ -17,7 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
-package github.nvllsvm.audinaut.service.sync;
+package net.nullsum.audinaut.service.sync;
 
 import android.accounts.Account;
 import android.annotation.TargetApi;
@@ -36,12 +36,12 @@ import android.util.Log;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.CachedMusicService;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.RESTMusicService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.CachedMusicService;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.RESTMusicService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.Util;
 
 /**
  * Created by Scott on 9/6/13.

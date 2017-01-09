@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,8 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
 
 /**
  * Created by Scott on 11/24/13.

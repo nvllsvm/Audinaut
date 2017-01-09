@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,22 +27,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
-import github.nvllsvm.audinaut.domain.SearchResult;
-import github.nvllsvm.audinaut.util.DrawableTint;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.AlbumView;
-import github.nvllsvm.audinaut.view.ArtistView;
-import github.nvllsvm.audinaut.view.BasicHeaderView;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory.Entry;
+import net.nullsum.audinaut.domain.SearchResult;
+import net.nullsum.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.AlbumView;
+import net.nullsum.audinaut.view.ArtistView;
+import net.nullsum.audinaut.view.BasicHeaderView;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
-import static github.nvllsvm.audinaut.adapter.ArtistAdapter.VIEW_TYPE_ARTIST;
-import static github.nvllsvm.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_CELL;
-import static github.nvllsvm.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_LINE;
-import static github.nvllsvm.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_SONG;
+import static net.nullsum.audinaut.adapter.ArtistAdapter.VIEW_TYPE_ARTIST;
+import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_CELL;
+import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_LINE;
+import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_SONG;
 
 public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
 	private ImageLoader imageLoader;

@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,19 +14,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.MainAdapter;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.EnvironmentVariables;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.UserUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.MainAdapter;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.EnvironmentVariables;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.UserUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

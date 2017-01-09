@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 
 public class BasicListView extends UpdateView<String> {
 	private TextView titleView;

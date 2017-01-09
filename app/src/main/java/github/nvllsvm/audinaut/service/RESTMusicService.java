@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -70,34 +70,34 @@ import android.net.NetworkInfo;
 import android.os.Looper;
 import android.util.Log;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.*;
-import github.nvllsvm.audinaut.fragments.MainFragment;
-import github.nvllsvm.audinaut.service.parser.EntryListParser;
-import github.nvllsvm.audinaut.service.parser.ErrorParser;
-import github.nvllsvm.audinaut.service.parser.GenreParser;
-import github.nvllsvm.audinaut.service.parser.IndexesParser;
-import github.nvllsvm.audinaut.service.parser.MusicDirectoryParser;
-import github.nvllsvm.audinaut.service.parser.MusicFoldersParser;
-import github.nvllsvm.audinaut.service.parser.PlayQueueParser;
-import github.nvllsvm.audinaut.service.parser.PlaylistParser;
-import github.nvllsvm.audinaut.service.parser.PlaylistsParser;
-import github.nvllsvm.audinaut.service.parser.RandomSongsParser;
-import github.nvllsvm.audinaut.service.parser.ScanStatusParser;
-import github.nvllsvm.audinaut.service.parser.SearchResult2Parser;
-import github.nvllsvm.audinaut.service.parser.SearchResultParser;
-import github.nvllsvm.audinaut.service.parser.TopSongsParser;
-import github.nvllsvm.audinaut.service.parser.UserParser;
-import github.nvllsvm.audinaut.service.ssl.SSLSocketFactory;
-import github.nvllsvm.audinaut.service.ssl.TrustSelfSignedStrategy;
-import github.nvllsvm.audinaut.util.BackgroundTask;
-import github.nvllsvm.audinaut.util.Pair;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.SongDBHandler;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.*;
+import net.nullsum.audinaut.fragments.MainFragment;
+import net.nullsum.audinaut.service.parser.EntryListParser;
+import net.nullsum.audinaut.service.parser.ErrorParser;
+import net.nullsum.audinaut.service.parser.GenreParser;
+import net.nullsum.audinaut.service.parser.IndexesParser;
+import net.nullsum.audinaut.service.parser.MusicDirectoryParser;
+import net.nullsum.audinaut.service.parser.MusicFoldersParser;
+import net.nullsum.audinaut.service.parser.PlayQueueParser;
+import net.nullsum.audinaut.service.parser.PlaylistParser;
+import net.nullsum.audinaut.service.parser.PlaylistsParser;
+import net.nullsum.audinaut.service.parser.RandomSongsParser;
+import net.nullsum.audinaut.service.parser.ScanStatusParser;
+import net.nullsum.audinaut.service.parser.SearchResult2Parser;
+import net.nullsum.audinaut.service.parser.SearchResultParser;
+import net.nullsum.audinaut.service.parser.TopSongsParser;
+import net.nullsum.audinaut.service.parser.UserParser;
+import net.nullsum.audinaut.service.ssl.SSLSocketFactory;
+import net.nullsum.audinaut.service.ssl.TrustSelfSignedStrategy;
+import net.nullsum.audinaut.util.BackgroundTask;
+import net.nullsum.audinaut.util.Pair;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SongDBHandler;
+import net.nullsum.audinaut.util.Util;
 import java.io.*;
 import java.util.zip.GZIPInputStream;
 

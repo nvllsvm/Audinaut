@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,13 +22,13 @@ import android.view.Menu;
 
 import java.io.File;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.view.AlbumView;
-import github.nvllsvm.audinaut.view.ArtistEntryView;
-import github.nvllsvm.audinaut.view.ArtistView;
-import github.nvllsvm.audinaut.view.SongView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.view.AlbumView;
+import net.nullsum.audinaut.view.ArtistEntryView;
+import net.nullsum.audinaut.view.ArtistView;
+import net.nullsum.audinaut.view.SongView;
+import net.nullsum.audinaut.view.UpdateView;
 
 public final class MenuUtil {
 	private final static String TAG = MenuUtil.class.getSimpleName();

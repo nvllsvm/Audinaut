@@ -16,21 +16,21 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.util.DrawableTint;
-import github.nvllsvm.audinaut.util.SongDBHandler;
-import github.nvllsvm.audinaut.util.ThemeUtil;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.util.SongDBHandler;
+import net.nullsum.audinaut.util.ThemeUtil;
+import net.nullsum.audinaut.util.Util;
 
 import java.io.File;
 

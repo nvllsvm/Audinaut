@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

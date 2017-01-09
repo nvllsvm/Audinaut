@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.accounts.Account;
 import android.content.ContentResolver;
@@ -46,18 +46,18 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.HeadphoneListenerService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.SyncUtil;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.view.CacheLocationPreference;
-import github.nvllsvm.audinaut.view.ErrorDialog;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.HeadphoneListenerService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.SyncUtil;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.view.CacheLocationPreference;
+import net.nullsum.audinaut.view.ErrorDialog;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();

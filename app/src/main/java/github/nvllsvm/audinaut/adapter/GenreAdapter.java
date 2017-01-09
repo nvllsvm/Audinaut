@@ -13,14 +13,14 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.GenreView;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.GenreView;
+import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.List;
 

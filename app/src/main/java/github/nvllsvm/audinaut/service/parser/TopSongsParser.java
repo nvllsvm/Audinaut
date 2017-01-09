@@ -12,7 +12,7 @@
 	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
 	Copyright 2016 (C) Scott Jackson
 */
-package github.nvllsvm.audinaut.service.parser;
+package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 
@@ -20,8 +20,8 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.ProgressListener;
 
 public class TopSongsParser extends MusicDirectoryEntryParser {
 

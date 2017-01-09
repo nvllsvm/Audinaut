@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;

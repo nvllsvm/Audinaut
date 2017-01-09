@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 
 public class DrawableTint {
 	private static final Map<Integer, Integer> attrMap = new HashMap<>();

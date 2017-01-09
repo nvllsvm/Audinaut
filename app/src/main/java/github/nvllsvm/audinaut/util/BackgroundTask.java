@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,8 +35,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.view.ErrorDialog;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.view.ErrorDialog;
 
 /**
  * @author Sindre Mehus

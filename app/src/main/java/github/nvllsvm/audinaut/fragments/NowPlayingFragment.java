@@ -12,7 +12,7 @@
 	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
 	Copyright 2014 (C) Scott Jackson
 */
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -54,30 +54,30 @@ import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.audiofx.EqualizerController;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.domain.RepeatMode;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.DownloadService.OnSongChangedListener;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.adapter.DownloadFileAdapter;
-import github.nvllsvm.audinaut.view.FadeOutAnimation;
-import github.nvllsvm.audinaut.view.FastScroller;
-import github.nvllsvm.audinaut.view.UpdateView;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.audiofx.EqualizerController;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.domain.RepeatMode;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.DownloadService.OnSongChangedListener;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.adapter.DownloadFileAdapter;
+import net.nullsum.audinaut.view.FadeOutAnimation;
+import net.nullsum.audinaut.view.FastScroller;
+import net.nullsum.audinaut.view.UpdateView;
+import net.nullsum.audinaut.util.Util;
 
-import static github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
-import static github.nvllsvm.audinaut.domain.PlayerState.*;
-import github.nvllsvm.audinaut.util.*;
-import github.nvllsvm.audinaut.view.AutoRepeatButton;
+import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
+import static net.nullsum.audinaut.domain.PlayerState.*;
+import net.nullsum.audinaut.util.*;
+import net.nullsum.audinaut.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 

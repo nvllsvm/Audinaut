@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,13 +23,13 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.BasicListAdapter;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.BasicListAdapter;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class SelectYearFragment extends SelectRecyclerFragment<String> {
 

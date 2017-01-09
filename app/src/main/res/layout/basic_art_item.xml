@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground">
 
-	<github.nvllsvm.audinaut.view.RecyclingImageView
+	<net.nullsum.audinaut.view.RecyclingImageView
 		android:id="@+id/item_art"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"

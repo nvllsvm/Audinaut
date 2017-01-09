@@ -15,7 +15,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -56,15 +56,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SettingsActivity;
-import github.nvllsvm.audinaut.activity.SubsonicFragmentActivity;
-import github.nvllsvm.audinaut.adapter.DetailsAdapter;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.domain.RepeatMode;
-import github.nvllsvm.audinaut.receiver.MediaButtonIntentReceiver;
-import github.nvllsvm.audinaut.service.DownloadService;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SettingsActivity;
+import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
+import net.nullsum.audinaut.adapter.DetailsAdapter;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.domain.RepeatMode;
+import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
+import net.nullsum.audinaut.service.DownloadService;
 
 import org.apache.http.HttpEntity;
 
@@ -113,8 +113,8 @@ public final class Util {
 	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
 	private static int CURRENT_YEAR = new Date().getYear();
 
-    public static final String EVENT_META_CHANGED = "github.nvllsvm.audinaut.EVENT_META_CHANGED";
-    public static final String EVENT_PLAYSTATE_CHANGED = "github.nvllsvm.audinaut.EVENT_PLAYSTATE_CHANGED";
+    public static final String EVENT_META_CHANGED = "net.nullsum.audinaut.EVENT_META_CHANGED";
+    public static final String EVENT_PLAYSTATE_CHANGED = "net.nullsum.audinaut.EVENT_PLAYSTATE_CHANGED";
 	
 	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
@@ -1356,7 +1356,7 @@ public final class Util {
 			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
 			intent.putExtra("position", (long) downloadService.getPlayerPosition());
 			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			intent.putExtra("package","github.nvllsvm.audinaut");
+			intent.putExtra("package","net.nullsum.audinaut");
 		} else {
 			intent.putExtra("track", "");
 			intent.putExtra("artist", "");
@@ -1366,7 +1366,7 @@ public final class Util {
 			intent.putExtra("duration", (long) 0);
 			intent.putExtra("position", (long) 0);
 			intent.putExtra("coverart", "");
-			intent.putExtra("package","github.nvllsvm.audinaut");
+			intent.putExtra("package","net.nullsum.audinaut");
 		}
 	}
 	

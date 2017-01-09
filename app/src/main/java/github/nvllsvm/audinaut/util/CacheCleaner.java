@@ -1,4 +1,4 @@
-package github.nvllsvm.audinaut.util;
+package net.nullsum.audinaut.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,10 +11,10 @@ import java.util.Set;
 import android.content.Context;
 import android.util.Log;
 import android.os.StatFs;
-import github.nvllsvm.audinaut.domain.Playlist;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MediaStoreService;
+import net.nullsum.audinaut.domain.Playlist;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MediaStoreService;
 
 import java.util.*;
 

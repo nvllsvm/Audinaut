@@ -24,7 +24,7 @@
  * <http://www.apache.org/>.
  *
  */
-package github.nvllsvm.audinaut.service.ssl;
+package net.nullsum.audinaut.service.ssl;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

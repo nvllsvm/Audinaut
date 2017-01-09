@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,18 +36,18 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerQueue;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.util.CacheCleaner;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.FileUtil;
-import github.nvllsvm.audinaut.util.Pair;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.SongDBHandler;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerQueue;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.util.CacheCleaner;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.Pair;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.SongDBHandler;
+import net.nullsum.audinaut.util.Util;
 
-import static github.nvllsvm.audinaut.domain.PlayerState.PREPARING;
+import static net.nullsum.audinaut.domain.PlayerState.PREPARING;
 
 /**
  * @author Sindre Mehus

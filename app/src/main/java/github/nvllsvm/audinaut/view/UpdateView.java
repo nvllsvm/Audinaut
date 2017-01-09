@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.DrawableTint;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.DrawableTint;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
 
 public abstract class UpdateView<T> extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();

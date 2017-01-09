@@ -12,7 +12,7 @@
 	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
 	Copyright 2015 (C) Scott Jackson
 */
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.os.Build;
@@ -32,8 +32,8 @@ import android.widget.TextView;
 
 import java.io.File;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.util.FileUtil;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.util.FileUtil;
 
 public class CacheLocationPreference extends EditTextPreference {
 	private static final String TAG = CacheLocationPreference.class.getSimpleName();

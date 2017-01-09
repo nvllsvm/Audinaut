@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
@@ -36,14 +36,14 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.Genre;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.service.OfflineException;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.LoadingTask;
-import github.nvllsvm.audinaut.util.Util;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.Genre;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.service.OfflineException;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.LoadingTask;
+import net.nullsum.audinaut.util.Util;
 
 public class EditPlayActionActivity extends SubsonicActivity {
 	private CheckBox shuffleCheckbox;

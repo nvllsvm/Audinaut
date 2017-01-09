@@ -13,15 +13,15 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.view.FastScroller;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.view.FastScroller;
 
 public class AlphabeticalAlbumAdapter extends EntryInfiniteGridAdapter implements FastScroller.BubbleTextGetter {
 	public AlphabeticalAlbumAdapter(Context context, List<MusicDirectory.Entry> entries, ImageLoader imageLoader, boolean largeCell) {

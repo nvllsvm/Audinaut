@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -32,18 +32,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.service.DownloadFile;
-import github.nvllsvm.audinaut.service.DownloadService;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.util.DownloadFileItemHelperCallback;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.adapter.DownloadFileAdapter;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.DownloadFile;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.util.DownloadFileItemHelperCallback;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.adapter.DownloadFileAdapter;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {
 	private long currentRevision;

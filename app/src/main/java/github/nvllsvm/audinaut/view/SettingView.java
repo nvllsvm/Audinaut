@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.view;
+package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,11 +21,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.User;
-import github.nvllsvm.audinaut.domain.User.MusicFolderSetting;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.domain.User.MusicFolderSetting;
 
-import static github.nvllsvm.audinaut.domain.User.Setting;
+import static net.nullsum.audinaut.domain.User.Setting;
 
 public class SettingView extends UpdateView2<Setting, Boolean> {
 	private final TextView titleView;

@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.adapter;
+package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,15 +22,15 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.MusicDirectory.Entry;
-import github.nvllsvm.audinaut.fragments.MainFragment;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.MusicDirectory.Entry;
+import net.nullsum.audinaut.fragments.MainFragment;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.view.UpdateView;
 
 public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 	public static int VIEW_TYPE_LOADING = 4;

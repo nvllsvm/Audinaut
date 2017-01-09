@@ -13,7 +13,7 @@
 	Copyright 2015 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.fragments;
+package net.nullsum.audinaut.fragments;
 
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -36,14 +36,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.adapter.SectionAdapter;
-import github.nvllsvm.audinaut.service.MusicService;
-import github.nvllsvm.audinaut.service.MusicServiceFactory;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.ProgressListener;
-import github.nvllsvm.audinaut.util.TabBackgroundTask;
-import github.nvllsvm.audinaut.view.FastScroller;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.SectionAdapter;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.TabBackgroundTask;
+import net.nullsum.audinaut.view.FastScroller;
 
 public abstract class SelectRecyclerFragment<T> extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<T> {
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();

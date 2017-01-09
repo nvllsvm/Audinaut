@@ -6,7 +6,7 @@ android {
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		applicationId "github.nvllsvm.audinaut"
+		applicationId "net.nullsum.audinaut"
 		minSdkVersion 19
 		targetSdkVersion 23
 		versionCode 186

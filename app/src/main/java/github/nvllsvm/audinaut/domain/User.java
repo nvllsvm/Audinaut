@@ -13,7 +13,7 @@
 	Copyright 2014 (C) Scott Jackson
 */
 
-package github.nvllsvm.audinaut.domain;
+package net.nullsum.audinaut.domain;
 
 import android.util.Pair;
 

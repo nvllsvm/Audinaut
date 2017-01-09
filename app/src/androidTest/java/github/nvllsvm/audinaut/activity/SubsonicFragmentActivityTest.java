@@ -1,6 +1,6 @@
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
-import github.nvllsvm.audinaut.R;
+import net.nullsum.audinaut.R;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class SubsonicFragmentActivityTest extends

@@ -16,17 +16,17 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.activity;
+package net.nullsum.audinaut.activity;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.fragments.PreferenceCompatFragment;
-import github.nvllsvm.audinaut.fragments.SettingsFragment;
-import github.nvllsvm.audinaut.util.Constants;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.fragments.PreferenceCompatFragment;
+import net.nullsum.audinaut.fragments.SettingsFragment;
+import net.nullsum.audinaut.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
 	private static final String TAG = SettingsActivity.class.getSimpleName();

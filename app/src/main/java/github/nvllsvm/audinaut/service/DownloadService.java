@@ -16,36 +16,36 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.nvllsvm.audinaut.service;
+package net.nullsum.audinaut.service;
 
-import static github.nvllsvm.audinaut.domain.PlayerState.COMPLETED;
-import static github.nvllsvm.audinaut.domain.PlayerState.DOWNLOADING;
-import static github.nvllsvm.audinaut.domain.PlayerState.IDLE;
-import static github.nvllsvm.audinaut.domain.PlayerState.PAUSED;
-import static github.nvllsvm.audinaut.domain.PlayerState.PAUSED_TEMP;
-import static github.nvllsvm.audinaut.domain.PlayerState.PREPARED;
-import static github.nvllsvm.audinaut.domain.PlayerState.PREPARING;
-import static github.nvllsvm.audinaut.domain.PlayerState.STARTED;
-import static github.nvllsvm.audinaut.domain.PlayerState.STOPPED;
+import static net.nullsum.audinaut.domain.PlayerState.COMPLETED;
+import static net.nullsum.audinaut.domain.PlayerState.DOWNLOADING;
+import static net.nullsum.audinaut.domain.PlayerState.IDLE;
+import static net.nullsum.audinaut.domain.PlayerState.PAUSED;
+import static net.nullsum.audinaut.domain.PlayerState.PAUSED_TEMP;
+import static net.nullsum.audinaut.domain.PlayerState.PREPARED;
+import static net.nullsum.audinaut.domain.PlayerState.PREPARING;
+import static net.nullsum.audinaut.domain.PlayerState.STARTED;
+import static net.nullsum.audinaut.domain.PlayerState.STOPPED;
 
-import github.nvllsvm.audinaut.R;
-import github.nvllsvm.audinaut.activity.SubsonicActivity;
-import github.nvllsvm.audinaut.audiofx.AudioEffectsController;
-import github.nvllsvm.audinaut.audiofx.EqualizerController;
-import github.nvllsvm.audinaut.domain.MusicDirectory;
-import github.nvllsvm.audinaut.domain.PlayerState;
-import github.nvllsvm.audinaut.domain.RepeatMode;
-import github.nvllsvm.audinaut.receiver.MediaButtonIntentReceiver;
-import github.nvllsvm.audinaut.util.ImageLoader;
-import github.nvllsvm.audinaut.util.Notifications;
-import github.nvllsvm.audinaut.util.SilentBackgroundTask;
-import github.nvllsvm.audinaut.util.Constants;
-import github.nvllsvm.audinaut.util.ShufflePlayBuffer;
-import github.nvllsvm.audinaut.util.SimpleServiceBinder;
-import github.nvllsvm.audinaut.util.UpdateHelper;
-import github.nvllsvm.audinaut.util.Util;
-import github.nvllsvm.audinaut.util.tags.BastpUtil;
-import github.nvllsvm.audinaut.view.UpdateView;
+import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.activity.SubsonicActivity;
+import net.nullsum.audinaut.audiofx.AudioEffectsController;
+import net.nullsum.audinaut.audiofx.EqualizerController;
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.domain.PlayerState;
+import net.nullsum.audinaut.domain.RepeatMode;
+import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
+import net.nullsum.audinaut.util.ImageLoader;
+import net.nullsum.audinaut.util.Notifications;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.ShufflePlayBuffer;
+import net.nullsum.audinaut.util.SimpleServiceBinder;
+import net.nullsum.audinaut.util.UpdateHelper;
+import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.util.tags.BastpUtil;
+import net.nullsum.audinaut.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
@@ -85,14 +85,14 @@ import android.view.KeyEvent;
 public class DownloadService extends Service {
 	private static final String TAG = DownloadService.class.getSimpleName();
 
-	public static final String CMD_PLAY = "github.nvllsvm.audinaut.CMD_PLAY";
-	public static final String CMD_TOGGLEPAUSE = "github.nvllsvm.audinaut.CMD_TOGGLEPAUSE";
-	public static final String CMD_PAUSE = "github.nvllsvm.audinaut.CMD_PAUSE";
-	public static final String CMD_STOP = "github.nvllsvm.audinaut.CMD_STOP";
-	public static final String CMD_PREVIOUS = "github.nvllsvm.audinaut.CMD_PREVIOUS";
-	public static final String CMD_NEXT = "github.nvllsvm.audinaut.CMD_NEXT";
-	public static final String CANCEL_DOWNLOADS = "github.nvllsvm.audinaut.CANCEL_DOWNLOADS";
-	public static final String START_PLAY = "github.nvllsvm.audinaut.START_PLAYING";
+	public static final String CMD_PLAY = "net.nullsum.audinaut.CMD_PLAY";
+	public static final String CMD_TOGGLEPAUSE = "net.nullsum.audinaut.CMD_TOGGLEPAUSE";
+	public static final String CMD_PAUSE = "net.nullsum.audinaut.CMD_PAUSE";
+	public static final String CMD_STOP = "net.nullsum.audinaut.CMD_STOP";
+	public static final String CMD_PREVIOUS = "net.nullsum.audinaut.CMD_PREVIOUS";
+	public static final String CMD_NEXT = "net.nullsum.audinaut.CMD_NEXT";
+	public static final String CANCEL_DOWNLOADS = "net.nullsum.audinaut.CANCEL_DOWNLOADS";
+	public static final String START_PLAY = "net.nullsum.audinaut.START_PLAYING";
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
 	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
