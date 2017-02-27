@@ -31,12 +31,12 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import net.nullsum.audinaut.domain.MusicDirectory;
-import net.nullsum.audinaut.util.Constants;
-import net.nullsum.audinaut.util.SilentBackgroundTask;
-import net.nullsum.audinaut.util.FileUtil;
-import net.nullsum.audinaut.util.Util;
+import net.nullsum.audinaut.util.BufferFile;
 import net.nullsum.audinaut.util.CacheCleaner;
-import github.daneren2005.serverproxy.BufferFile;
+import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.FileUtil;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.Util;
 
 import org.apache.http.Header;
 
