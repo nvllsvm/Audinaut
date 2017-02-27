@@ -14,20 +14,6 @@ android {
 		setProperty("archivesBaseName", "Audinaut $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
-	buildTypes {
-		release {
-			minifyEnabled true
-			shrinkResources true
-			proguardFiles 'proguard.cfg'
-			zipAlignEnabled true
-		}
-		fix {
-			minifyEnabled true
-			shrinkResources true
-			proguardFiles 'proguard.cfg'
-			zipAlignEnabled true
-		}
-	}
 
 	packagingOptions {
 		exclude 'META-INF/beans.xml'
@@ -47,6 +33,7 @@ android {
 
 dependencies {
 	compile fileTree(include: ['*.jar'], dir: 'libs')
+	compile 'com.esotericsoftware:kryo:4.0.0'
 	compile 'com.android.support:support-v4:23.4.+'
 	compile 'com.android.support:appcompat-v7:23.4.+'
 	compile 'com.android.support:mediarouter-v7:23.4.+'
