@@ -82,7 +82,6 @@
         <service android:name=".service.DownloadService"
                  android:label="Audinaut Playback Service"/>
 
-		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
 		<service android:name="net.nullsum.audinaut.service.sync.AuthenticatorService">
 			<intent-filter>
 				<action android:name="android.accounts.AccountAuthenticator"/>
