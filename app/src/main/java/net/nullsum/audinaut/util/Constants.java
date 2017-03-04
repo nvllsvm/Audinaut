@@ -167,7 +167,7 @@ public final class Constants {
 
 	// Account prefs
 	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
-	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
+	public static final String SYNC_ACCOUNT_TYPE = "Audinaut";
 	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "net.nullsum.audinaut.playlists.provider";
 	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "net.nullsum.audinaut.mostrecent.provider";
 
