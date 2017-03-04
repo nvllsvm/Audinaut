@@ -149,7 +149,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		update();
 
 		if (Constants.PREFERENCES_KEY_HIDE_MEDIA.equals(key)) {
-			setHideMedia(sharedPreferences.getBoolean(key, false));
+			setHideMedia(sharedPreferences.getBoolean(key, true));
 		}
 		else if (Constants.PREFERENCES_KEY_MEDIA_BUTTONS.equals(key)) {
 			setMediaButtonsEnabled(sharedPreferences.getBoolean(key, true));
