@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 23
-	buildToolsVersion "23.0.3"
+	compileSdkVersion 25
+	buildToolsVersion "25.0.2"
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "net.nullsum.audinaut"
 		minSdkVersion 19
-		targetSdkVersion 23
+		targetSdkVersion 25
 		versionCode 188
 		versionName '0.1.2'
 		setProperty("archivesBaseName", "Audinaut $versionName")
@@ -33,6 +33,6 @@ android {
 
 dependencies {
 	compile 'com.esotericsoftware:kryo:4.0.0'
-	compile 'com.android.support:design:23.4.+'
+	compile 'com.android.support:design:25.2.0'
 	compile 'com.sothree.slidinguppanel:library:3.3.1'
 }
