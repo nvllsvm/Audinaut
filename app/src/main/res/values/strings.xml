@@ -294,6 +294,9 @@
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>
+    <string name="widget.title">Title</string>
+    <string name="widget.artist">Artist</string>
+    <string name="widget.album">Album</string>
 
     <string name="util.bytes_format.gigabyte">0.00 GB</string>
     <string name="util.bytes_format.megabyte">0.00 MB</string>

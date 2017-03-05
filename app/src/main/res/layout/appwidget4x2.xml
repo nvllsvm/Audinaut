@@ -48,7 +48,7 @@
 				android:paddingBottom="2dip"
                 android:maxLines="1"
                 android:gravity="center_horizontal"
-                android:text="Title"
+                android:text="@string/widget.title"
                 android:textColor="@color/appwidget_text"
                 android:textSize="16sp"
 				android:textStyle="bold"
@@ -75,7 +75,7 @@
 				android:paddingBottom="2dip"
                 android:maxLines="1"
                 android:gravity="center_horizontal"
-                android:text="Artist"
+                android:text="@string/widget.artist"
                 android:textColor="@color/appwidget_text"
                 android:textSize="12sp" />
             
@@ -92,7 +92,7 @@
                 android:paddingRight="4dip"
                 android:maxLines="1"
                 android:gravity="center_horizontal"
-                android:text="Album"
+                android:text="@string/widget.album"
                 android:textColor="@color/appwidget_text"
                 android:textSize="12sp" />
 
