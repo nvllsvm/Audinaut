@@ -81,7 +81,7 @@ public abstract class ServerProxy implements Runnable {
 		return getAddress("127.0.0.1", request);
 	}
 	public String getPublicAddress(String request) {
-		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 		int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
 
 		if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
