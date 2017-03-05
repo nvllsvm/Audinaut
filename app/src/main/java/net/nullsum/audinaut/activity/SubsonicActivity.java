@@ -102,7 +102,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
-	protected boolean tv = false;
 	protected boolean touchscreen = true;
 	protected Handler handler = new Handler();
 	Spinner actionBarSpinner;
@@ -127,9 +126,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	@Override
 	protected void onCreate(Bundle bundle) {
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
-		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
-			// tv = true;
-		}
 		PackageManager pm = getPackageManager();
 		if(!pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)) {
 			touchscreen = false;
@@ -240,11 +236,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	public void setContentView(int viewId) {
-		if(isTv()) {
-			super.setContentView(R.layout.static_drawer_activity);
-		} else {
-			super.setContentView(R.layout.abstract_activity);
-		}
+        super.setContentView(R.layout.abstract_activity);
 		rootView = (ViewGroup) findViewById(R.id.content_frame);
 
 		if(viewId != 0) {
@@ -310,54 +302,52 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		updateDrawerHeader();
 
-		if(!isTv()) {
-			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-			// Pass in toolbar if it exists
-			Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
-				@Override
-				public void onDrawerClosed(View view) {
-					drawerIdle = true;
-					drawerOpen = false;
+        // Pass in toolbar if it exists
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
+            @Override
+            public void onDrawerClosed(View view) {
+                drawerIdle = true;
+                drawerOpen = false;
 
-					if(!showingTabs) {
-						populateTabs();
-					}
-				}
+                if(!showingTabs) {
+                    populateTabs();
+                }
+            }
 
-				@Override
-				public void onDrawerOpened(View view) {
-					DownloadService downloadService = getDownloadService();
-					boolean downloadingVisible = downloadService != null && !downloadService.getBackgroundDownloads().isEmpty();
-					if(lastSelectedPosition == R.id.drawer_downloading) {
-						downloadingVisible = true;
-					}
-					setDrawerItemVisible(R.id.drawer_downloading, downloadingVisible);
+            @Override
+            public void onDrawerOpened(View view) {
+                DownloadService downloadService = getDownloadService();
+                boolean downloadingVisible = downloadService != null && !downloadService.getBackgroundDownloads().isEmpty();
+                if(lastSelectedPosition == R.id.drawer_downloading) {
+                    downloadingVisible = true;
+                }
+                setDrawerItemVisible(R.id.drawer_downloading, downloadingVisible);
 
-					drawerIdle = true;
-					drawerOpen = true;
-				}
+                drawerIdle = true;
+                drawerOpen = true;
+            }
 
-				@Override
-				public void onDrawerSlide(View drawerView, float slideOffset) {
-					super.onDrawerSlide(drawerView, slideOffset);
-					drawerIdle = false;
-				}
-			};
-			drawer.setDrawerListener(drawerToggle);
-			drawerToggle.setDrawerIndicatorEnabled(true);
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                drawerIdle = false;
+            }
+        };
+        drawer.setDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);
 
-			drawer.setOnTouchListener(new View.OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent event) {
-					if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
-						return currentFragment.getGestureDetector().onTouchEvent(event);
-					} else {
-						return false;
-					}
-				}
-			});
-		}
+        drawer.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
+                    return currentFragment.getGestureDetector().onTouchEvent(event);
+                } else {
+                    return false;
+                }
+            }
+        });
 
 		// Check whether this is a tablet or not
 		secondaryContainer = findViewById(R.id.fragment_second_container);
@@ -795,17 +785,15 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 			spinnerAdapter.notifyDataSetChanged();
 			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
-			if(!isTv()) {
-				getSupportActionBar().setDisplayShowTitleEnabled(false);
-				getSupportActionBar().setDisplayShowCustomEnabled(true);
-			}
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
 
 			if(drawerToggle.isDrawerIndicatorEnabled()) {
 				getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 				drawerToggle.setDrawerIndicatorEnabled(false);
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			}
-		} else if(!isTv()) {
+		} else {
 			getSupportActionBar().setDisplayShowTitleEnabled(true);
 			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
@@ -843,7 +831,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);
-		if(fullScreen || isTv()) {
+		if(fullScreen ) {
 			// Hide additional elements on higher Android versions
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 				int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
@@ -928,9 +916,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		return theme;
 	}
 
-	public boolean isTv() {
-		return tv;
-	}
 	public boolean isTouchscreen() {
 		return touchscreen;
 	}
