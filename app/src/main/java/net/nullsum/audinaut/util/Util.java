@@ -108,10 +108,6 @@ public final class Util {
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
-	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
-	private static int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "net.nullsum.audinaut.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "net.nullsum.audinaut.EVENT_PLAYSTATE_CHANGED";
@@ -782,47 +778,6 @@ public final class Util {
         builder.append(secs);
         return builder.toString();
     }
-
-	public static String formatDate(Context context, String dateString) {
-		return formatDate(context, dateString, true);
-	}
-	public static String formatDate(Context context, String dateString, boolean includeTime) {
-		if(dateString == null) {
-			return "";
-		}
-
-		try {
-			dateString = dateString.replace(' ', 'T');
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-			return formatDate(dateFormat.parse(dateString), includeTime);
-		} catch(ParseException e) {
-			Log.e(TAG, "Failed to parse date string", e);
-			return dateString;
-		}
-	}
-	public static String formatDate(Date date) {
-		return formatDate(date, true);
-	}
-	public static String formatDate(Date date, boolean includeTime) {
-		if(date == null) {
-			return "Never";
-		} else {
-			if(includeTime) {
-				if (date.getYear() != CURRENT_YEAR) {
-					return DATE_FORMAT_LONG.format(date);
-				} else {
-					return DATE_FORMAT_SHORT.format(date);
-				}
-			} else {
-				return DATE_FORMAT_NO_TIME.format(date);
-			}
-		}
-	}
-	public static String formatDate(long millis) {
-		return formatDate(new Date(millis));
-	}
 
 	public static String formatBoolean(Context context, boolean value) {
 		return context.getResources().getString(value ? R.string.common_true : R.string.common_false);

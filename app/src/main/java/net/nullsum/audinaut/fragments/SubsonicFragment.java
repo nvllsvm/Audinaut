@@ -89,7 +89,6 @@ import net.nullsum.audinaut.view.UpdateView;
 
 import java.io.File;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1014,12 +1013,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet");
 				}
 			} else {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				DateFormat dateFormat = DateFormat.getDateInstance();
 				playlistNameView.setText(dateFormat.format(new Date()));
 			}
 		} else {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			playlistNameView.setText(dateFormat.format(new Date()));
+			DateFormat dateFormat = DateFormat.getDateInstance(); playlistNameView.setText(dateFormat.format(new Date()));
 		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -1206,7 +1204,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
 			if(dates != null && dates[0] != null && dates[0] > 0) {
 				headers.add(R.string.details_last_played);
-				details.add(Util.formatDate((dates[1] != null && dates[1] > dates[0]) ? dates[1] : dates[0]));
+				Date date = new Date((dates[1] != null && dates[1] > dates[0]) ? dates[1] : dates[0]);
+				DateFormat dateFormat = DateFormat.getDateInstance();
+				details.add(dateFormat.format(date));
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to get last played", e);

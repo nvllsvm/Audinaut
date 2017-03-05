@@ -30,6 +30,7 @@ import net.nullsum.audinaut.util.Util;
 import net.nullsum.audinaut.adapter.PlaylistAdapter;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -237,11 +238,15 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 		if(playlist.getCreated() != null) {
 			headers.add(R.string.details_created);
-			details.add(Util.formatDate(playlist.getCreated()));
+
+            DateFormat dateFormat = DateFormat.getDateInstance();
+			details.add(dateFormat.format(playlist.getCreated()));
 		}
 		if(playlist.getChanged() != null) {
 			headers.add(R.string.details_updated);
-			details.add(Util.formatDate(playlist.getChanged()));
+
+            DateFormat dateFormat = DateFormat.getDateInstance();
+			details.add(dateFormat.format(playlist.getChanged()));
 		}
 
 		Util.showDetailsDialog(context, R.string.details_title_playlist, headers, details);
