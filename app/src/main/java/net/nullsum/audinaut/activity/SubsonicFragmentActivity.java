@@ -43,6 +43,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.File;
@@ -193,52 +194,41 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			}
 
-			@Override
-			public void onPanelCollapsed(View panel) {
-				isPanelClosing = false;
-				if(bottomBar.getVisibility() == View.GONE) {
-					bottomBar.setVisibility(View.VISIBLE);
-					nowPlayingToolbar.setVisibility(View.GONE);
-					nowPlayingFragment.setPrimaryFragment(false);
-					setSupportActionBar(mainToolbar);
-					recreateSpinner();
-				}
-			}
+            @Override
+            public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) {
+                if (newState == PanelState.COLLAPSED) {
+                    isPanelClosing = false;
+                    if(bottomBar.getVisibility() == View.GONE) {
+                        bottomBar.setVisibility(View.VISIBLE);
+                        nowPlayingToolbar.setVisibility(View.GONE);
+                        nowPlayingFragment.setPrimaryFragment(false);
+                        setSupportActionBar(mainToolbar);
+                        recreateSpinner();
+                    }
+                } else if (newState == PanelState.EXPANDED) {
+                    isPanelClosing = false;
+                    currentFragment.stopActionMode();
 
-			@Override
-			public void onPanelExpanded(View panel) {
-				isPanelClosing = false;
-				currentFragment.stopActionMode();
+                    // Disable custom view before switching
+                    getSupportActionBar().setDisplayShowCustomEnabled(false);
+                    getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-				// Disable custom view before switching
-				getSupportActionBar().setDisplayShowCustomEnabled(false);
-				getSupportActionBar().setDisplayShowTitleEnabled(true);
+                    bottomBar.setVisibility(View.GONE);
+                    nowPlayingToolbar.setVisibility(View.VISIBLE);
+                    setSupportActionBar(nowPlayingToolbar);
 
-				bottomBar.setVisibility(View.GONE);
-				nowPlayingToolbar.setVisibility(View.VISIBLE);
-				setSupportActionBar(nowPlayingToolbar);
+                    if(secondaryFragment == null) {
+                        nowPlayingFragment.setPrimaryFragment(true);
+                    } else {
+                        secondaryFragment.setPrimaryFragment(true);
+                    }
 
-				if(secondaryFragment == null) {
-					nowPlayingFragment.setPrimaryFragment(true);
-				} else {
-					secondaryFragment.setPrimaryFragment(true);
-				}
-
-				drawerToggle.setDrawerIndicatorEnabled(false);
-				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			}
-
-			@Override
-			public void onPanelAnchored(View panel) {
-
-			}
-
-			@Override
-			public void onPanelHidden(View panel) {
-
-			}
+                    drawerToggle.setDrawerIndicatorEnabled(false);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+            }
 		};
-		slideUpPanel.setPanelSlideListener(panelSlideListener);
+		slideUpPanel.addPanelSlideListener(panelSlideListener);
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			// Post this later so it actually runs
@@ -482,7 +472,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 
 		if(savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
-			panelSlideListener.onPanelExpanded(null);
+			panelSlideListener.onPanelStateChanged(null, null, PanelState.EXPANDED);
 		}
 	}
 
