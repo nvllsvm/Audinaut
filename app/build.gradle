@@ -35,5 +35,4 @@ dependencies {
 	compile 'com.esotericsoftware:kryo:4.0.0'
 	compile 'com.android.support:design:23.4.+'
 	compile 'com.sothree.slidinguppanel:library:3.3.0'
-	compile group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
 }

@@ -4,9 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
-import org.eclipse.jetty.util.ArrayQueue;
-
-import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import net.nullsum.audinaut.adapter.SectionAdapter;
 import net.nullsum.audinaut.fragments.SubsonicFragment;
@@ -22,7 +21,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 	private boolean mainList;
 
 	private BackgroundTask pendingTask = null;
-	private Queue pendingOperations = new ArrayQueue();
+	private Deque pendingOperations = new ArrayDeque();
 
 	public DownloadFileItemHelperCallback(SubsonicFragment fragment, boolean mainList) {
 		super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
