@@ -403,9 +403,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private void getAlbumList(final String albumListType, final int size, final boolean refresh) {
-		if ("newest".equals(albumListType)) {
-			setTitle(R.string.main_albums_newest);
-		} else if ("random".equals(albumListType)) {
+		if ("random".equals(albumListType)) {
 			setTitle(R.string.main_albums_random);
 		} else if ("recent".equals(albumListType)) {
 			setTitle(R.string.main_albums_recent);

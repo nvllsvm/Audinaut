@@ -322,9 +322,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public void onItemClicked(UpdateView<Integer> updateView, Integer item) {
-		if (item == R.string.main_albums_newest) {
-			showAlbumList("newest");
-		} else if (item == R.string.main_albums_random) {
+		if (item == R.string.main_albums_random) {
 			showAlbumList("random");
 		} else if (item == R.string.main_albums_recent) {
 			showAlbumList("recent");

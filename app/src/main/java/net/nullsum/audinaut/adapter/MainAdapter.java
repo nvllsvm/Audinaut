@@ -25,14 +25,12 @@ import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.util.Util;
-import net.nullsum.audinaut.view.AlbumListCountView;
 import net.nullsum.audinaut.view.BasicHeaderView;
 import net.nullsum.audinaut.view.BasicListView;
 import net.nullsum.audinaut.view.UpdateView;
 
 public class MainAdapter extends SectionAdapter<Integer> {
 	public static final int VIEW_TYPE_ALBUM_LIST = 1;
-	public static final int VIEW_TYPE_ALBUM_COUNT_LIST = 2;
 
 	public MainAdapter(Context context, List<String> headers, List<List<Integer>> sections, OnItemClickedListener onItemClickedListener) {
 		super(context, headers, sections);
@@ -41,13 +39,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		UpdateView updateView;
-		if(viewType == VIEW_TYPE_ALBUM_LIST) {
-			updateView = new BasicListView(context);
-		} else  {
-			updateView = new AlbumListCountView(context);
-		}
-
+		UpdateView updateView = new BasicListView(context);
 		return new UpdateView.UpdateViewHolder(updateView);
 	}
 
@@ -64,11 +56,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 
 	@Override
 	public int getItemViewType(Integer item) {
-		if(item == R.string.main_albums_newest) {
-			return VIEW_TYPE_ALBUM_COUNT_LIST;
-		} else {
-			return VIEW_TYPE_ALBUM_LIST;
-		}
+		return VIEW_TYPE_ALBUM_LIST;
 	}
 
 	@Override
