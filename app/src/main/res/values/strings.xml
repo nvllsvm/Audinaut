@@ -23,7 +23,6 @@
 	<string name="common.close">Close</string>
 	<string name="common.false">No</string>
 	<string name="common.true">Yes</string>
-	<string name="common.never">Never</string>
 
     <string name="button_bar.browse">Library</string>
 	<string name="button_bar.playlists">Playlists</string>
@@ -35,11 +34,8 @@
     <string name="main.welcome_text">Welcome to Audinaut! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
 	<string name="main.about_title">About Audinaut</string>
-	<string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
 	<string name="main.online">Go Online</string>
-    <string name="main.settings">Settings</string>
-    <string name="main.albums_title">Album Lists</string>
 	<string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
@@ -48,7 +44,6 @@
 	<string name="main.albums_genres">Genres</string>
 	<string name="main.albums_year">Decades</string>
 	<string name="main.albums_alphabetical">Alphabetically</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.songs_newest">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top Played</string>
 	<string name="main.songs_recent">@string/main.albums_recent</string>
@@ -63,17 +58,12 @@
 	<string name="menu.play">Play</string>
 	<string name="menu.play_last">Play Last</string>
     <string name="menu.settings">Settings</string>
-    <string name="menu.help">Help</string>
-	<string name="menu.about">About</string>
 	<string name="menu.add_playlist">Add To Playlist</string>
 	<string name="menu.remove_playlist">Remove From Playlist</string>
 	<string name="menu.deleted_playlist">Deleted playlist %s</string>
 	<string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
-	<string name="menu.log">Send Log</string>
 	<string name="menu.show_artist">Show Artist</string>
 	<string name="menu.delete_cache">Delete Cache</string>
-	<string name="menu.rescan">Rescan Server</string>
-	<string name="menu.similar_artists.missing">Missing Artists</string>
 	<string name="menu.first_level_artist">First level artists</string>
 
     <string name="playlist.label">Playlists</string>
@@ -85,10 +75,7 @@
 	<string name="playlist.create_new">Create New</string>
 	<string name="playlist.delete">Delete Playlist</string>
 
-    <string name="search.label">Search</string>
     <string name="search.title">Search</string>
-    <string name="search.search">Click to search</string>
-    <string name="search.no_match">No matches, please try again</string>
     <string name="search.artists">Artists</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Songs</string>
@@ -115,13 +102,11 @@
     <string name="download.menu_show_album">Show Album</string>
 	<string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_shuffle">Shuffle</string>
-	<string name="download.menu_toggle">Toggle</string>
     <string name="download.menu_save">Save playlist</string>
     <string name="download.menu_shuffle_notification">Playlist was shuffled</string>
 	<string name="download.menu_remove_played_songs">Remove played songs</string>
     <string name="download.playlist_title">Save playlist</string>
     <string name="download.playlist_name">Enter the playlist name:</string>
-    <string name="download.playlist_saving">Saving playlist \"%s\"...</string>
     <string name="download.playlist_done">Playlist was successfully saved.</string>
     <string name="download.playlist_error">Failed to save playlist, please try later.</string>
     <string name="download.repeat_off">Repeat off</string>
@@ -132,19 +117,13 @@
 	<string name="download.downloading_summary">Current: %1$s</string>
 	<string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s</string>
-	<string name="download.failed_to_load">Failed to load</string>
 	<string name="download.batch_mode">Batch Mode</string>
 
-	<string name="playlist.mine">My Playlists</string>
 	<string name="playlist_error">Failed to grab list of playlists</string>
 	<string name="updated_playlist">Added %1$d songs to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
 	<string name="removed_playlist">Removed %1$d songs from \"%2$s\"</string>
 	
-	<string name="song_details.error">Error</string>
-	<string name="song_details.skipped">Skipped</string>
-	<string name="song_details.downloading">Downloading</string>
-
     <string name="error.label">Error</string>
 
     <string name="settings.title">Settings</string>
@@ -190,8 +169,6 @@
 	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
 	<string name="settings.custom_sort">Sort By Year</string>
 	<string name="settings.custom_sort_summary">Sort albums by year, or by alphabetical</string>
-	<string name="settings.open_to_tab">Open To Tab</string>
-	<string name="settings.open_to_tab_summary">Open directly to this tab</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
@@ -221,8 +198,6 @@
     <string name="settings.preload_5">5 songs</string>
     <string name="settings.preload_10">10 songs</string>
 	<string name="settings.preload_unlimited">Unlimited</string>
-    <string name="settings.clear_search_history">Clear search history</string>
-    <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
     <string name="settings.hide_media_title">Hide from other</string>
     <string name="settings.hide_media_summary">Hide music files from other apps.</string>
@@ -231,7 +206,6 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_title">Play</string>
 	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
 	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
 	<string name="settings.temp_loss_pause">Always Pause</string>
@@ -254,7 +228,6 @@
 	<string name="settings.playback_title">Playback</string>
 	<string name="settings.hide_widget_title">Hide Widget</string>
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
-	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.song_press_action">Song Press Action</string>
 	<string name="settings.song_press_play_single">Play only that song</string>
 	<string name="settings.song_press_play_all">Adds everything in the album to the Now Playing Queue</string>
@@ -340,8 +313,6 @@
 	<string name="details.title.song">Song Details</string>
 	<string name="details.title.album">Album Details</string>
 	<string name="details.title.playlist">Playlist Details</string>
-	<string name="details.title.artist">Artist Details</string>
-	<string name="details.status">Status</string>
 	<string name="details.artist">Artist</string>
 	<string name="details.album">Album</string>
 	<string name="details.track">Track</string>
@@ -353,15 +324,12 @@
 	<string name="details.cached_bitrate">Cached Bitrate</string>
 	<string name="details.size">Size</string>
 	<string name="details.length">Length</string>
-	<string name="details.description">Description</string>
 	<string name="details.owner">Owner</string>
 	<string name="details.comments">Comments</string>
 	<string name="details.song_count">Song Count</string>
 	<string name="details.public">Public</string>
 	<string name="details.created">Created</string>
 	<string name="details.title">Title</string>
-	<string name="details.url">URL</string>
-	<string name="details.error">Error Message</string>
 	<string name="details.author">Author</string>
 	<string name="details.email">Email</string>
 	<string name="details.version">Version</string>
@@ -370,14 +338,8 @@
 	<string name="details.used_space">Used Space</string>
 	<string name="details.available_space">Available Space</string>
 	<string name="details.of">%1$s of %2$s</string>
-	<string name="details.song">Song</string>
-	<string name="details.position">Position</string>
 	<string name="details.updated">Updated</string>
 	<string name="details.last_played">Last Played</string>
-	<string name="details.expiration">Expiration</string>
-	<string name="details.played_count">Played Count</string>
-	<string name="details.stream_url">Stream URL</string>
-	<string name="details.home_page">Home Page</string>
 
 	<string name="permission.external_storage.failed">Audinaut cannot function without the ability to write to storage</string>
 
