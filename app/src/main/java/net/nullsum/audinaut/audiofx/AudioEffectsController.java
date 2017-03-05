@@ -31,22 +31,12 @@ public class AudioEffectsController {
     private final Context context;
 	private int audioSessionId = 0;
 
-	private boolean available = false;
-
 	private EqualizerController equalizerController;
 
     public AudioEffectsController(Context context, int audioSessionId) {
         this.context = context;
 		this.audioSessionId = audioSessionId;
-
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-			available = true;
-		}
     }
-
-	public boolean isAvailable() {
-		return available;
-	}
 
 	public void release() {
 		if(equalizerController != null) {
@@ -55,13 +45,9 @@ public class AudioEffectsController {
 	}
 
 	public EqualizerController getEqualizerController() {
-		if (available && equalizerController == null) {
+		if (equalizerController == null) {
 			equalizerController = new EqualizerController(context, audioSessionId);
-			if (!equalizerController.isAvailable()) {
-				equalizerController = null;
-			} else {
-				equalizerController.loadSettings();
-			}
+            equalizerController.loadSettings();
 		}
 		return equalizerController;
 	}

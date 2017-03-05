@@ -1218,7 +1218,7 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
-    	if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+    	if (focusListener == null) {
     		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     		audioManager.requestAudioFocus(focusListener = new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
@@ -1372,11 +1372,7 @@ public final class Util {
 	
 	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
 		WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-		int lockType = WifiManager.WIFI_MODE_FULL;
-		if (Build.VERSION.SDK_INT >= 12) {
-			lockType = 3;
-		}
-		return wm.createWifiLock(lockType, tag);
+		return wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, tag);
 	}
 
 	public static Random getRandom() {

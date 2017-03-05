@@ -251,7 +251,7 @@ public class DownloadService extends Service {
 	@Override
 	public void onTrimMemory(int level) {
 		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
-		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		if(imageLoader != null) {
 			Log.i(TAG, "Memory Trim Level: " + level);
 			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
@@ -1133,7 +1133,6 @@ public class DownloadService extends Service {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void reset() {
 		if (bufferTask != null) {
 			bufferTask.cancel();
@@ -1143,7 +1142,7 @@ public class DownloadService extends Service {
             setPlayerState(IDLE);
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+			if(nextSetup) {
 				mediaPlayer.setNextMediaPlayer(null);
 				nextSetup = false;
 			}
@@ -1154,11 +1153,10 @@ public class DownloadService extends Service {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void resetNext() {
 		try {
 			if (nextMediaPlayer != null) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+				if (nextSetup) {
 					mediaPlayer.setNextMediaPlayer(null);
 				}
 				nextSetup = false;
@@ -1366,10 +1364,6 @@ public class DownloadService extends Service {
 		return suggestedPlaylistId;
 	}
 
-	public boolean getEqualizerAvailable() {
-		return effectsController.isAvailable();
-	}
-
 	public EqualizerController getEqualizerController() {
 		EqualizerController controller = null;
 		try {
@@ -1532,7 +1526,6 @@ public class DownloadService extends Service {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
@@ -1558,7 +1551,7 @@ public class DownloadService extends Service {
 					try {
 						setNextPlayerState(PREPARED);
 
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
+						if(playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED) {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}

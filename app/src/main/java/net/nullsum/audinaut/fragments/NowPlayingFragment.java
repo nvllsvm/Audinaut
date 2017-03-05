@@ -393,8 +393,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menu.findItem(R.id.menu_remove_played).setChecked(true);
 		}
 
-		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
-		if(equalizerAvailable) {
+		if(downloadService != null) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
 			if (equalizerOn && downloadService != null) {
