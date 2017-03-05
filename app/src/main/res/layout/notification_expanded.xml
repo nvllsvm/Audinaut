@@ -32,7 +32,7 @@
 				android:layout_gravity="left|center_vertical"
 				android:ellipsize="marquee"
 				android:focusable="true"
-				android:singleLine="true" />
+				android:maxLines="1" />
 
 			<ImageButton
 				android:id="@+id/notification_close"
@@ -52,7 +52,7 @@
 	        android:layout_gravity="left"
 	        android:ellipsize="end"
 	        android:scrollHorizontally="true"
-	        android:singleLine="true" />
+	        android:maxLines="1" />
 
 	    <TextView
 	        android:id="@+id/notification_album"
@@ -62,7 +62,7 @@
 	        android:layout_gravity="left"
 	        android:ellipsize="end"
 	        android:scrollHorizontally="true"
-	        android:singleLine="true"
+	        android:maxLines="1"
 			android:paddingBottom="10dp"/>
 
 		<ImageView

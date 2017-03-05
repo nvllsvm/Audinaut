@@ -60,7 +60,7 @@
 					android:layout_marginLeft="16dip"
 					android:layout_marginRight="16dip"
 					android:layout_marginTop="6dp"
-					android:singleLine="true"
+					android:maxLines="1"
 					android:ellipsize="end"
 					style="?attr/actionbarSubtitleStyle"
 					android:textColor="?android:textColorSecondary"/>
@@ -72,7 +72,7 @@
 					android:layout_gravity="center_horizontal"
 					android:layout_marginLeft="16dip"
 					android:layout_marginRight="16dip"
-					android:singleLine="true"
+					android:maxLines="1"
 					android:textStyle="bold"
 					style="?attr/actionbarTitleStyle"
 					android:textColor="?android:textColorPrimary"/>

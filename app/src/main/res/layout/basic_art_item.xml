@@ -20,7 +20,7 @@
 		android:paddingLeft="10dip"
 		android:paddingRight="3dip"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:singleLine="true"
+		android:maxLines="1"
 		android:ellipsize="marquee"
 		android:textColor="?android:textColorPrimary"/>
 

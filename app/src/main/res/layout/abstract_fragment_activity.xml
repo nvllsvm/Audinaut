@@ -74,7 +74,7 @@
 						android:id="@+id/track_name"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content"
-						android:singleLine="true"
+						android:maxLines="1"
 						android:text="@string/main.title"
 						android:ellipsize="marquee"
 						android:marqueeRepeatLimit="marquee_forever"
@@ -92,7 +92,7 @@
 						android:id="@+id/artist_name"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content"
-						android:singleLine="true"
+						android:maxLines="1"
 						android:text="@string/main.artist"
 						style="?attr/actionbarSubtitleStyle"/>
 				</LinearLayout>

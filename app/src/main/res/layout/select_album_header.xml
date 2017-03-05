@@ -25,7 +25,7 @@
 				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceLarge"
 				android:textStyle="bold"
-				android:singleLine="true"
+				android:maxLines="1"
 				android:ellipsize="marquee"
 				android:marqueeRepeatLimit="marquee_forever"
 				android:scrollHorizontally="true"
@@ -44,7 +44,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:singleLine="true"
+				android:maxLines="1"
 				android:ellipsize="end"
 				android:textColor="?android:textColorPrimary"/>
 
@@ -55,7 +55,7 @@
 				android:layout_height="wrap_content"
 				android:paddingTop="14dip"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:singleLine="true"
+				android:maxLines="1"
 				android:ellipsize="none"
 				android:textColor="?android:textColorSecondary"/>
 
@@ -65,7 +65,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceSmall"
-				android:singleLine="true"
+				android:maxLines="1"
 				android:ellipsize="none"
 				android:textColor="?android:textColorSecondary"/>
 

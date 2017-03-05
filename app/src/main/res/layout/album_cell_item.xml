@@ -41,7 +41,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:textAppearance="?android:attr/textAppearanceSmall"
-					android:singleLine="true"
+					android:maxLines="1"
 					android:ellipsize="marquee"
 					android:text="@string/search.albums"
 					android:textColor="?android:textColorPrimary"
@@ -58,7 +58,7 @@
 						android:layout_height="wrap_content"
 						android:textSize="12sp"
 						android:textColor="?android:textColorSecondary"
-						android:singleLine="true"
+						android:maxLines="1"
 						android:text="@string/search.artists"
 						android:paddingLeft="@dimen/Card.TextLeftPadding"/>
 				</LinearLayout>

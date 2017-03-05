@@ -15,7 +15,7 @@
 		android:paddingLeft="6dip"
 		android:paddingRight="6dip"
 		android:minHeight="50dip"
-		android:singleLine="true"
+		android:maxLines="1"
 		android:ellipsize="marquee"
 		android:background="@android:color/transparent"
 		android:textColor="?android:textColorPrimary"/>
