@@ -124,7 +124,6 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_LARGE_ALBUM_ART = "largeAlbumArt";
 	public static final String PREFERENCES_KEY_PLAYLIST_NAME = "suggestedPlaylistName";
 	public static final String PREFERENCES_KEY_PLAYLIST_ID = "suggestedPlaylistId";
-	public static final String PREFERENCES_KEY_SERVER_SYNC = "serverSync";
 	public static final String PREFERENCES_KEY_RECENT_COUNT = "mostRecentCount";
 	public static final String PREFERENCES_KEY_REPLAY_GAIN = "replayGain";
 	public static final String PREFERENCES_KEY_REPLAY_GAIN_BUMP = "replayGainBump2";

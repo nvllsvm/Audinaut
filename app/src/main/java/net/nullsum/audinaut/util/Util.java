@@ -17,7 +17,6 @@
  */
 package net.nullsum.audinaut.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.StringRes;
@@ -403,11 +402,6 @@ public final class Util {
         return true;
 	}
 	
-	public static boolean isSyncEnabled(Context context, int instance) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
-	}
-
 	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
 		if(Util.isTagBrowsing(context)) {
 			if(!entry.isDirectory()) {
@@ -1028,24 +1022,6 @@ public final class Util {
 		
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
-	public static void showHTMLDialog(Context context, int title, int message) {
-		showHTMLDialog(context, title, context.getResources().getString(message));
-	}
-	public static void showHTMLDialog(Context context, int title, String message) {
-		AlertDialog dialog = new AlertDialog.Builder(context)
-			.setIcon(android.R.drawable.ic_dialog_info)
-			.setTitle(title)
-			.setMessage(Html.fromHtml(message))
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int i) {
-					dialog.dismiss();
-				}
-			})
-			.show();
-
-		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-	}
 
 	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
 		List<String> headerStrings = new ArrayList<>();
@@ -1171,7 +1147,6 @@ public final class Util {
         }
     }
     
-    @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
     	if (focusListener == null) {
     		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
