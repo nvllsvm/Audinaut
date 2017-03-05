@@ -71,6 +71,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		if(mDisplay == null) {
 			mDisplay = "%.0f";
 		}
+
+        a.recycle();
 	}
 
 	@Override
