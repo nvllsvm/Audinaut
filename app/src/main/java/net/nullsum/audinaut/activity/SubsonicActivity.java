@@ -518,8 +518,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		MenuItem offlineMenuItem = drawerList.getMenu().findItem(R.id.drawer_offline);
 		if(Util.isOffline(this)) {
-			setDrawerItemVisible(R.id.drawer_library, false);
-
 			if(lastSelectedPosition == 0 || lastSelectedPosition == R.id.drawer_library) {
 				String newFragment = Util.openToTab(this);
 				if(newFragment == null || "Library".equals(newFragment)) {
