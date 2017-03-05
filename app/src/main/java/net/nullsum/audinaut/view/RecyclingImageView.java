@@ -23,10 +23,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-public class RecyclingImageView extends ImageView {
+public class RecyclingImageView extends AppCompatImageView {
 	private boolean invalidated = false;
 	private OnInvalidated onInvalidated;
 
@@ -40,11 +40,6 @@ public class RecyclingImageView extends ImageView {
 
 	public RecyclingImageView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-	}
-
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public RecyclingImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
 	}
 
 	@Override
