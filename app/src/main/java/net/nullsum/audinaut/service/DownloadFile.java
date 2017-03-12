@@ -38,10 +38,7 @@ import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.Util;
 
-import org.apache.http.Header;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import okhttp3.Response;
 
 /**
  * @author Sindre Mehus
@@ -454,20 +451,18 @@ public class DownloadFile implements BufferFile {
                 }
                 if(compare) {
                     // Attempt partial HTTP GET, appending to the file if it exists.
-                    HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
-                    Header contentLengthHeader = response.getFirstHeader("Content-Length");
-                    if(contentLengthHeader != null) {
-                        String contentLengthString = contentLengthHeader.getValue();
-                        if(contentLengthString != null) {
-                            Log.i(TAG, "Content Length: " + contentLengthString);
-                            contentLength = Long.parseLong(contentLengthString);
-                        }
+                    Response response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
+                    if(response.header("Content-Length") != null) {
+                        Log.i(TAG, "Content Length: " + contentLength);
+                        contentLength = contentLength;
                     }
-                    in = response.getEntity().getContent();
-                    boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
+
+                    boolean partial = response.code() == 206;
                     if (partial) {
                         Log.i(TAG, "Executed partial HTTP GET, skipping " + partialFile.length() + " bytes");
                     }
+
+                    in = response.body().byteStream();
 
                     out = new FileOutputStream(partialFile, partial);
                     long n = copy(in, out);

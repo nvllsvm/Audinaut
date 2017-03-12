@@ -34,7 +34,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
+import okhttp3.Response;
 
 import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.domain.Genre;
@@ -206,7 +206,7 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public HttpResponse getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+	public Response getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

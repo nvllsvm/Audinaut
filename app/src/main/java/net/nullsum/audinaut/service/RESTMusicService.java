@@ -34,37 +34,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import java.util.concurrent.TimeUnit;
 
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.params.ConnManagerParams;
-import org.apache.http.conn.params.ConnPerRouteBean;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.scheme.SocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
-import org.apache.http.protocol.HttpContext;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -97,8 +66,6 @@ import net.nullsum.audinaut.service.parser.PlaylistsParser;
 import net.nullsum.audinaut.service.parser.RandomSongsParser;
 import net.nullsum.audinaut.service.parser.SearchResult2Parser;
 import net.nullsum.audinaut.service.parser.UserParser;
-import net.nullsum.audinaut.service.ssl.SSLSocketFactory;
-import net.nullsum.audinaut.service.ssl.TrustSelfSignedStrategy;
 import net.nullsum.audinaut.util.BackgroundTask;
 import net.nullsum.audinaut.util.Pair;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
@@ -130,46 +97,13 @@ public class RESTMusicService implements MusicService {
     private static final int HTTP_REQUEST_MAX_ATTEMPTS = 5;
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
 
-    private final DefaultHttpClient httpClient;
     private long redirectionLastChecked;
     private int redirectionNetworkType = -1;
     private String redirectFrom;
     private String redirectTo;
-    private final ThreadSafeClientConnManager connManager;
     private Integer instance;
 
     public RESTMusicService() {
-
-        // Create and initialize default HTTP parameters
-        HttpParams params = new BasicHttpParams();
-        ConnManagerParams.setMaxTotalConnections(params, 20);
-        ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(20));
-        HttpConnectionParams.setConnectionTimeout(params, SOCKET_CONNECT_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_DEFAULT);
-
-        // Turn off stale checking.  Our connections break all the time anyway,
-        // and it's not worth it to pay the penalty of checking every time.
-        HttpConnectionParams.setStaleCheckingEnabled(params, false);
-
-        // Create and initialize scheme registry
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        schemeRegistry.register(new Scheme("https", createSSLSocketFactory(), 443));
-
-        // Create an HttpClient with the ThreadSafeClientConnManager.
-        // This connection manager must be used if more than one thread will
-        // be using the HttpClient.
-        connManager = new ThreadSafeClientConnManager(params, schemeRegistry);
-        httpClient = new DefaultHttpClient(connManager, params);
-    }
-
-    private SocketFactory createSSLSocketFactory() {
-        try {
-            return new SSLSocketFactory(new TrustSelfSignedStrategy(), SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        } catch (Throwable x) {
-            Log.e(TAG, "Failed to create custom SSL socket factory, using default.", x);
-            return org.apache.http.conn.ssl.SSLSocketFactory.getSocketFactory();
-        }
     }
 
     @Override
@@ -744,48 +678,35 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+    public Response getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+
+        OkHttpClient eagerClient = client.newBuilder()
+           .readTimeout(30, TimeUnit.SECONDS)
+           .build();
 
         String url = getRestUrl(context, "stream");
 
-        // Set socket read timeout. Note: The timeout increases as the offset gets larger. This is
-        // to avoid the thrashing effect seen when offset is combined with transcoding/downsampling on the server.
-        // In that case, the server uses a long time before sending any data, causing the client to time out.
-        HttpParams params = new BasicHttpParams();
-        int timeout = (int) (SOCKET_READ_TIMEOUT_DOWNLOAD + offset * TIMEOUT_MILLIS_PER_OFFSET_BYTE);
-        HttpConnectionParams.setSoTimeout(params, timeout);
+        url += "&id=" + song.getId();
 
-        // Add "Range" header if offset is given.
-        List<Header> headers = new ArrayList<Header>();
+        Log.i(TAG, "Using music URL: " + url);
+
+        Builder builder = new FormBody.Builder();
+        builder.add("id", song.getId());
+        builder.add("maxBitRate", Integer.toString(maxBitrate));
+
+        RequestBody formBody = builder.build();
+
+        Request.Builder requestBuilder= new Request.Builder();
         if (offset > 0) {
-            headers.add(new BasicHeader("Range", "bytes=" + offset + "-"));
+            requestBuilder.header("Range", "bytes=" + offset + "-");
         }
 
-        List<String> parameterNames = new ArrayList<String>();
-        parameterNames.add("id");
-        parameterNames.add("maxBitRate");
+        requestBuilder.url(url);
+//        requestBuilder.post(formBody);
 
-        List<Object> parameterValues = new ArrayList<Object>();
-        parameterValues.add(song.getId());
-        parameterValues.add(maxBitrate);
+        Request request = requestBuilder.build();
 
-        HttpResponse response = getResponseForURL(context, url, params, parameterNames, parameterValues, headers, null, task, false);
-
-        // If content type is XML, an error occurred.  Get it.
-        String contentType = response.getEntity().getContentType().getValue();
-        if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
-            InputStream in = response.getEntity().getContent();
-            Header contentEncoding = response.getEntity().getContentEncoding();
-            if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-                in = new GZIPInputStream(in);
-            }
-            try {
-                new ErrorParser(context, getInstance(context)).parse(in);
-            } finally {
-                Util.close(in);
-            }
-        }
-
+        Response response = eagerClient.newCall(request).execute();
         return response;
     }
 
@@ -972,163 +893,6 @@ public class RESTMusicService implements MusicService {
         this.instance = instance;
     }
 
-    private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
-                                           List<String> parameterNames, List<Object> parameterValues,
-                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwsErrors) throws Exception {
-        // If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
-        // received intact. Remember, HTTP POST requests are converted to GET requests during HTTP redirects, thus
-        // loosing its entity.
-        if (parameterNames != null && parameterNames.size() < 10) {
-            StringBuilder builder = new StringBuilder(url);
-            for (int i = 0; i < parameterNames.size(); i++) {
-                builder.append("&").append(parameterNames.get(i)).append("=");
-                String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
-                part = part.replaceAll("\\%27", "'");
-                builder.append(part);
-            }
-            url = builder.toString();
-            parameterNames = null;
-            parameterValues = null;
-        }
-
-        String rewrittenUrl = rewriteUrlWithRedirect(context, url);
-        return executeWithRetry(context, rewrittenUrl, url, requestParams, parameterNames, parameterValues, headers, progressListener, task, throwsErrors);
-    }
-
-    private HttpResponse executeWithRetry(final Context context, String url, String originalUrl, HttpParams requestParams,
-                                          List<String> parameterNames, List<Object> parameterValues,
-                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwErrors) throws Exception {
-        // Strip out sensitive information from log
-        if(url.indexOf("scanstatus") == -1) {
-            Log.i(TAG, stripUrlInfo(url));
-        }
-
-        SharedPreferences prefs = Util.getPreferences(context);
-        int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
-        HttpParams newParams = httpClient.getParams();
-        HttpConnectionParams.setSoTimeout(newParams, networkTimeout);
-        httpClient.setParams(newParams);
-
-        final AtomicReference<Boolean> isCancelled = new AtomicReference<Boolean>(false);
-        int attempts = 0;
-        while (true) {
-            attempts++;
-            HttpContext httpContext = new BasicHttpContext();
-            final HttpRequestBase request = (url.indexOf("rest") == -1) ? new HttpGet(url) : new HttpPost(url);
-
-            if (task != null) {
-                // Attempt to abort the HTTP request if the task is cancelled.
-                task.setOnCancelListener(new BackgroundTask.OnCancelListener() {
-                    @Override
-                    public void onCancel() {
-                        try {
-                            isCancelled.set(true);
-                            if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
-                                new SilentBackgroundTask<Void>(context) {
-                                    @Override
-                                    protected Void doInBackground() throws Throwable {
-                                        request.abort();
-                                        return null;
-                                    }
-                                }.execute();
-                            } else {
-                                request.abort();
-                            }
-                        } catch(Exception e) {
-                            Log.e(TAG, "Failed to stop http task", e);
-                        }
-                    }
-                });
-            }
-
-            if (parameterNames != null && request instanceof HttpPost) {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                for (int i = 0; i < parameterNames.size(); i++) {
-                    params.add(new BasicNameValuePair(parameterNames.get(i), String.valueOf(parameterValues.get(i))));
-                }
-                ((HttpPost) request).setEntity(new UrlEncodedFormEntity(params, Constants.UTF_8));
-            }
-
-            if (requestParams != null) {
-                request.setParams(requestParams);
-            }
-
-            if (headers != null) {
-                for (Header header : headers) {
-                    request.addHeader(header);
-                }
-            }
-            if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1) {
-                request.addHeader("Accept-Encoding", "gzip");
-            }
-            request.addHeader("User-Agent", Constants.REST_CLIENT_ID);
-
-            // Set credentials to get through apache proxies that require authentication.
-            int instance = getInstance(context);
-            String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
-            String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
-            httpClient.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-                    new UsernamePasswordCredentials(username, password));
-
-            try {
-                HttpResponse response = httpClient.execute(request, httpContext);
-                detectRedirect(originalUrl, context, httpContext);
-                return response;
-            } catch (IOException x) {
-                request.abort();
-                if (attempts >= HTTP_REQUEST_MAX_ATTEMPTS || isCancelled.get() || throwErrors) {
-                    throw x;
-                }
-                if (progressListener != null) {
-                    String msg = context.getResources().getString(R.string.music_service_retry, attempts, HTTP_REQUEST_MAX_ATTEMPTS - 1);
-                    progressListener.updateProgress(msg);
-                }
-                Log.w(TAG, "Got IOException " + x + " (" + attempts + "), will retry");
-                increaseTimeouts(requestParams);
-                Thread.sleep(2000L);
-            }
-        }
-    }
-
-    private void increaseTimeouts(HttpParams requestParams) {
-        if (requestParams != null) {
-            int connectTimeout = HttpConnectionParams.getConnectionTimeout(requestParams);
-            if (connectTimeout != 0) {
-                HttpConnectionParams.setConnectionTimeout(requestParams, (int) (connectTimeout * 1.3F));
-            }
-            int readTimeout = HttpConnectionParams.getSoTimeout(requestParams);
-            if (readTimeout != 0) {
-                HttpConnectionParams.setSoTimeout(requestParams, (int) (readTimeout * 1.5F));
-            }
-        }
-    }
-
-    private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) throws Exception {
-        HttpUriRequest request = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
-        HttpHost host = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-
-        // Sometimes the request doesn't contain the "http://host" part
-        String redirectedUrl;
-        if (request.getURI().getScheme() == null) {
-            redirectedUrl = host.toURI() + request.getURI();
-        } else {
-            redirectedUrl = request.getURI().toString();
-        }
-
-        int fromIndex = originalUrl.indexOf("/rest/");
-        int toIndex = redirectedUrl.indexOf("/rest/");
-        if(fromIndex != -1 && toIndex != -1 && !Util.equals(originalUrl, redirectedUrl)) {
-            redirectFrom = originalUrl.substring(0, fromIndex);
-            redirectTo = redirectedUrl.substring(0, toIndex);
-
-            if (redirectFrom.compareTo(redirectTo) != 0) {
-                Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
-            }
-            redirectionLastChecked = System.currentTimeMillis();
-            redirectionNetworkType = getCurrentNetworkType(context);
-        }
-    }
-
     private String rewriteUrlWithRedirect(Context context, String url) {
 
         // Only cache for a certain time.
@@ -1176,9 +940,5 @@ public class RESTMusicService implements MusicService {
         } else {
             return Util.getRestUrl(context, method, instance, allowAltAddress);
         }
-    }
-
-    public HttpClient getHttpClient() {
-        return httpClient;
     }
 }

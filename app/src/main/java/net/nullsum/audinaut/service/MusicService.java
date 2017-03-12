@@ -20,7 +20,7 @@ package net.nullsum.audinaut.service;
 
 import java.util.List;
 
-import org.apache.http.HttpResponse;
+import okhttp3.Response;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -87,7 +87,7 @@ public interface MusicService {
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
-    HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
+    Response getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
 
 	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
 

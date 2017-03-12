@@ -65,8 +65,6 @@ import net.nullsum.audinaut.domain.RepeatMode;
 import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
 import net.nullsum.audinaut.service.DownloadService;
 
-import org.apache.http.HttpEntity;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
