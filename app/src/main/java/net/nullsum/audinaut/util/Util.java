@@ -65,6 +65,8 @@ import net.nullsum.audinaut.domain.RepeatMode;
 import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
 import net.nullsum.audinaut.service.DownloadService;
 
+import okhttp3.HttpUrl;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -322,35 +324,34 @@ public final class Util {
     public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
         return getRestUrl(context, method, prefs, instance, true);
     }
-	public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
-		StringBuilder builder = new StringBuilder();
 
-		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		if(allowAltAddress && Util.isWifiConnected(context)) {
-			String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-			if(!SSID.isEmpty()) {
-				String currentSSID = Util.getSSID(context);
+    public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+        String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 
-				String[] ssidParts = SSID.split(",");
-				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
-					String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-					if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
-						serverUrl = internalUrl;
-					}
-				}
-			}
-		}
+        HttpUrl.Builder builder;
+        builder = HttpUrl.parse(serverUrl).newBuilder();
 
-		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
-		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+        if(allowAltAddress && Util.isWifiConnected(context)) {
+            String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
+            if(!SSID.isEmpty()) {
+                String currentSSID = Util.getSSID(context);
 
-		builder.append(serverUrl);
-		if (builder.charAt(builder.length() - 1) != '/') {
-			builder.append("/");
-		}
-        builder.append("rest/");
-		builder.append(method).append(".view");
-		builder.append("?u=").append(username);
+                String[] ssidParts = SSID.split(",");
+                if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
+                    String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+                    if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
+                        serverUrl = internalUrl;
+                        builder = HttpUrl.parse(serverUrl).newBuilder();
+                    }
+                }
+            }
+        }
+
+        String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
+        String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+
+        builder.addPathSegment("rest/" + method + ".view");
+
         int hash = (username + password).hashCode();
         Pair<String, String> values = tokens.get(hash);
         if(values == null) {
@@ -360,14 +361,15 @@ public final class Util {
             tokens.put(hash, values);
         }
 
-        builder.append("&s=").append(values.getFirst());
-        builder.append("&t=").append(values.getSecond());
+        builder.addQueryParameter("u", username);
+        builder.addQueryParameter("s", values.getFirst());
+        builder.addQueryParameter("t", values.getSecond());
+        builder.addQueryParameter("v", Constants.REST_PROTOCOL_VERSION_SUBSONIC);
+        builder.addQueryParameter("c", Constants.REST_CLIENT_ID);
 
-        builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION_SUBSONIC);
-		builder.append("&c=").append(Constants.REST_CLIENT_ID);
+        return builder.build().toString();
+    }
 
-		return builder.toString();
-	}
 	public static int getRestUrlHash(Context context) {
 		return getRestUrlHash(context, Util.getMostRecentActiveServer(context));
 	}
