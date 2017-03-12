@@ -597,11 +597,6 @@ public class CachedMusicService implements MusicService {
     }
 
 	@Override
-	public String getCoverArtUrl(Context context, Entry entry) throws Exception {
-		return musicService.getCoverArtUrl(context, entry);
-	}
-
-	@Override
     public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
         return musicService.getCoverArt(context, entry, size, progressListener, task);
     }
@@ -610,11 +605,6 @@ public class CachedMusicService implements MusicService {
     public Response getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
         return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
     }
-
-	@Override
-	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
-		return musicService.getMusicUrl(context, song, maxBitrate);
-	}
 
 	@Override
 	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {

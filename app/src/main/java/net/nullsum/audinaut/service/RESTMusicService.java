@@ -19,19 +19,9 @@
 package net.nullsum.audinaut.service;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -46,9 +36,6 @@ import okhttp3.Credentials;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Looper;
 import android.util.Log;
 
 import net.nullsum.audinaut.R;
@@ -74,8 +61,6 @@ import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.SongDBHandler;
 import net.nullsum.audinaut.util.Util;
-import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 /**
  * @author Sindre Mehus
@@ -85,26 +70,7 @@ public class RESTMusicService implements MusicService {
     private static OkHttpClient client = new OkHttpClient();
     private static final String TAG = RESTMusicService.class.getSimpleName();
 
-    private static final int SOCKET_CONNECT_TIMEOUT = 10 * 1000;
-    private static final int SOCKET_READ_TIMEOUT_DEFAULT = 10 * 1000;
-    private static final int SOCKET_READ_TIMEOUT_DOWNLOAD = 30 * 1000;
-    private static final int SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS = 60 * 1000;
-    private static final int SOCKET_READ_TIMEOUT_GET_PLAYLIST = 60 * 1000;
-
-    // Allow 20 seconds extra timeout per MB offset.
-    private static final double TIMEOUT_MILLIS_PER_OFFSET_BYTE = 20000.0 / 1000000.0;
-
-    private static final int HTTP_REQUEST_MAX_ATTEMPTS = 5;
-    private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
-
-    private long redirectionLastChecked;
-    private int redirectionNetworkType = -1;
-    private String redirectFrom;
-    private String redirectTo;
     private Integer instance;
-
-    public RESTMusicService() {
-    }
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -617,15 +583,6 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
-        StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
-        builder.append("&id=").append(entry.getCoverArt());
-        String url = builder.toString();
-        url = rewriteUrlWithRedirect(context, url);
-        return url;
-    }
-
-    @Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 
         // Synchronize on the entry so that we don't download concurrently for the same song.
@@ -686,10 +643,6 @@ public class RESTMusicService implements MusicService {
 
         String url = getRestUrl(context, "stream");
 
-        url += "&id=" + song.getId();
-
-        Log.i(TAG, "Using music URL: " + url);
-
         Builder builder = new FormBody.Builder();
         builder.add("id", song.getId());
         builder.add("maxBitRate", Integer.toString(maxBitrate));
@@ -702,7 +655,7 @@ public class RESTMusicService implements MusicService {
         }
 
         requestBuilder.url(url);
-//        requestBuilder.post(formBody);
+        requestBuilder.post(formBody);
 
         Request request = requestBuilder.build();
 
@@ -710,20 +663,6 @@ public class RESTMusicService implements MusicService {
         return response;
     }
 
-
-    @Override
-    public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
-        StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
-        builder.append("&id=").append(song.getId());
-
-        // Allow user to specify to stream raw formats if available
-        builder.append("&maxBitRate=").append(maxBitrate);
-
-        String url = builder.toString();
-        url = rewriteUrlWithRedirect(context, url);
-        Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
-        return url;
-    }
 
     @Override
     public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
@@ -893,35 +832,6 @@ public class RESTMusicService implements MusicService {
         this.instance = instance;
     }
 
-    private String rewriteUrlWithRedirect(Context context, String url) {
-
-        // Only cache for a certain time.
-        if (System.currentTimeMillis() - redirectionLastChecked > REDIRECTION_CHECK_INTERVAL_MILLIS) {
-            return url;
-        }
-
-        // Ignore cache if network type has changed.
-        if (redirectionNetworkType != getCurrentNetworkType(context)) {
-            return url;
-        }
-
-        if (redirectFrom == null || redirectTo == null) {
-            return url;
-        }
-
-        return url.replace(redirectFrom, redirectTo);
-    }
-
-    private String stripUrlInfo(String url) {
-        return url.substring(0, url.indexOf("?u=") + 1) + url.substring(url.indexOf("&v=") + 1);
-    }
-
-    private int getCurrentNetworkType(Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        return networkInfo == null ? -1 : networkInfo.getType();
-    }
-
     public int getInstance(Context context) {
         if(instance == null) {
             return Util.getActiveServer(context);
@@ -929,6 +839,7 @@ public class RESTMusicService implements MusicService {
             return instance;
         }
     }
+
 
     public String getRestUrl(Context context, String method) {
         return getRestUrl(context, method, true);

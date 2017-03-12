@@ -211,11 +211,6 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
     }
@@ -555,11 +550,6 @@ public class OfflineMusicService implements MusicService {
 
         return result;
     }
-
-	@Override
-	public String getCoverArtUrl(Context context, Entry entry) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
 
 	@Override
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
