@@ -19,7 +19,7 @@
 package net.nullsum.audinaut.service.parser;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -36,17 +36,17 @@ import net.nullsum.audinaut.util.Util;
  */
 public abstract class AbstractParser {
     private static final String TAG = AbstractParser.class.getSimpleName();
-	private static final String SUBSONIC_RESPONSE = "subsonic-response";
-	private static final String SUBSONIC = "subsonic";
+    private static final String SUBSONIC_RESPONSE = "subsonic-response";
+    private static final String SUBSONIC = "subsonic";
 
     protected final Context context;
-	protected final int instance;
+    protected final int instance;
     private XmlPullParser parser;
     private boolean rootElementFound;
 
     public AbstractParser(Context context, int instance) {
         this.context = context;
-		this.instance = instance;
+        this.instance = instance;
     }
 
     protected Context getContext() {
@@ -57,9 +57,9 @@ public abstract class AbstractParser {
         int code = getInteger("code");
         String message;
         switch (code) {
-			case 0:
-				message = context.getResources().getString(R.string.parser_server_error, get("message"));
-				break;
+            case 0:
+                message = context.getResources().getString(R.string.parser_server_error, get("message"));
+                break;
             case 20:
                 message = context.getResources().getString(R.string.parser_upgrade_client);
                 break;
@@ -69,11 +69,11 @@ public abstract class AbstractParser {
             case 40:
                 message = context.getResources().getString(R.string.parser_not_authenticated);
                 break;
-			case 41:
-				Util.setBlockTokenUse(context, instance, true);
+            case 41:
+                Util.setBlockTokenUse(context, instance, true);
 
-				// Throw IOException so RESTMusicService knows to retry
-				throw new IOException();
+                // Throw IOException so RESTMusicService knows to retry
+                throw new IOException();
             case 50:
                 message = context.getResources().getString(R.string.parser_not_authorized);
                 break;
@@ -128,18 +128,18 @@ public abstract class AbstractParser {
         return s == null ? null : Float.valueOf(s);
     }
 
-    protected void init(Reader reader) throws Exception {
+    protected void init(InputStream inputStream) throws Exception {
         parser = Xml.newPullParser();
-        parser.setInput(reader);
+        parser.setInput(inputStream, "UTF-8");
         rootElementFound = false;
     }
 
     protected int nextParseEvent() throws Exception {
-		try {
-			return parser.next();
-		} catch(Exception e) {
-			throw e;
-		}
+        try {
+            return parser.next();
+        } catch(Exception e) {
+            throw e;
+        }
     }
 
     protected String getElementName() {

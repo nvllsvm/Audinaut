@@ -21,7 +21,7 @@ package net.nullsum.audinaut.service.parser;
 import android.content.Context;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.Reader;
+import java.io.InputStream;
 
 /**
  * @author Sindre Mehus
@@ -32,9 +32,9 @@ public class ErrorParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public void parse(Reader reader) throws Exception {
+    public void parse(InputStream inputStream) throws Exception {
 
-        init(reader);
+        init(inputStream);
 
         int eventType;
         do {

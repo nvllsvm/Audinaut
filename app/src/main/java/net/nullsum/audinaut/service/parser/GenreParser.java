@@ -27,10 +27,8 @@ import net.nullsum.audinaut.util.ProgressListener;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,56 +36,19 @@ import java.util.List;
  * @author Joshua Bahnsen
  */
 public class GenreParser extends AbstractParser {
-	private static final String TAG = GenreParser.class.getSimpleName();
-	
+    private static final String TAG = GenreParser.class.getSimpleName();
+
     public GenreParser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
-    public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<Genre> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+        init(inputStream);
+
         List<Genre> result = new ArrayList<Genre>();
-        StringReader sr = null;
-        
-        try {
-        	BufferedReader br = new BufferedReader(reader);
-        	String xml = null;
-        	String line = null;
-        
-        	while ((line = br.readLine()) != null) {
-        		if (xml == null) {
-        			xml = line;
-        		} else {
-        			xml += line;
-        		}
-        	}
-        	br.close();
-        	
-        	// Replace double escaped ampersand (&amp;apos;) 
-        	xml = xml.replaceAll("(?:&amp;)(amp;|lt;|gt;|#37;|apos;)", "&$1");
-        	
-            // Replace unescaped ampersand
-            xml = xml.replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;");
-
-            // Replace unescaped percent symbol
-            // No replacements for <> at this time
-            xml = xml.replaceAll("%", "&#37;");
-            
-            xml = xml.replaceAll("'", "&apos;");
-            
-            sr = new StringReader(xml);
-        } catch (IOException ioe) {
-        	Log.e(TAG, "Error parsing Genre XML", ioe);
-        }
-
-        if (sr == null) {
-        	Log.w(TAG, "Unable to parse Genre XML, returning empty list");
-        	return result;
-        }
-        
-        init(sr);
 
         Genre genre = null;
-        
+
         int eventType;
         do {
             eventType = nextParseEvent();
@@ -95,28 +56,28 @@ public class GenreParser extends AbstractParser {
                 String name = getElementName();
                 if ("genre".equals(name)) {
                     genre = new Genre();
-					genre.setSongCount(getInteger("songCount"));
-					genre.setAlbumCount(getInteger("albumCount"));
+                    genre.setSongCount(getInteger("songCount"));
+                    genre.setAlbumCount(getInteger("albumCount"));
                 } else if ("error".equals(name)) {
                     handleError();
                 } else {
-                	genre = null;
+                    genre = null;
                 }
             } else if (eventType == XmlPullParser.TEXT) {
                 if (genre != null) {
-                	String value = getText();
-                	if (genre != null) {
-                		genre.setName(Html.fromHtml(value).toString());
-                		genre.setIndex(value.substring(0, 1));
-                		result.add(genre);
-                		genre = null;
-                	}
+                    String value = getText();
+                    if (genre != null) {
+                        genre.setName(Html.fromHtml(value).toString());
+                        genre.setIndex(value.substring(0, 1));
+                        result.add(genre);
+                        genre = null;
+                    }
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        
+
         return Genre.GenreComparator.sort(result);
     }
 }

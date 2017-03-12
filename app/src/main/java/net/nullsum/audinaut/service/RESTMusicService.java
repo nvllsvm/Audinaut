@@ -32,6 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import java.util.concurrent.TimeUnit;
+
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -62,6 +65,15 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.FormBody;
+import okhttp3.FormBody.Builder;
+import okhttp3.RequestBody;
+import okhttp3.Call;
+import okhttp3.Credentials;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -83,10 +95,7 @@ import net.nullsum.audinaut.service.parser.PlayQueueParser;
 import net.nullsum.audinaut.service.parser.PlaylistParser;
 import net.nullsum.audinaut.service.parser.PlaylistsParser;
 import net.nullsum.audinaut.service.parser.RandomSongsParser;
-import net.nullsum.audinaut.service.parser.ScanStatusParser;
 import net.nullsum.audinaut.service.parser.SearchResult2Parser;
-import net.nullsum.audinaut.service.parser.SearchResultParser;
-import net.nullsum.audinaut.service.parser.TopSongsParser;
 import net.nullsum.audinaut.service.parser.UserParser;
 import net.nullsum.audinaut.service.ssl.SSLSocketFactory;
 import net.nullsum.audinaut.service.ssl.TrustSelfSignedStrategy;
@@ -106,6 +115,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class RESTMusicService implements MusicService {
 
+    private static OkHttpClient client = new OkHttpClient();
     private static final String TAG = RESTMusicService.class.getSimpleName();
 
     private static final int SOCKET_CONNECT_TIMEOUT = 10 * 1000;
@@ -126,7 +136,7 @@ public class RESTMusicService implements MusicService {
     private String redirectFrom;
     private String redirectTo;
     private final ThreadSafeClientConnManager connManager;
-	private Integer instance;
+    private Integer instance;
 
     public RESTMusicService() {
 
@@ -164,521 +174,522 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "ping", null);
-        try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
+        String url = getRestUrl(context, "ping");
+
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
         }
     }
 
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getMusicFolders", null);
-        try {
-            return new MusicFoldersParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        String url = getRestUrl(context, "getMusicFolders");
+
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new MusicFoldersParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
-	@Override
-	public void startRescan(Context context, ProgressListener listener) throws Exception {
-		Reader reader = getReader(context, listener, "startRescan", null);
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-
-		// Now check if still running
-		boolean done = false;
-		while(!done) {
-			reader = getReader(context, null, "scanstatus", null);
-			try {
-				boolean running = new ScanStatusParser(context, getInstance(context)).parse(reader, listener);
-				if(running) {
-					// Don't run system ragged trying to query too much
-					Thread.sleep(100L);
-				} else {
-					done = true;
-				}
-			} catch(Exception e) {
-				done = true;
-			} finally {
-				Util.close(reader);
-			}
-		}
-	}
-
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = new ArrayList<String>();
-        List<Object> parameterValues = new ArrayList<Object>();
+        String url = getRestUrl(context, "getArtists");
 
-	if (musicFolderId != null) {
-            parameterNames.add("musicFolderId");
-            parameterValues.add(musicFolderId);
+        Builder builder= new FormBody.Builder();
+
+        if (musicFolderId != null) {
+            builder.add("musicFolderId", musicFolderId);
         }
 
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtists" : "getIndexes", null, parameterNames, parameterValues);
-        try {
-            return new IndexesParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new IndexesParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		SharedPreferences prefs = Util.getPreferences(context);
-		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
-			String search = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			SearchCritera critera = new SearchCritera(search, 1, 1, 0);
-			SearchResult result = searchNew(critera, context, progressListener);
-			if(result.getArtists().size() == 1) {
-				id = result.getArtists().get(0).getId();
-			} else if(result.getAlbums().size() == 1) {
-				id = result.getAlbums().get(0).getId();
-			}
-		}
+        SharedPreferences prefs = Util.getPreferences(context);
+        String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+        if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+            String search = Util.parseOfflineIDSearch(context, id, cacheLocn);
+            SearchCritera critera = new SearchCritera(search, 1, 1, 0);
+            SearchResult result = search(critera, context, progressListener);
+            if(result.getArtists().size() == 1) {
+                id = result.getArtists().get(0).getId();
+            } else if(result.getAlbums().size() == 1) {
+                id = result.getAlbums().get(0).getId();
+            }
+        }
 
-		MusicDirectory dir = null;
-		int index, start = 0;
-		while((index = id.indexOf(';', start)) != -1) {
-			MusicDirectory extra = getMusicDirectoryImpl(id.substring(start, index), name, refresh, context, progressListener);
-			if(dir == null) {
-				dir = extra;
-			} else {
-				dir.addChildren(extra.getChildren());
-			}
+        MusicDirectory dir = null;
+        int index, start = 0;
+        while((index = id.indexOf(';', start)) != -1) {
+            MusicDirectory extra = getMusicDirectoryImpl(id.substring(start, index), name, refresh, context, progressListener);
+            if(dir == null) {
+                dir = extra;
+            } else {
+                dir.addChildren(extra.getChildren());
+            }
 
-			start = index + 1;
-		}
-		MusicDirectory extra = getMusicDirectoryImpl(id.substring(start), name, refresh, context, progressListener);
-		if(dir == null) {
-			dir = extra;
-		} else {
-			dir.addChildren(extra.getChildren());
-		}
+            start = index + 1;
+        }
+        MusicDirectory extra = getMusicDirectoryImpl(id.substring(start), name, refresh, context, progressListener);
+        if(dir == null) {
+            dir = extra;
+        } else {
+            dir.addChildren(extra.getChildren());
+        }
 
-		return dir;
+        return dir;
     }
 
-	private MusicDirectory getMusicDirectoryImpl(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getMusicDirectory", null, "id", id);
-		try {
-			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
+    private MusicDirectory getMusicDirectoryImpl(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getMusicDirectory");
 
-	@Override
-	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getArtist", null, "id", id);
-		try {
-			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
+        RequestBody formBody = new FormBody.Builder()
+            .add("id", id)
+            .build();
 
-	@Override
-	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getAlbum", null, "id", id);
-		try {
-			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
 
-	@Override
-    public SearchResult search(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
-        return searchNew(critera, context, progressListener);
-    }
-
-    /**
-     * Search using the "search" REST method.
-     */
-    private SearchResult searchOld(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = Arrays.asList("any", "songCount");
-        List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getSongCount());
-        Reader reader = getReader(context, progressListener, "search", null, parameterNames, parameterValues);
-        try {
-            return new SearchResultParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        try (Response response = client.newCall(request).execute()) {
+            return new MusicDirectoryParser(context, getInstance(context)).parse(name, response.body().byteStream(), progressListener);
         }
     }
 
-    /**
-     * Search using the "search2" REST method, available in 1.4.0 and later.
-     */
-    private SearchResult searchNew(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = Arrays.asList("query", "artistCount", "albumCount", "songCount");
-        List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getArtistCount(), critera.getAlbumCount(), critera.getSongCount());
+    @Override
+    public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getArtist");
 
-		int instance = getInstance(context);
-		String method;
-        if(Util.isTagBrowsing(context, instance)) {
-            method = "search3";
-        } else {
-            method = "search2";
-		}
-        Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
-        try {
-            return new SearchResult2Parser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        RequestBody formBody = new FormBody.Builder()
+            .add("id", id)
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new MusicDirectoryParser(context, getInstance(context)).parse(name, response.body().byteStream(), progressListener);
+        }
+    }
+
+    @Override
+    public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getAlbum");
+
+        RequestBody formBody = new FormBody.Builder()
+            .add("id", id)
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new MusicDirectoryParser(context, getInstance(context)).parse(name, response.body().byteStream(), progressListener);
+        }
+    }
+
+    @Override
+    public SearchResult search(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "search3");
+
+        Builder builder= new FormBody.Builder();
+
+        builder.add("query", critera.getQuery());
+        builder.add("artistCount", Integer.toString(critera.getArtistCount()));
+        builder.add("albumCount", Integer.toString(critera.getAlbumCount()));
+        builder.add("songCount", Integer.toString(critera.getSongCount()));
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new SearchResult2Parser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
     @Override
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
-        HttpParams params = new BasicHttpParams();
-        HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_PLAYLIST);
+        String url = getRestUrl(context, "getPlaylist");
 
-        Reader reader = getReader(context, progressListener, "getPlaylist", params, "id", id);
-        try {
-			return new PlaylistParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        RequestBody formBody = new FormBody.Builder()
+            .add("id", id)
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new PlaylistParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getPlaylists", null);
-        try {
-            return new PlaylistsParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        String url = getRestUrl(context, "getPlaylists");
+
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new PlaylistsParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = new LinkedList<String>();
-        List<Object> parameterValues = new LinkedList<Object>();
+        String url = getRestUrl(context, "createPlaylist");
+
+        Builder builder= new FormBody.Builder();
 
         if (id != null) {
-            parameterNames.add("playlistId");
-            parameterValues.add(id);
-        }
-        if (name != null) {
-            parameterNames.add("name");
-            parameterValues.add(name);
-        }
-        for (MusicDirectory.Entry entry : entries) {
-            parameterNames.add("songId");
-            parameterValues.add(getOfflineSongId(entry.getId(), context, progressListener));
+            builder.add("playlistId", id);
         }
 
-        Reader reader = getReader(context, progressListener, "createPlaylist", null, parameterNames, parameterValues);
-        try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
+        if (name != null) {
+            builder.add("name", name);
+        }
+
+        for (MusicDirectory.Entry entry : entries) {
+            builder.add("songId", getOfflineSongId(entry.getId(), context, progressListener));
+        }
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
         }
     }
 
-	@Override
-	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "deletePlaylist", null, "id", id);
-		try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
-        }
-	}
+    @Override
+    public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "deletePlaylist");
 
-	@Override
-	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
-		names.add("playlistId");
-		values.add(id);
-		for(MusicDirectory.Entry song: toAdd) {
-			names.add("songIdToAdd");
-			values.add(getOfflineSongId(song.getId(), context, progressListener));
-		}
-		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
-    	try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
-        }
-	}
+        RequestBody formBody = new FormBody.Builder()
+            .add("id", id)
+            .build();
 
-	@Override
-	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
-		names.add("playlistId");
-		values.add(id);
-		for(Integer song: toRemove) {
-			names.add("songIndexToRemove");
-			values.add(song);
-		}
-		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
-    	try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
-        }
-	}
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
 
-	@Override
-	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
-		names.add("playlistId");
-		values.add(id);
-		names.add("name");
-		values.add(name);
-		for(MusicDirectory.Entry song: toAdd) {
-			names.add("songIdToAdd");
-			values.add(song.getId());
-		}
-		for(int i = 0; i < toRemove; i++) {
-			names.add("songIndexToRemove");
-			values.add(i);
-		}
-		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
-    	try {
-            new ErrorParser(context, getInstance(context)).parse(reader);
-        } finally {
-            Util.close(reader);
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
         }
-	}
+    }
 
-	@Override
-	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment", "public"), Arrays.<Object>asList(id, name, comment, pub));
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
+    @Override
+    public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "updatePlaylist");
+
+        Builder builder= new FormBody.Builder();
+        builder.add("playlistId", id);
+        for(MusicDirectory.Entry song: toAdd) {
+            builder.add("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
+        }
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
+        }
+    }
+
+    @Override
+    public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "updatePlaylist");
+
+        Builder builder= new FormBody.Builder();
+        builder.add("playlistId", id);
+
+        for(Integer song: toRemove) {
+            builder.add("songIndexToRemove", Integer.toString(song));
+        }
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
+        }
+    }
+
+    @Override
+    public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "updatePlaylist");
+
+        Builder builder= new FormBody.Builder();
+        builder.add("playlistId", id);
+        builder.add("name", name);
+
+        for(MusicDirectory.Entry song: toAdd) {
+            builder.add("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
+        }
+
+        for(int i = 0; i < toRemove; i++) {
+            builder.add("songIndexToRemove", Integer.toString(i));
+        }
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
+        }
+    }
+
+    @Override
+    public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "updatePlaylist");
+
+        Builder builder= new FormBody.Builder();
+        builder.add("playlistId", id);
+        builder.add("name", name);
+        builder.add("comment", comment);
+        builder.add("public", Boolean.toString(pub));
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
+        }
+    }
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+        String url = getRestUrl(context, "getAlbumList2");
 
-		names.add("type");
-		values.add(type);
-		names.add("size");
-		values.add(size);
-		names.add("offset");
-		values.add(offset);
+        Builder builder= new FormBody.Builder();
+        builder.add("type", type);
+        builder.add("size", Integer.toString(size));
+        builder.add("offset", Integer.toString(offset));
 
-		// Add folder if it was set and is non null
-		int instance = getInstance(context);
-		if(Util.getAlbumListsPerFolder(context, instance)) {
-			String folderId = Util.getSelectedMusicFolderId(context, instance);
-			if(folderId != null) {
-				names.add("musicFolderId");
-				values.add(folderId);
-			}
-		}
+        // Add folder if it was set and is non null
+        int instance = getInstance(context);
+        if(Util.getAlbumListsPerFolder(context, instance)) {
+            String folderId = Util.getSelectedMusicFolderId(context, instance);
+            if(folderId != null) {
+                builder.add("musicFolderId", folderId);
+            }
+        }
 
-		String method;
-		if(Util.isTagBrowsing(context, instance)) {
-            method = "getAlbumList2";
-		} else {
-			method = "getAlbumList";
-		}
+        RequestBody formBody = builder.build();
 
-        Reader reader = getReader(context, progressListener, method, null, names, values, true);
-        try {
-            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new EntryListParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
-	@Override
-	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+    @Override
+    public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getAlbumList2");
 
-		names.add("size");
-		names.add("offset");
+        Builder builder= new FormBody.Builder();
+        builder.add("size", Integer.toString(size));
+        builder.add("offset", Integer.toString(offset));
 
-		values.add(size);
-		values.add(offset);
+        int instance = getInstance(context);
+        if("genres".equals(type)) {
+            builder.add("type", "byGenre");
+            builder.add("genre", extra);
+        } else if("years".equals(type)) {
+            int decade = Integer.parseInt(extra);
 
-		int instance = getInstance(context);
-		if("genres".equals(type)) {
-			names.add("type");
-			values.add("byGenre");
+            builder.add("type", "byYear");
+            builder.add("fromYear", Integer.toString(decade + 9));
+            builder.add("toYear", Integer.toString(decade));
+        }
 
-			names.add("genre");
-			values.add(extra);
-		} else if("years".equals(type)) {
-			names.add("type");
-			values.add("byYear");
+        // Add folder if it was set and is non null
+        if(Util.getAlbumListsPerFolder(context, instance)) {
+            String folderId = Util.getSelectedMusicFolderId(context, instance);
+            if(folderId != null) {
+                builder.add("musicFolderId", folderId);
+            }
+        }
 
-			names.add("fromYear");
-			names.add("toYear");
+        RequestBody formBody = builder.build();
 
-			int decade = Integer.parseInt(extra);
-			// Reverse chronological order only supported in 5.3+
-            values.add(decade + 9);
-            values.add(decade);
-		}
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
 
-		// Add folder if it was set and is non null
-		if(Util.getAlbumListsPerFolder(context, instance)) {
-			String folderId = Util.getSelectedMusicFolderId(context, instance);
-			if(folderId != null) {
-				names.add("musicFolderId");
-				values.add(folderId);
-			}
-		}
-
-		String method;
-		if(Util.isTagBrowsing(context, instance)) {
-            method = "getAlbumList2";
-		} else {
-			method = "getAlbumList";
-		}
-
-		Reader reader = getReader(context, progressListener, method, null, names, values, true);
-		try {
-			return new EntryListParser(context, instance).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
+        try (Response response = client.newCall(request).execute()) {
+            return new EntryListParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
+        }
+    }
 
     @Override
     public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-        List<String> names = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
-
-        names.add("size");
-        values.add(size);
-        names.add("offset");
-        values.add(offset);
+        Builder builder= new FormBody.Builder();
+        builder.add("size", Integer.toString(size));
+        builder.add("offset", Integer.toString(offset));
 
         String method;
         switch(type) {
-			case MainFragment.SONGS_NEWEST:
-				method = "getNewaddedSongs";
-				break;
-			case MainFragment.SONGS_TOP_PLAYED:
-				method = "getTopplayedSongs";
-				break;
-			case MainFragment.SONGS_RECENT:
-				method = "getLastplayedSongs";
-				break;
-			case MainFragment.SONGS_FREQUENT:
-				method = "getMostplayedSongs";
-				break;
-			default:
-				method = "getNewaddedSongs";
-		}
+            case MainFragment.SONGS_NEWEST:
+                method = "getNewaddedSongs";
+                break;
+            case MainFragment.SONGS_TOP_PLAYED:
+                method = "getTopplayedSongs";
+                break;
+            case MainFragment.SONGS_RECENT:
+                method = "getLastplayedSongs";
+                break;
+            case MainFragment.SONGS_FREQUENT:
+                method = "getMostplayedSongs";
+                break;
+            default:
+                method = "getNewaddedSongs";
+        }
 
-        Reader reader = getReader(context, progressListener, method, null, names, values, true);
-        try {
-            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        String url = getRestUrl(context, method);
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new EntryListParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
     @Override
-	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+    public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
+        Builder builder= new FormBody.Builder();
+        builder.add("id", artistId);
+        builder.add("count", Integer.toString(size));
 
-		names.add("id");
-		names.add("count");
+        String url = getRestUrl(context, "getSimilarSongs2");
 
-		values.add(artistId);
-		values.add(size);
+        RequestBody formBody = builder.build();
 
-		int instance = getInstance(context);
-		String method;
-        if (Util.isTagBrowsing(context, instance)) {
-            method = "getSimilarSongs2";
-        } else {
-            method = "getSimilarSongs";
-		}
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
 
-		Reader reader = getReader(context, progressListener, method, null, names, values);
-		try {
-			return new RandomSongsParser(context, instance).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
+        try (Response response = client.newCall(request).execute()) {
+            return new RandomSongsParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
+        }
+    }
 
     @Override
     public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
-        HttpParams params = new BasicHttpParams();
-        HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
-
-		List<String> names = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
-
-        names.add("size");
-        values.add(size);
+        Builder builder= new FormBody.Builder();
+        builder.add("size", Integer.toString(size));
 
         if (musicFolderId != null && !"".equals(musicFolderId) && !Util.isTagBrowsing(context, getInstance(context))) {
-            names.add("musicFolderId");
-            values.add(musicFolderId);
+            builder.add("musicFolderId", musicFolderId);
         }
-		if(genre != null && !"".equals(genre)) {
-			names.add("genre");
-			values.add(genre);
-		}
-		if(startYear != null && !"".equals(startYear)) {
-			// Check to make sure user isn't doing 2015 -> 2010 since Subsonic will return no results
-			if(endYear != null && !"".equals(endYear)) {
-				try {
-					int startYearInt = Integer.parseInt(startYear);
-					int endYearInt = Integer.parseInt(endYear);
+        if(genre != null && !"".equals(genre)) {
+            builder.add("genre", genre);
+        }
+        if(startYear != null && !"".equals(startYear)) {
+            // Check to make sure user isn't doing 2015 -> 2010 since Subsonic will return no results
+            if(endYear != null && !"".equals(endYear)) {
+                try {
+                    int startYearInt = Integer.parseInt(startYear);
+                    int endYearInt = Integer.parseInt(endYear);
 
-					if(startYearInt > endYearInt) {
-						String tmp = startYear;
-						startYear = endYear;
-						endYear = tmp;
-					}
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to convert start/end year into ints", e);
-				}
-			}
+                    if(startYearInt > endYearInt) {
+                        String tmp = startYear;
+                        startYear = endYear;
+                        endYear = tmp;
+                    }
+                } catch(Exception e) {
+                    Log.w(TAG, "Failed to convert start/end year into ints", e);
+                }
+            }
 
-			names.add("fromYear");
-			values.add(startYear);
-		}
-		if(endYear != null && !"".equals(endYear)) {
-			names.add("toYear");
-			values.add(endYear);
-		}
+            builder.add("fromYear", startYear);
+        }
+        if(endYear != null && !"".equals(endYear)) {
+            builder.add("toYear", endYear);
+        }
 
-        Reader reader = getReader(context, progressListener, "getRandomSongs", params, names, values);
-        try {
-            return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        String url = getRestUrl(context, "getRandomSongs");
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new RandomSongsParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
     }
 
-	@Override
-	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
-		builder.append("&id=").append(entry.getCoverArt());
-		String url = builder.toString();
-		url = rewriteUrlWithRedirect(context, url);
-		return url;
-	}
+    @Override
+    public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+        StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
+        builder.append("&id=").append(entry.getCoverArt());
+        String url = builder.toString();
+        url = rewriteUrlWithRedirect(context, url);
+        return url;
+    }
 
     @Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
@@ -694,48 +705,40 @@ public class RESTMusicService implements MusicService {
 
             String url = getRestUrl(context, "getCoverArt");
 
-            InputStream in = null;
-            try {
-                List<String> parameterNames = Arrays.asList("id");
-                List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt());
-                HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener, task);
+            Builder builder= new FormBody.Builder();
+            builder.add("id", entry.getCoverArt());
 
-				in = entity.getContent();
-				Header contentEncoding = entity.getContentEncoding();
-				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-					in = new GZIPInputStream(in);
-				}
+            RequestBody formBody = builder.build();
 
-                // If content type is XML, an error occured.  Get it.
-                String contentType = Util.getContentType(entity);
-				if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
-                    new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
-                    return null; // Never reached.
-                }
+            Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                InputStream in = response.body().byteStream();
 
                 byte[] bytes = Util.toByteArray(in);
 
-				// Handle case where partial was downloaded before being cancelled
-				if(task != null && task.isCancelled()) {
-					return null;
-				}
+                // Handle case where partial was downloaded before being cancelled
+                if(task != null && task.isCancelled()) {
+                    return null;
+                }
 
-				OutputStream out = null;
-				try {
-					out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
-					out.write(bytes);
-				} finally {
-					Util.close(out);
-				}
+                OutputStream out = null;
+                try {
+                    out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
+                    out.write(bytes);
+                } finally {
+                    Util.close(out);
+                }
 
-				// Size == 0 -> only want to download
-				if(size == 0) {
-					return null;
-				} else {
-					return FileUtil.getSampledBitmap(bytes, size);
-				}
-            } finally {
-                Util.close(in);
+                // Size == 0 -> only want to download
+                if(size == 0) {
+                    return null;
+                } else {
+                    return FileUtil.getSampledBitmap(bytes, size);
+                }
             }
         }
     }
@@ -758,26 +761,26 @@ public class RESTMusicService implements MusicService {
             headers.add(new BasicHeader("Range", "bytes=" + offset + "-"));
         }
 
-		List<String> parameterNames = new ArrayList<String>();
-		parameterNames.add("id");
-		parameterNames.add("maxBitRate");
+        List<String> parameterNames = new ArrayList<String>();
+        parameterNames.add("id");
+        parameterNames.add("maxBitRate");
 
-		List<Object> parameterValues = new ArrayList<Object>();
-		parameterValues.add(song.getId());
-		parameterValues.add(maxBitrate);
+        List<Object> parameterValues = new ArrayList<Object>();
+        parameterValues.add(song.getId());
+        parameterValues.add(maxBitrate);
 
         HttpResponse response = getResponseForURL(context, url, params, parameterNames, parameterValues, headers, null, task, false);
 
         // If content type is XML, an error occurred.  Get it.
-        String contentType = Util.getContentType(response.getEntity());
+        String contentType = response.getEntity().getContentType().getValue();
         if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
             InputStream in = response.getEntity().getContent();
-			Header contentEncoding = response.getEntity().getContentEncoding();
-			if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-				in = new GZIPInputStream(in);
-			}
+            Header contentEncoding = response.getEntity().getContentEncoding();
+            if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+                in = new GZIPInputStream(in);
+            }
             try {
-                new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
+                new ErrorParser(context, getInstance(context)).parse(in);
             } finally {
                 Util.close(in);
             }
@@ -786,384 +789,201 @@ public class RESTMusicService implements MusicService {
         return response;
     }
 
-	@Override
-	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
-		builder.append("&id=").append(song.getId());
 
-		// Allow user to specify to stream raw formats if available
-		builder.append("&maxBitRate=").append(maxBitrate);
+    @Override
+    public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+        StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
+        builder.append("&id=").append(song.getId());
 
-		String url = builder.toString();
-		url = rewriteUrlWithRedirect(context, url);
-		Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
-		return url;
-	}
+        // Allow user to specify to stream raw formats if available
+        builder.append("&maxBitRate=").append(maxBitrate);
 
-	@Override
-	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getGenres", null);
-        try {
-            return new GenreParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
+        String url = builder.toString();
+        url = rewriteUrlWithRedirect(context, url);
+        Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
+        return url;
+    }
+
+    @Override
+    public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getGenres");
+
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new GenreParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
         }
-	}
-
-	@Override
-	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
-		HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
-
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
-
-		parameterNames.add("genre");
-		parameterValues.add(genre);
-		parameterNames.add("count");
-		parameterValues.add(count);
-		parameterNames.add("offset");
-		parameterValues.add(offset);
-
-		// Add folder if it was set and is non null
-		int instance = getInstance(context);
-		if(Util.getAlbumListsPerFolder(context, instance)) {
-			String folderId = Util.getSelectedMusicFolderId(context, instance);
-			if(folderId != null) {
-				parameterNames.add("musicFolderId");
-				parameterValues.add(folderId);
-			}
-		}
-
-		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues, true);
-		try {
-			return new RandomSongsParser(context, instance).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
-
-		parameterNames.add("artist");
-		parameterValues.add(artist);
-		parameterNames.add("size");
-		parameterValues.add(size);
-
-		String method = "getTopSongs";
-		Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
-		try {
-			return new TopSongsParser(context, getInstance(context)).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
-		try {
-			List<User> users = new UserParser(context, getInstance(context)).parse(reader, progressListener);
-			if(users.size() > 0) {
-				// Should only have returned one anyways
-				return users.get(0);
-			} else {
-				return null;
-			}
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getUsers", null);
-		try {
-			return new UserParser(context, getInstance(context)).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
-
-		names.add("username");
-		values.add(user.getUsername());
-		names.add("email");
-		values.add(user.getEmail());
-		names.add("password");
-		values.add(user.getPassword());
-
-		for(User.Setting setting: user.getSettings()) {
-			names.add(setting.getName());
-			values.add(setting.getValue());
-		}
-
-		if(user.getMusicFolderSettings() != null) {
-			for(User.Setting setting: user.getMusicFolderSettings()) {
-				if(setting.getValue()) {
-					names.add("musicFolderId");
-					values.add(setting.getName());
-				}
-			}
-		}
-
-		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
-
-		names.add("username");
-		values.add(user.getUsername());
-
-		for(User.Setting setting: user.getSettings()) {
-			if(setting.getName().indexOf("Role") != -1) {
-				names.add(setting.getName());
-				values.add(setting.getValue());
-			}
-		}
-
-		if(user.getMusicFolderSettings() != null) {
-			for(User.Setting setting: user.getMusicFolderSettings()) {
-				if(setting.getValue()) {
-					names.add("musicFolderId");
-					values.add(setting.getName());
-				}
-			}
-		}
-
-		Reader reader = getReader(context, progressListener, "updateUser", null, names, values);
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "deleteUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "updateUser", null, Arrays.asList("username", "email"), Arrays.<Object>asList(username, email));
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "changePassword", null, Arrays.asList("username", "password"), Arrays.<Object>asList(username, password));
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-		// Synchronize on the url so that we don't download concurrently
-		synchronized (url) {
-			// Use cached file, if existing.
-			Bitmap bitmap = FileUtil.getMiscBitmap(context, url, size);
-			if(bitmap != null) {
-				return bitmap;
-			}
-
-			InputStream in = null;
-			try {
-				HttpEntity entity = getEntityForURL(context, url, null, null, null, progressListener, task);
-				in = entity.getContent();
-				Header contentEncoding = entity.getContentEncoding();
-				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-					in = new GZIPInputStream(in);
-				}
-
-				// If content type is XML, an error occurred. Get it.
-				String contentType = Util.getContentType(entity);
-				if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
-					new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
-					return null; // Never reached.
-				}
-
-				byte[] bytes = Util.toByteArray(in);
-				if(task != null && task.isCancelled()) {
-					// Handle case where partial is downloaded and cancelled
-					return null;
-				}
-
-				OutputStream out = null;
-				try {
-					out = new FileOutputStream(FileUtil.getMiscFile(context, url));
-					out.write(bytes);
-				} finally {
-					Util.close(out);
-				}
-
-				return FileUtil.getSampledBitmap(bytes, size, false);
-			}
-			finally {
-				Util.close(in);
-			}
-		}
-	}
-
-	@Override
-	public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
-		List<String> parameterNames = new LinkedList<String>();
-		List<Object> parameterValues = new LinkedList<Object>();
-
-		for(MusicDirectory.Entry song: songs) {
-			parameterNames.add("id");
-			parameterValues.add(song.getId());
-		}
-
-		parameterNames.add("current");
-		parameterValues.add(currentPlaying.getId());
-
-		parameterNames.add("position");
-		parameterValues.add(position);
-
-		Reader reader = getReader(context, progressListener, "savePlayQueue", null, parameterNames, parameterValues);
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getPlayQueue", null);
-		try {
-			return new PlayQueueParser(context, getInstance(context)).parse(reader, progressListener);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	private String getOfflineSongId(String id, Context context, ProgressListener progressListener) throws Exception {
-		SharedPreferences prefs = Util.getPreferences(context);
-		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
-			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(Util.getRestUrlHash(context, getInstance(context)), id);
-			if(cachedSongId != null) {
-				id = cachedSongId.getSecond();
-			} else {
-				String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-				SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
-				SearchResult result = searchNew(critera, context, progressListener);
-				if (result.getSongs().size() == 1) {
-					id = result.getSongs().get(0).getId();
-				}
-			}
-		}
-
-		return id;
-	}
-
-	@Override
-	public void setInstance(Integer instance)  throws Exception {
-		this.instance = instance;
-	}
-
-	private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
-		return getReader(context, progressListener, method, requestParams, false);
-	}
-    private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams, boolean throwsError) throws Exception {
-        return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList(), throwsError);
     }
 
-    private Reader getReader(Context context, ProgressListener progressListener, String method,
-                             HttpParams requestParams, String parameterName, Object parameterValue) throws Exception {
-        return getReader(context, progressListener, method, requestParams, Arrays.asList(parameterName), Arrays.<Object>asList(parameterValue));
-    }
+    @Override
+    public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
+        Builder builder= new FormBody.Builder();
+        builder.add("genre", genre);
+        builder.add("count", Integer.toString(count));
+        builder.add("offset", Integer.toString(offset));
 
-	private Reader getReader(Context context, ProgressListener progressListener, String method,
-							 HttpParams requestParams, List<String> parameterNames, List<Object> parameterValues) throws Exception {
-		return getReader(context, progressListener, method, requestParams, parameterNames, parameterValues, false);
-	}
-    private Reader getReader(Context context, ProgressListener progressListener, String method,
-                             HttpParams requestParams, List<String> parameterNames, List<Object> parameterValues, boolean throwErrors) throws Exception {
-
-        if (progressListener != null) {
-            progressListener.updateProgress(R.string.service_connecting);
+        // Add folder if it was set and is non null
+        int instance = getInstance(context);
+        if(Util.getAlbumListsPerFolder(context, instance)) {
+            String folderId = Util.getSelectedMusicFolderId(context, instance);
+            if(folderId != null) {
+                builder.add("musicFolderId", folderId);
+            }
         }
 
-        String url = getRestUrl(context, method);
-        return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, throwErrors);
+        String url = getRestUrl(context, "getSongsByGenre");
+
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return new RandomSongsParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
+        }
     }
 
-	private Reader getReaderForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-								   List<Object> parameterValues, ProgressListener progressListener) throws Exception {
-		return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, true);
-	}
-    private Reader getReaderForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-                                   List<Object> parameterValues, ProgressListener progressListener, boolean throwErrors) throws Exception {
-        HttpEntity entity = getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, throwErrors);
-        if (entity == null) {
-            throw new RuntimeException("No entity received for URL " + url);
+    @Override
+    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getUser");
+
+        RequestBody formBody = new FormBody.Builder()
+            .add("username", username)
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            List<User> users = new UserParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
+            if(users.size() > 0) {
+                // Should only have returned one anyways
+                return users.get(0);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    @Override
+    public Bitmap getBitmap(String method, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+        // Synchronize on the url so that we don't download concurrently
+        synchronized (method) {
+            // Use cached file, if existing.
+            Bitmap bitmap = FileUtil.getMiscBitmap(context, method, size);
+            if(bitmap != null) {
+                return bitmap;
+            }
+
+            String url = getRestUrl(context, method);
+
+            Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                InputStream in = response.body().byteStream();
+
+                byte[] bytes = Util.toByteArray(in);
+                if(task != null && task.isCancelled()) {
+                    // Handle case where partial is downloaded and cancelled
+                    return null;
+                }
+
+                OutputStream out = null;
+                try {
+                    out = new FileOutputStream(FileUtil.getMiscFile(context, url));
+                    out.write(bytes);
+                } finally {
+                    Util.close(out);
+                }
+
+                return FileUtil.getSampledBitmap(bytes, size, false);
+            }
+        }
+    }
+
+    @Override
+    public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "savePlayQueue");
+
+        Builder builder= new FormBody.Builder();
+
+        builder.add("current", currentPlaying.getId());
+        builder.add("position", Integer.toString(position));
+
+        for(MusicDirectory.Entry song: songs) {
+            builder.add("id", song.getId());
         }
 
-        InputStream in = entity.getContent();
-		Header contentEncoding = entity.getContentEncoding();
-		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-			in = new GZIPInputStream(in);
-		}
-        return new InputStreamReader(in, Constants.UTF_8);
+        RequestBody formBody = builder.build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            new ErrorParser(context, getInstance(context)).parse(response.body().byteStream());
+        }
     }
 
-	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-		List<Object> parameterValues, ProgressListener progressListener, boolean throwErrors) throws Exception {
+    @Override
+    public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
+        String url = getRestUrl(context, "getPlayQueue");
 
-		return getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, null, throwErrors);
-	}
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
 
-	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-									   List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-		return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task, false).getEntity();
-	}
-    private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-                                       List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task, boolean throwsError) throws Exception {
-        return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task, throwsError).getEntity();
+        try (Response response = client.newCall(request).execute()) {
+            return new PlayQueueParser(context, getInstance(context)).parse(response.body().byteStream(), progressListener);
+        }
+    }
+
+    private String getOfflineSongId(String id, Context context, ProgressListener progressListener) throws Exception {
+        SharedPreferences prefs = Util.getPreferences(context);
+        String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+        if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+            Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(Util.getRestUrlHash(context, getInstance(context)), id);
+            if(cachedSongId != null) {
+                id = cachedSongId.getSecond();
+            } else {
+                String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+                SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
+                SearchResult result = search(critera, context, progressListener);
+                if (result.getSongs().size() == 1) {
+                    id = result.getSongs().get(0).getId();
+                }
+            }
+        }
+
+        return id;
+    }
+
+    @Override
+    public void setInstance(Integer instance)  throws Exception {
+        this.instance = instance;
     }
 
     private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
                                            List<String> parameterNames, List<Object> parameterValues,
                                            List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwsErrors) throws Exception {
-	// If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
+        // If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
         // received intact. Remember, HTTP POST requests are converted to GET requests during HTTP redirects, thus
         // loosing its entity.
         if (parameterNames != null && parameterNames.size() < 10) {
             StringBuilder builder = new StringBuilder(url);
             for (int i = 0; i < parameterNames.size(); i++) {
                 builder.append("&").append(parameterNames.get(i)).append("=");
-				String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
-				part = part.replaceAll("\\%27", "'");
+                String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
+                part = part.replaceAll("\\%27", "'");
                 builder.append(part);
             }
             url = builder.toString();
@@ -1178,16 +998,16 @@ public class RESTMusicService implements MusicService {
     private HttpResponse executeWithRetry(final Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwErrors) throws Exception {
-		// Strip out sensitive information from log
-		if(url.indexOf("scanstatus") == -1) {
-			Log.i(TAG, stripUrlInfo(url));
-		}
+        // Strip out sensitive information from log
+        if(url.indexOf("scanstatus") == -1) {
+            Log.i(TAG, stripUrlInfo(url));
+        }
 
-		SharedPreferences prefs = Util.getPreferences(context);
-		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
-		HttpParams newParams = httpClient.getParams();
-		HttpConnectionParams.setSoTimeout(newParams, networkTimeout);
-		httpClient.setParams(newParams);
+        SharedPreferences prefs = Util.getPreferences(context);
+        int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
+        HttpParams newParams = httpClient.getParams();
+        HttpConnectionParams.setSoTimeout(newParams, networkTimeout);
+        httpClient.setParams(newParams);
 
         final AtomicReference<Boolean> isCancelled = new AtomicReference<Boolean>(false);
         int attempts = 0;
@@ -1201,22 +1021,22 @@ public class RESTMusicService implements MusicService {
                 task.setOnCancelListener(new BackgroundTask.OnCancelListener() {
                     @Override
                     public void onCancel() {
-						try {
-							isCancelled.set(true);
-							if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
-								new SilentBackgroundTask<Void>(context) {
-									@Override
-									protected Void doInBackground() throws Throwable {
-										request.abort();
-										return null;
-									}
-								}.execute();
-							} else {
-								request.abort();
-							}
-						} catch(Exception e) {
-							Log.e(TAG, "Failed to stop http task", e);
-						}
+                        try {
+                            isCancelled.set(true);
+                            if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                                new SilentBackgroundTask<Void>(context) {
+                                    @Override
+                                    protected Void doInBackground() throws Throwable {
+                                        request.abort();
+                                        return null;
+                                    }
+                                }.execute();
+                            } else {
+                                request.abort();
+                            }
+                        } catch(Exception e) {
+                            Log.e(TAG, "Failed to stop http task", e);
+                        }
                     }
                 });
             }
@@ -1238,10 +1058,10 @@ public class RESTMusicService implements MusicService {
                     request.addHeader(header);
                 }
             }
-			if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1) {
-				request.addHeader("Accept-Encoding", "gzip");
-			}
-			request.addHeader("User-Agent", Constants.REST_CLIENT_ID);
+            if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1) {
+                request.addHeader("Accept-Encoding", "gzip");
+            }
+            request.addHeader("User-Agent", Constants.REST_CLIENT_ID);
 
             // Set credentials to get through apache proxies that require authentication.
             int instance = getInstance(context);
@@ -1265,7 +1085,7 @@ public class RESTMusicService implements MusicService {
                 }
                 Log.w(TAG, "Got IOException " + x + " (" + attempts + "), will retry");
                 increaseTimeouts(requestParams);
-				Thread.sleep(2000L);
+                Thread.sleep(2000L);
             }
         }
     }
@@ -1286,31 +1106,27 @@ public class RESTMusicService implements MusicService {
     private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) throws Exception {
         HttpUriRequest request = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
         HttpHost host = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-		
-		// Sometimes the request doesn't contain the "http://host" part
-		String redirectedUrl;
-		if (request.getURI().getScheme() == null) {
-			redirectedUrl = host.toURI() + request.getURI();
-		} else {
-			redirectedUrl = request.getURI().toString();
-		}
 
-		if(redirectedUrl != null && "http://subsonic.org/pages/".equals(redirectedUrl)) {
-			throw new Exception("Invalid url, redirects to http://subsonic.org/pages/");
-		}
+        // Sometimes the request doesn't contain the "http://host" part
+        String redirectedUrl;
+        if (request.getURI().getScheme() == null) {
+            redirectedUrl = host.toURI() + request.getURI();
+        } else {
+            redirectedUrl = request.getURI().toString();
+        }
 
-		int fromIndex = originalUrl.indexOf("/rest/");
-		int toIndex = redirectedUrl.indexOf("/rest/");
-		if(fromIndex != -1 && toIndex != -1 && !Util.equals(originalUrl, redirectedUrl)) {
-			redirectFrom = originalUrl.substring(0, fromIndex);
-			redirectTo = redirectedUrl.substring(0, toIndex);
+        int fromIndex = originalUrl.indexOf("/rest/");
+        int toIndex = redirectedUrl.indexOf("/rest/");
+        if(fromIndex != -1 && toIndex != -1 && !Util.equals(originalUrl, redirectedUrl)) {
+            redirectFrom = originalUrl.substring(0, fromIndex);
+            redirectTo = redirectedUrl.substring(0, toIndex);
 
-			if (redirectFrom.compareTo(redirectTo) != 0) {
-				Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
-			}
-			redirectionLastChecked = System.currentTimeMillis();
-			redirectionNetworkType = getCurrentNetworkType(context);
-		}
+            if (redirectFrom.compareTo(redirectTo) != 0) {
+                Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+            }
+            redirectionLastChecked = System.currentTimeMillis();
+            redirectionNetworkType = getCurrentNetworkType(context);
+        }
     }
 
     private String rewriteUrlWithRedirect(Context context, String url) {
@@ -1332,9 +1148,9 @@ public class RESTMusicService implements MusicService {
         return url.replace(redirectFrom, redirectTo);
     }
 
-	private String stripUrlInfo(String url) {
-		return url.substring(0, url.indexOf("?u=") + 1) + url.substring(url.indexOf("&v=") + 1);
-	}
+    private String stripUrlInfo(String url) {
+        return url.substring(0, url.indexOf("?u=") + 1) + url.substring(url.indexOf("&v=") + 1);
+    }
 
     private int getCurrentNetworkType(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1342,25 +1158,27 @@ public class RESTMusicService implements MusicService {
         return networkInfo == null ? -1 : networkInfo.getType();
     }
 
-	public int getInstance(Context context) {
-		if(instance == null) {
-			return Util.getActiveServer(context);
-		} else {
-			return instance;
-		}
-	}
-	public String getRestUrl(Context context, String method) {
-		return getRestUrl(context, method, true);
-	}
-	public String getRestUrl(Context context, String method, boolean allowAltAddress) {
-		if(instance == null) {
-			return Util.getRestUrl(context, method, allowAltAddress);
-		} else {
-			return Util.getRestUrl(context, method, instance, allowAltAddress);
-		}
-	}
+    public int getInstance(Context context) {
+        if(instance == null) {
+            return Util.getActiveServer(context);
+        } else {
+            return instance;
+        }
+    }
 
-	public HttpClient getHttpClient() {
-		return httpClient;
-	}
+    public String getRestUrl(Context context, String method) {
+        return getRestUrl(context, method, true);
+    }
+
+    public String getRestUrl(Context context, String method, boolean allowAltAddress) {
+        if(instance == null) {
+            return Util.getRestUrl(context, method, allowAltAddress);
+        } else {
+            return Util.getRestUrl(context, method, instance, allowAltAddress);
+        }
+    }
+
+    public HttpClient getHttpClient() {
+        return httpClient;
+    }
 }

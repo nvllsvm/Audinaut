@@ -48,8 +48,6 @@ public interface MusicService {
 
     List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
-	void startRescan(Context context, ProgressListener listener) throws Exception;
-
     Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
     MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
@@ -97,21 +95,7 @@ public interface MusicService {
 	
 	MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 
-	MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception;
-	
 	User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
-
-	List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
-
-	void createUser(User user, Context context, ProgressListener progressListener) throws Exception;
-
-	void updateUser(User user, Context context, ProgressListener progressListener) throws Exception;
-
-	void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception;
-
-	void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception;
-
-	void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception;
 
 	Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 

@@ -20,7 +20,7 @@ import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +39,8 @@ public class UserParser extends AbstractParser {
 		super(context, instance);
 	}
 
-	public List<User> parse(Reader reader, ProgressListener progressListener) throws Exception {
-		init(reader);
+	public List<User> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+		init(inputStream);
 		List<User> result = new ArrayList<User>();
 		List<MusicFolder> musicFolders = null;
 		User user = null;

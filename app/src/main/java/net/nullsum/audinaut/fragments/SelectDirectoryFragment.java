@@ -391,17 +391,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}.execute();
 	}
 
-	private void getTopTracks(final String id, final String name, final boolean refresh) {
-		setTitle(name);
-
-		new LoadTask(refresh) {
-			@Override
-			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getTopTrackSongs(name, 50, context, this);
-			}
-		}.execute();
-	}
-
 	private void getAlbumList(final String albumListType, final int size, final boolean refresh) {
 		if ("random".equals(albumListType)) {
 			setTitle(R.string.main_albums_random);

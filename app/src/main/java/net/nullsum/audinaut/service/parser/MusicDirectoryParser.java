@@ -27,7 +27,7 @@ import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.Util;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,8 +44,8 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         super(context, instance);
     }
 
-    public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
-        init(reader);
+    public MusicDirectory parse(String artist, InputStream inputStream, ProgressListener progressListener) throws Exception {
+        init(inputStream);
 
         MusicDirectory dir = new MusicDirectory();
         int eventType;

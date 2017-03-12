@@ -18,7 +18,7 @@
  */
 package net.nullsum.audinaut.service.parser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +35,11 @@ import net.nullsum.audinaut.util.ProgressListener;
 public class MusicFoldersParser extends AbstractParser {
 
     public MusicFoldersParser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
-    public List<MusicFolder> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        init(reader);
+    public List<MusicFolder> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+        init(inputStream);
 
         List<MusicFolder> result = new ArrayList<MusicFolder>();
         int eventType;

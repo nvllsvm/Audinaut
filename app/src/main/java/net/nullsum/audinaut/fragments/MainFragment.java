@@ -187,22 +187,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		}.execute();
 	}
 
-	private void rescanServer() {
-		new LoadingTask<Void>(context, false) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.startRescan(context, this);
-				return null;
-			}
-
-			@Override
-			protected void done(Void value) {
-				Util.toast(context, R.string.main_scan_complete);
-			}
-		}.execute();
-	}
-
 	private void getLogs() {
 		try {
 			final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);

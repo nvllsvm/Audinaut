@@ -221,11 +221,6 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public void startRescan(Context context, ProgressListener listener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
 		List<Artist> artists = new ArrayList<Artist>();
 		List<Entry> albums = new ArrayList<Entry>();
@@ -544,11 +539,6 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
     public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         File root = FileUtil.getMusicDirectory(context);
         List<File> children = new LinkedList<File>();
@@ -573,36 +563,6 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

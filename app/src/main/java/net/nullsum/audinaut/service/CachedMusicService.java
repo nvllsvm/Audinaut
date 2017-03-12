@@ -107,11 +107,6 @@ public class CachedMusicService implements MusicService {
     }
 
 	@Override
-	public void startRescan(Context context, ProgressListener listener) throws Exception {
-		musicService.startRescan(context, listener);
-	}
-
-	@Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         checkSettingsChanged(context);
         if (refresh) {
@@ -662,11 +657,6 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getTopTrackSongs(artist, size, context, progressListener);
-	}
-
-	@Override
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
 		User result = null;
 
@@ -682,82 +672,6 @@ public class CachedMusicService implements MusicService {
 		}
 
 		return result;
-	}
-
-	@Override
-	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<User> result = null;
-
-		if(!refresh) {
-			result = FileUtil.deserialize(context, getCacheName(context, "users"), ArrayList.class);
-		}
-
-		if(result == null) {
-			result = musicService.getUsers(refresh, context, progressListener);
-			FileUtil.serialize(context, new ArrayList<User>(result), getCacheName(context, "users"));
-		}
-
-		return result;
-	}
-
-	@Override
-	public void createUser(final User user, Context context, ProgressListener progressListener) throws Exception {
-		musicService.createUser(user, context, progressListener);
-		
-		new UserUpdater(context, "") {
-			@Override
-			public boolean checkResult(User check) {
-				return true;
-			}
-			
-			@Override
-			public void updateResult(List<User> users, User result) {
-				users.add(user);
-			}
-		}.execute();
-	}
-
-	@Override
-	public void updateUser(final User user, Context context, ProgressListener progressListener) throws Exception {
-		musicService.updateUser(user, context, progressListener);
-
-		new UserUpdater(context, user.getUsername()) {
-			@Override
-			public void updateResult(List<User> users, User result) {
-				result.setEmail(user.getEmail());
-				result.setSettings(user.getSettings());
-			}
-		}.execute();
-	}
-
-	@Override
-	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
-		musicService.deleteUser(username, context, progressListener);
-
-		new UserUpdater(context, username) {
-			@Override
-			public void updateResult(List<User> users, User result) {
-				users.remove(result);
-			}
-		}.execute();
-	}
-
-	@Override
-	public void changeEmail(String username, final String email, Context context, ProgressListener progressListener) throws Exception {
-		musicService.changeEmail(username, email, context, progressListener);
-		
-		// Update cached email for user
-		new UserUpdater(context, username) {
-			@Override
-			public void updateResult(List<User> users, User result) {
-				result.setEmail(email);
-			}
-		}.execute();
-	}
-
-	@Override
-	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
-		musicService.changePassword(username, password, context, progressListener);
 	}
 
 	@Override

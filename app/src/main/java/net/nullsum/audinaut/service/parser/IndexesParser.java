@@ -18,7 +18,7 @@
  */
 package net.nullsum.audinaut.service.parser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ public class IndexesParser extends MusicDirectoryEntryParser {
         super(context, instance);
     }
 
-    public Indexes parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public Indexes parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
         long t0 = System.currentTimeMillis();
-        init(reader);
+        init(inputStream);
 
         List<Artist> artists = new ArrayList<Artist>();
         List<Artist> shortcuts = new ArrayList<Artist>();

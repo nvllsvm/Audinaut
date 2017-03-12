@@ -528,13 +528,6 @@ public final class Util {
 		}
 	}
 
-    public static String getContentType(HttpEntity entity) {
-        if (entity == null || entity.getContentType() == null) {
-            return null;
-        }
-        return entity.getContentType().getValue();
-    }
-
 	public static boolean isFirstLevelArtist(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);

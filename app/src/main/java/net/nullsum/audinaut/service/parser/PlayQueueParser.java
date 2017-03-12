@@ -19,7 +19,7 @@ import android.content.Context;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -36,8 +36,8 @@ public class PlayQueueParser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-	public PlayerQueue parse(Reader reader, ProgressListener progressListener) throws Exception {
-		init(reader);
+	public PlayerQueue parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+		init(inputStream);
 
 		PlayerQueue state = new PlayerQueue();
 		String currentId = null;

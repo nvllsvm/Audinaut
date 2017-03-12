@@ -26,7 +26,7 @@ import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.Reader;
+import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -39,8 +39,8 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-    public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
-        init(reader);
+    public SearchResult parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+        init(inputStream);
 
         List<Artist> artists = new ArrayList<Artist>();
         List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
