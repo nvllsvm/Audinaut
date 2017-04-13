@@ -350,7 +350,8 @@ public final class Util {
         String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
         String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
 
-        builder.addPathSegment("rest/" + method + ".view");
+        builder.addPathSegment("rest");
+        builder.addPathSegment(method + ".view");
 
         int hash = (username + password).hashCode();
         Pair<String, String> values = tokens.get(hash);
