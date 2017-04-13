@@ -8,8 +8,8 @@ android {
 		applicationId "net.nullsum.audinaut"
 		minSdkVersion 19
 		targetSdkVersion 25
-		versionCode 189
-		versionName '0.2.0'
+		versionCode 190
+		versionName '0.2.1'
 		setProperty("archivesBaseName", "Audinaut $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
