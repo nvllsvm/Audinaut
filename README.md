@@ -1,7 +1,7 @@
 # Audinaut
 <img src="/audinaut.png" align="left" width="200" hspace="10" vspace="10">
 
-A FOSS [Libresonic] client for Android.
+An opinionated [Libresonic] client for Android.
 
 
 <a href="https://f-droid.org/app/net.nullsum.audinaut">
