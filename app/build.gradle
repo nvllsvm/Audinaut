@@ -22,12 +22,6 @@ android {
 		checkReleaseBuilds false
         warning 'InvalidPackage'
 	}
-
-	signingConfigs {
-		debug {
-			storeFile file('../debug.keystore')
-		}
-	}
 }
 
 dependencies {
