@@ -1,5 +1,5 @@
 # Audinaut
-<img src="/audinaut.png" align="left" width="200" hspace="10" vspace="10">
+<img src="audinaut.png" align="left" width="200" hspace="10" vspace="10">
 
 A [Libresonic] client for Android.
 
