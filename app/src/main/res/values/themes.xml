@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<style name="LaunchScreen" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+		<item name="android:windowBackground">@color/black</item>
+    </style>
 	<style name="Theme.Audinaut.Light.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
 		<item name="offline_icon">@drawable/main_offline_light</item>
 		<item name="media_button_backward">@drawable/media_backward_light</item>

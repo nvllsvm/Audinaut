@@ -34,7 +34,7 @@
     <application android:label="@string/common.appname"
     	android:backupAgent="net.nullsum.audinaut.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
-    	android:theme="@style/Theme.Audinaut.Light">
+    	android:theme="@style/LaunchScreen">
     	
         <uses-library android:name="android.test.runner" />
 
