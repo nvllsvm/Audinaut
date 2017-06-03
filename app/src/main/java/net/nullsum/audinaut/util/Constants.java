@@ -27,9 +27,7 @@ public final class Constants {
     // Character encoding used throughout.
     public static final String UTF_8 = "UTF-8";
 
-    // REST protocol version and client ID.
-    // Note: Keep it as low as possible to maintain compatibility with older servers.
-    public static final String REST_PROTOCOL_VERSION_SUBSONIC = "1.2.0";
+    public static final String REST_PROTOCOL_VERSION_SUBSONIC = "1.13.0";
     public static final String REST_CLIENT_ID = "Audinaut";
 	public static final String LAST_VERSION = "subsonic.version";
 
