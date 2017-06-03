@@ -44,7 +44,7 @@ public class GenreView extends UpdateView<Genre> {
 	public void setObjectImpl(Genre genre) {
 		titleView.setText(genre.getName());
 
-		if(genre.getAlbumCount() != null) {
+		if(genre.getAlbumCount() != 0) {
 			songsView.setVisibility(View.VISIBLE);
 			albumsView.setVisibility(View.VISIBLE);
 			songsView.setText(context.getResources().getString(R.string.select_genre_songs, genre.getSongCount()));

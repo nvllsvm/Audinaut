@@ -30,6 +30,8 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -78,6 +80,12 @@ public class GenreParser extends AbstractParser {
 
         validate();
 
-        return Genre.GenreComparator.sort(result);
+        Collections.sort(result, new Comparator<Genre>() {
+            @Override
+            public int compare(Genre genre1, Genre genre2) {
+                return genre1.getName().compareTo(genre2.getName());
+            }
+        });
+        return result;
     }
 }

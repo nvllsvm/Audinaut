@@ -1,32 +1,50 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 25
-	buildToolsVersion "25.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
-	defaultConfig {
-		applicationId "net.nullsum.audinaut"
-		minSdkVersion 19
-		targetSdkVersion 25
-		versionCode 190
-		versionName '0.2.1'
-		setProperty("archivesBaseName", "Audinaut $versionName")
-		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
-	}
+    defaultConfig {
+        applicationId "net.nullsum.audinaut"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 190
+        versionName '0.2.1'
+        setProperty("archivesBaseName", "Audinaut $versionName")
+        resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
+    }
 
-	packagingOptions {
-		exclude 'META-INF/beans.xml'
-	}
+    packagingOptions {
+        exclude 'META-INF/beans.xml'
+    }
 
-	lintOptions {
-		checkReleaseBuilds false
+    lintOptions {
+        checkReleaseBuilds false
         warning 'InvalidPackage'
-	}
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
-	compile 'com.esotericsoftware:kryo:4.0.0'
-	compile 'com.android.support:design:25.2.0'
-	compile 'com.sothree.slidinguppanel:library:3.3.1'
+    compile 'com.esotericsoftware:kryo:4.0.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.sothree.slidinguppanel:library:3.3.1'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.2-2'
+}
+
+buildscript {
+    ext.kotlin_version = '1.1.2-2'
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+    }
 }
