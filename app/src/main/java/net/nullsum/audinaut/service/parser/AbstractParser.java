@@ -27,7 +27,6 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.domain.Version;
 import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.Util;
 

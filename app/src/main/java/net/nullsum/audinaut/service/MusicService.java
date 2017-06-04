@@ -28,14 +28,12 @@ import android.graphics.Bitmap;
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;
 import net.nullsum.audinaut.domain.PlayerQueue;
-import net.nullsum.audinaut.domain.RemoteStatus;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.domain.SearchCritera;
 import net.nullsum.audinaut.domain.SearchResult;
 import net.nullsum.audinaut.domain.User;
-import net.nullsum.audinaut.domain.Version;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.ProgressListener;
 

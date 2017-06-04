@@ -37,7 +37,6 @@ import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;
 import net.nullsum.audinaut.domain.PlayerQueue;
-import net.nullsum.audinaut.domain.RemoteStatus;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.domain.Playlist;
