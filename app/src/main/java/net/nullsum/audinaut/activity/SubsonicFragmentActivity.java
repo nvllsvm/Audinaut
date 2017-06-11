@@ -677,12 +677,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "guest5");
 			editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "guest");
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			editor.commit();
+			editor.apply();
 		}
 		if(!prefs.contains(Constants.PREFERENCES_KEY_SERVER_COUNT)) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
-			editor.commit();
+			editor.apply();
 		}
 	}
 
@@ -694,7 +694,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		} else {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, newDirectory);
-			editor.commit();
+			editor.apply();
 			return true;
 		}
 	}

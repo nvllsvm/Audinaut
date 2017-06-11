@@ -138,7 +138,7 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
-		editor.commit();
+		editor.apply();
 	}
 
     public static boolean isScreenLitOnDownload(Context context) {
@@ -155,14 +155,14 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.PREFERENCES_KEY_REPEAT_MODE, repeatMode.name());
-        editor.commit();
+        editor.apply();
     }
 
     public static void setActiveServer(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getActiveServer(Context context) {
@@ -210,7 +210,7 @@ public final class Util {
 		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
-		editor.commit();
+		editor.apply();
 
 		if (instance == activeInstance) {
 			if(instance != 1) {
@@ -238,7 +238,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getSelectedMusicFolderId(Context context) {
@@ -261,7 +261,7 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, perFolder);
-		editor.commit();
+		editor.apply();
 	}
 	
 	public static boolean getDisplayTrack(Context context) {
@@ -303,7 +303,7 @@ public final class Util {
 		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
 	}
 	public static void setBatchMode(Context context, boolean batchMode) {
-		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).commit();
+		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).apply();
 	}
 
     public static String getRestUrl(Context context, String method) {
@@ -393,7 +393,7 @@ public final class Util {
 	public static void setBlockTokenUse(Context context, int instance, boolean block) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static boolean isTagBrowsing(Context context) {
@@ -435,7 +435,7 @@ public final class Util {
 	public static void setSyncDefault(Context context, String defaultValue) {
 		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getCacheName(Context context, String name, String id) {
@@ -543,7 +543,7 @@ public final class Util {
 			editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
 		}
 
-		editor.commit();
+		editor.apply();
 	}
 
 	public static boolean shouldStartOnHeadphones(Context context) {

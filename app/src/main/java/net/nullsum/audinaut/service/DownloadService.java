@@ -184,7 +184,7 @@ public class DownloadService extends Service {
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     try {
                         audioSessionId = mediaPlayer.getAudioSessionId();
-                        prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).commit();
+                        prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).apply();
                     } catch (Throwable t) {
                         // Froyo or lower
                     }
@@ -461,7 +461,7 @@ public class DownloadService extends Service {
             }
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, startShufflePlay);
-            editor.commit();
+            editor.apply();
         }
         if (currentPlayingIndex != -1) {
             while(mediaPlayer == null) {
@@ -498,7 +498,7 @@ public class DownloadService extends Service {
         }
         SharedPreferences.Editor editor = Util.getPreferences(this).edit();
         editor.putBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, enabled);
-        editor.commit();
+        editor.apply();
     }
     public boolean isRemovePlayed() {
         return removePlayed;
@@ -511,7 +511,7 @@ public class DownloadService extends Service {
         }
         SharedPreferences.Editor editor = Util.getPreferences(this).edit();
         editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled ? SHUFFLE_MODE_ALL : SHUFFLE_MODE_NONE);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isShufflePlayEnabled() {
@@ -552,7 +552,7 @@ public class DownloadService extends Service {
         SharedPreferences prefs = Util.getPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, keepScreenOn);
-        editor.commit();
+        editor.apply();
     }
 
     public synchronized DownloadFile forSong(MusicDirectory.Entry song) {
@@ -1353,7 +1353,7 @@ public class DownloadService extends Service {
         SharedPreferences.Editor editor = Util.getPreferences(this).edit();
         editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, name);
         editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_ID, id);
-        editor.commit();
+        editor.apply();
     }
 
     public String getSuggestedPlaylistName() {
