@@ -359,4 +359,10 @@
         <item quantity="one">One song added to play queue.</item>
         <item quantity="other">%d songs added to play queue.</item>
     </plurals>
+
+	<string name="channel.playing_name">Now Playing</string>
+	<string name="channel.playing_description">Media controls and information about the playing song.</string>
+
+	<string name="channel.download_name">Media Download</string>
+	<string name="channel.download_description">Displays progress for explicitly initiated downloads (ex. cache).</string>
 </resources>
