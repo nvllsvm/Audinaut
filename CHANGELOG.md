@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## Version 0.2.3
+_2018-02-27_
+* Fix notifications on API 26+
+* Target SDK 27
+* Dependency updates
+
+
 ## Version 0.2.2
 _2017-06-11_
 * Use black background when loading application (previously white)
