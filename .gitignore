@@ -2,3 +2,4 @@
 /app/build
 /build
 /app/src/main/.gradle
+/local.properties
