@@ -26,32 +26,32 @@ import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Genre;
 
 public class GenreView extends UpdateView<Genre> {
-	private static final String TAG = GenreView.class.getSimpleName();
+    private static final String TAG = GenreView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView songsView;
-	private TextView albumsView;
+    private TextView titleView;
+    private TextView songsView;
+    private TextView albumsView;
 
-	public GenreView(Context context) {
-		super(context, false);
-		LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
+    public GenreView(Context context) {
+        super(context, false);
+        LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.genre_name);
-		songsView = (TextView) findViewById(R.id.genre_songs);
-		albumsView = (TextView) findViewById(R.id.genre_albums);
-	}
+        titleView = (TextView) findViewById(R.id.genre_name);
+        songsView = (TextView) findViewById(R.id.genre_songs);
+        albumsView = (TextView) findViewById(R.id.genre_albums);
+    }
 
-	public void setObjectImpl(Genre genre) {
-		titleView.setText(genre.getName());
+    public void setObjectImpl(Genre genre) {
+        titleView.setText(genre.getName());
 
-		if(genre.getAlbumCount() != 0) {
-			songsView.setVisibility(View.VISIBLE);
-			albumsView.setVisibility(View.VISIBLE);
-			songsView.setText(context.getResources().getString(R.string.select_genre_songs, genre.getSongCount()));
-			albumsView.setText(context.getResources().getString(R.string.select_genre_albums, genre.getAlbumCount()));
-		} else {
-			songsView.setVisibility(View.GONE);
-			albumsView.setVisibility(View.GONE);
-		}
-	}
+        if(genre.getAlbumCount() != 0) {
+            songsView.setVisibility(View.VISIBLE);
+            albumsView.setVisibility(View.VISIBLE);
+            songsView.setText(context.getResources().getString(R.string.select_genre_songs, genre.getSongCount()));
+            albumsView.setText(context.getResources().getString(R.string.select_genre_albums, genre.getAlbumCount()));
+        } else {
+            songsView.setVisibility(View.GONE);
+            albumsView.setVisibility(View.GONE);
+        }
+    }
 }

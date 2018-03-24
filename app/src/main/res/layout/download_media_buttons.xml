@@ -21,20 +21,20 @@
             android:layout_centerVertical="true"
             />
 
-	<net.nullsum.audinaut.view.AutoRepeatButton
-		style="@style/PlaybackControl.Large"
-		android:id="@+id/download_rewind"
-		android:src="?attr/media_button_rewind"
-		android:layout_toLeftOf="@+id/download_pause"
-		android:layout_centerVertical="true"
-		android:visibility="invisible"/>
+    <net.nullsum.audinaut.view.AutoRepeatButton
+        style="@style/PlaybackControl.Large"
+        android:id="@+id/download_rewind"
+        android:src="?attr/media_button_rewind"
+        android:layout_toLeftOf="@+id/download_pause"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"/>
 
     <ImageButton
             style="@style/PlaybackControl.Large"
             android:id="@+id/download_pause"
             android:src="?attr/media_button_pause"
             android:layout_centerInParent="true"
-			android:visibility="invisible"
+            android:visibility="invisible"
             />
 
     <ImageButton
@@ -42,7 +42,7 @@
             android:id="@+id/download_stop"
             android:src="?attr/media_button_stop"
             android:layout_centerInParent="true"
-			android:visibility="invisible"
+            android:visibility="invisible"
             />
 
     <ImageButton
@@ -52,13 +52,13 @@
             android:layout_centerInParent="true"
             />
 
-	<net.nullsum.audinaut.view.AutoRepeatButton
-		style="@style/PlaybackControl.Large"
-		android:id="@+id/download_fastforward"
-		android:src="?attr/media_button_fastforward"
-		android:layout_toRightOf="@+id/download_start"
-		android:layout_centerVertical="true"
-		android:visibility="invisible"/>
+    <net.nullsum.audinaut.view.AutoRepeatButton
+        style="@style/PlaybackControl.Large"
+        android:id="@+id/download_fastforward"
+        android:src="?attr/media_button_fastforward"
+        android:layout_toRightOf="@+id/download_start"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"/>
 
     <net.nullsum.audinaut.view.AutoRepeatButton
             style="@style/PlaybackControl.Small"
@@ -70,8 +70,8 @@
 
     <ImageButton
             style="@style/PlaybackControl"
-			android:id="@+id/download_toggle_list"
-			android:src="?attr/toggle_list"
+            android:id="@+id/download_toggle_list"
+            android:src="?attr/toggle_list"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             />

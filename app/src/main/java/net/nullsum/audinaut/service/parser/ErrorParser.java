@@ -29,8 +29,8 @@ import java.io.InputStream;
 public class ErrorParser extends AbstractParser {
 
     public ErrorParser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
     public void parse(InputStream inputStream) throws Exception {
 

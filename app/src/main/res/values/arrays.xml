@@ -3,21 +3,21 @@
     <string-array name="themeValues">
         <item>light</item>
         <item>dark</item>
-		<item>black</item>
-		<item>day/night</item>
-		<item>day/black</item>
+        <item>black</item>
+        <item>day/night</item>
+        <item>day/black</item>
     </string-array>
 
     <string-array name="themeNames">
         <item>@string/settings.theme_light</item>
         <item>@string/settings.theme_dark</item>
-		<item>@string/settings.theme_black</item>
-		<item>@string/settings.theme_day_night</item>
-		<item>@string/settings.theme_day_black_night</item>
+        <item>@string/settings.theme_black</item>
+        <item>@string/settings.theme_day_night</item>
+        <item>@string/settings.theme_day_black_night</item>
     </string-array>
-	
+
     <string-array name="preloadCountValues">
-		<item>0</item>
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -27,8 +27,8 @@
     </string-array>
 
     <string-array name="preloadCountNames">
-		<item>@string/settings.preload_0</item>
-		<item>@string/settings.preload_1</item>
+        <item>@string/settings.preload_0</item>
+        <item>@string/settings.preload_1</item>
         <item>@string/settings.preload_2</item>
         <item>@string/settings.preload_3</item>
         <item>@string/settings.preload_5</item>
@@ -63,84 +63,84 @@
         <item>@string/settings.max_bitrate_320</item>
         <item>@string/settings.max_bitrate_unlimited</item>
     </string-array>
-	
-	<string-array name="networkTimeoutValues">
-		<item>10000</item>
-		<item>15000</item>
-		<item>30000</item>
-		<item>45000</item>
-		<item>60000</item>
-	</string-array>
-	<string-array name="networkTimeoutNames">
-		<item>@string/settings.network_timeout_10000</item>
-		<item>@string/settings.network_timeout_15000</item>
-		<item>@string/settings.network_timeout_30000</item>
-		<item>@string/settings.network_timeout_45000</item>
-		<item>@string/settings.network_timeout_60000</item>
-	</string-array>
-	
-	<string-array name="tempLossValues">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-	</string-array>
-	<string-array name="tempLossNames">
-		<item>@string/settings.temp_loss_pause</item>
-		<item>@string/settings.temp_loss_pause_lower</item>
-		<item>@string/settings.temp_loss_lower</item>
-		<item>@string/settings.temp_loss_nothing</item>
-	</string-array>
 
-	<string-array name="keepPlayedCountValues">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-	</string-array>
-	<string-array name="keepPlayedCountNames">
-		<item>@string/settings.keep_played_count_none</item>
-		<item>@string/settings.keep_played_count_one</item>
-		<item>@string/settings.keep_played_count_two</item>
-		<item>@string/settings.keep_played_count_three</item>
-	</string-array>
+    <string-array name="networkTimeoutValues">
+        <item>10000</item>
+        <item>15000</item>
+        <item>30000</item>
+        <item>45000</item>
+        <item>60000</item>
+    </string-array>
+    <string-array name="networkTimeoutNames">
+        <item>@string/settings.network_timeout_10000</item>
+        <item>@string/settings.network_timeout_15000</item>
+        <item>@string/settings.network_timeout_30000</item>
+        <item>@string/settings.network_timeout_45000</item>
+        <item>@string/settings.network_timeout_60000</item>
+    </string-array>
 
-	<string-array name="disconnectPauseValues">
-		<item>0</item>
-		<item>3</item>
-	</string-array>
-	<string-array name="disconnectPauseNames">
-		<item>@string/settings.disconnect_pause_both</item>
-		<item>@string/settings.disconnect_pause_neither</item>
-	</string-array>
+    <string-array name="tempLossValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="tempLossNames">
+        <item>@string/settings.temp_loss_pause</item>
+        <item>@string/settings.temp_loss_pause_lower</item>
+        <item>@string/settings.temp_loss_lower</item>
+        <item>@string/settings.temp_loss_nothing</item>
+    </string-array>
 
-	<string-array name="replayGainTypeValues">
-		<item>1</item>
-		<item>2</item>
-		<item>3</item>
-	</string-array>
-	<string-array name="replayGainTypeNames">
-		<item>@string/settings.replay_gain_type.smart</item>
-		<item>@string/settings.replay_gain_type.album</item>
-		<item>@string/settings.replay_gain_type.track</item>
-	</string-array>
-	
-	<string-array name="editServerOptions">
-		<item>@string/tasker.edit_do_nothing</item>
-		<item>@string/main.online</item>
-		<item>@string/main.offline</item>
-	</string-array>
+    <string-array name="keepPlayedCountValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="keepPlayedCountNames">
+        <item>@string/settings.keep_played_count_none</item>
+        <item>@string/settings.keep_played_count_one</item>
+        <item>@string/settings.keep_played_count_two</item>
+        <item>@string/settings.keep_played_count_three</item>
+    </string-array>
 
-	<string-array name="songPressActionValues">
-		<item>single</item>
-		<item>all</item>
-		<item>next</item>
-		<item>last</item>
-	</string-array>
-	<string-array name="songPressActionNames">
-		<item>@string/settings.song_press_play_single</item>
-		<item>@string/settings.song_press_play_all</item>
-		<item>@string/settings.song_press_play_next</item>
-		<item>@string/settings.song_press_play_last</item>
-	</string-array>
+    <string-array name="disconnectPauseValues">
+        <item>0</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="disconnectPauseNames">
+        <item>@string/settings.disconnect_pause_both</item>
+        <item>@string/settings.disconnect_pause_neither</item>
+    </string-array>
+
+    <string-array name="replayGainTypeValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="replayGainTypeNames">
+        <item>@string/settings.replay_gain_type.smart</item>
+        <item>@string/settings.replay_gain_type.album</item>
+        <item>@string/settings.replay_gain_type.track</item>
+    </string-array>
+
+    <string-array name="editServerOptions">
+        <item>@string/tasker.edit_do_nothing</item>
+        <item>@string/main.online</item>
+        <item>@string/main.offline</item>
+    </string-array>
+
+    <string-array name="songPressActionValues">
+        <item>single</item>
+        <item>all</item>
+        <item>next</item>
+        <item>last</item>
+    </string-array>
+    <string-array name="songPressActionNames">
+        <item>@string/settings.song_press_play_single</item>
+        <item>@string/settings.song_press_play_all</item>
+        <item>@string/settings.song_press_play_next</item>
+        <item>@string/settings.song_press_play_last</item>
+    </string-array>
 </resources>

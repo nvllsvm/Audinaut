@@ -49,52 +49,52 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
         MusicDirectory dir = new MusicDirectory();
         int eventType;
-		boolean isArtist = false;
-		Map<String, Entry> titleMap = new HashMap<String, Entry>();
+        boolean isArtist = false;
+        Map<String, Entry> titleMap = new HashMap<String, Entry>();
         do {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
                 if ("child".equals(name) || "song".equals(name)) {
-					Entry entry = parseEntry(artist);
-					entry.setGrandParent(dir.getParent());
+                    Entry entry = parseEntry(artist);
+                    entry.setGrandParent(dir.getParent());
 
-					// Only check for songs
-					if(!entry.isDirectory()) {
-						// Check if duplicates
-						String disc = (entry.getDiscNumber() != null) ? Integer.toString(entry.getDiscNumber()) : "";
-						String track = (entry.getTrack() != null) ? Integer.toString(entry.getTrack()) : "";
-						String duplicateId = disc + "-" + track + "-" + entry.getTitle();
+                    // Only check for songs
+                    if(!entry.isDirectory()) {
+                        // Check if duplicates
+                        String disc = (entry.getDiscNumber() != null) ? Integer.toString(entry.getDiscNumber()) : "";
+                        String track = (entry.getTrack() != null) ? Integer.toString(entry.getTrack()) : "";
+                        String duplicateId = disc + "-" + track + "-" + entry.getTitle();
 
-						Entry duplicate = titleMap.get(duplicateId);
-						if (duplicate != null) {
-							// Check if the first already has been rebased or not
-							if (duplicate.getTitle().equals(entry.getTitle())) {
-								duplicate.rebaseTitleOffPath();
-							}
+                        Entry duplicate = titleMap.get(duplicateId);
+                        if (duplicate != null) {
+                            // Check if the first already has been rebased or not
+                            if (duplicate.getTitle().equals(entry.getTitle())) {
+                                duplicate.rebaseTitleOffPath();
+                            }
 
-							// Rebase if this is the second instance of this title found
-							entry.rebaseTitleOffPath();
-						} else {
-							titleMap.put(duplicateId, entry);
-						}
-					}
+                            // Rebase if this is the second instance of this title found
+                            entry.rebaseTitleOffPath();
+                        } else {
+                            titleMap.put(duplicateId, entry);
+                        }
+                    }
 
                     dir.addChild(entry);
                 } else if ("directory".equals(name) || "artist".equals(name) || ("album".equals(name) && !isArtist)) {
                     dir.setName(get("name"));
-					dir.setId(get("id"));
-					if(Util.isTagBrowsing(context, instance)) {
-						dir.setParent(get("artistId"));
-					} else {
-						dir.setParent(get("parent"));
-					}
-					isArtist = true;
+                    dir.setId(get("id"));
+                    if(Util.isTagBrowsing(context, instance)) {
+                        dir.setParent(get("artistId"));
+                    } else {
+                        dir.setParent(get("parent"));
+                    }
+                    isArtist = true;
                 } else if("album".equals(name)) {
-					Entry entry = parseEntry(artist);
-					entry.setDirectory(true);
-					dir.addChild(entry);
-				} else if ("error".equals(name)) {
+                    Entry entry = parseEntry(artist);
+                    entry.setDirectory(true);
+                    dir.addChild(entry);
+                } else if ("error".equals(name)) {
                     handleError();
                 }
             }

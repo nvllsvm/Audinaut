@@ -1,20 +1,20 @@
 /*
-	This file is part of Subsonic.
-	
-	Subsonic is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	
-	Subsonic is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-	
-	You should have received a copy of the GNU General Public License
-	along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
-	
-	Copyright 2009 (C) Sindre Mehus
+    This file is part of Subsonic.
+
+    Subsonic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Subsonic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2009 (C) Sindre Mehus
 */
 package net.nullsum.audinaut.util;
 
@@ -29,16 +29,16 @@ import java.io.IOException;
 import net.nullsum.audinaut.util.Constants;
 
 public class SettingsBackupAgent extends BackupAgentHelper {
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, Constants.PREFERENCES_FILE_NAME);
-		addHelper("mypreferences", helper);
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, Constants.PREFERENCES_FILE_NAME);
+        addHelper("mypreferences", helper);
+    }
 
-	@Override
-	public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException{
-		super.onRestore(data, appVersionCode, newState);
-		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_CACHE_LOCATION).apply();
-	}
+    @Override
+    public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException{
+        super.onRestore(data, appVersionCode, newState);
+        Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_CACHE_LOCATION).apply();
+    }
  }

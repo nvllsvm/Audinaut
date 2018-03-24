@@ -38,48 +38,48 @@ import net.nullsum.audinaut.provider.AudinautSearchProvider;
  */
 public class QueryReceiverActivity extends Activity {
 
-	private static final String TAG = QueryReceiverActivity.class.getSimpleName();
+    private static final String TAG = QueryReceiverActivity.class.getSimpleName();
 
-	@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			doSearch();
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			showResult(intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
-		}
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            doSearch();
+        } else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+            showResult(intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
+        }
         finish();
         Util.disablePendingTransition(this);
     }
 
-	private void doSearch() {
-		String query = getIntent().getStringExtra(SearchManager.QUERY);
-		if (query != null) {
-			Intent intent = new Intent(QueryReceiverActivity.this, SubsonicFragmentActivity.class);
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			Util.startActivityWithoutTransition(QueryReceiverActivity.this, intent);
-		}
-	}
-	private void showResult(String albumId, String name) {
-		if (albumId != null) {
-			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
-			if(albumId.indexOf("ar-") == 0) {
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-				albumId = albumId.replace("ar-", "");
-			} else if(albumId.indexOf("so-") == 0) {
-				intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
-				albumId = albumId.replace("so-", "");
-			}
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
-			if (name != null) {
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, name);
-			}
-			Util.startActivityWithoutTransition(this, intent);
-		}
-	}
+    private void doSearch() {
+        String query = getIntent().getStringExtra(SearchManager.QUERY);
+        if (query != null) {
+            Intent intent = new Intent(QueryReceiverActivity.this, SubsonicFragmentActivity.class);
+            intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Util.startActivityWithoutTransition(QueryReceiverActivity.this, intent);
+        }
+    }
+    private void showResult(String albumId, String name) {
+        if (albumId != null) {
+            Intent intent = new Intent(this, SubsonicFragmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
+            if(albumId.indexOf("ar-") == 0) {
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+                albumId = albumId.replace("ar-", "");
+            } else if(albumId.indexOf("so-") == 0) {
+                intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
+                albumId = albumId.replace("so-", "");
+            }
+            intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
+            if (name != null) {
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, name);
+            }
+            Util.startActivityWithoutTransition(this, intent);
+        }
+    }
 }

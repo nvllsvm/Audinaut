@@ -6,5 +6,5 @@
             android:voiceLanguageModel="web_search"
             android:searchSuggestAuthority="net.nullsum.audinaut.provider.AudinautSearchProvider"
             android:searchSuggestSelection=" unused"
-			android:searchSuggestIntentAction="android.intent.action.VIEW">
+            android:searchSuggestIntentAction="android.intent.action.VIEW">
 </searchable>

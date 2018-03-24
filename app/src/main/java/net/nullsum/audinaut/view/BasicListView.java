@@ -1,16 +1,16 @@
 /*
   This file is part of Subsonic.
-	Subsonic is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	Subsonic is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
-	Copyright 2015 (C) Scott Jackson
+    Subsonic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Subsonic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+    Copyright 2015 (C) Scott Jackson
 */
 
 package net.nullsum.audinaut.view;
@@ -25,18 +25,18 @@ import android.widget.TextView;
 import net.nullsum.audinaut.R;
 
 public class BasicListView extends UpdateView<String> {
-	private TextView titleView;
+    private TextView titleView;
 
-	public BasicListView(Context context) {
-		super(context, false);
-		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+    public BasicListView(Context context) {
+        super(context, false);
+        LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
-		moreButton.setVisibility(View.GONE);
-	}
+        titleView = (TextView) findViewById(R.id.item_name);
+        moreButton = (ImageView) findViewById(R.id.item_more);
+        moreButton.setVisibility(View.GONE);
+    }
 
-	protected void setObjectImpl(String string) {
-		titleView.setText(string);
-	}
+    protected void setObjectImpl(String string) {
+        titleView.setText(string);
+    }
 }

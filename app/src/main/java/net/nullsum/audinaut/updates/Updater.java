@@ -32,71 +32,71 @@ import java.util.List;
  * @author Scott
  */
 public class Updater {
-	protected String TAG = Updater.class.getSimpleName();
-	protected int version;
-	protected Context context;
-	
-	public Updater(int version) {
-		// 5.2 should show as 520 instead of 52
-		if(version < 100) {
-			version *= 10;
-		}
-		this.version = version;
-	}
-	
-	public void checkUpdates(Context context) {
-		this.context = context;
-		List<Updater> updaters = new ArrayList<Updater>();
-		updaters.add(new UpdaterSongPress());
-		
-		SharedPreferences prefs = Util.getPreferences(context);
-		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
-		if(lastVersion == 0) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.LAST_VERSION, version);
-			editor.apply();
-		}
-		else if(version > lastVersion) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.LAST_VERSION, version);
-			editor.apply();
-			
-			Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
-			for(Updater updater: updaters) {
-				if(updater.shouldUpdate(lastVersion)) {
-					new BackgroundUpdate(context, updater).execute();
-				}
-			}
-		}
-	}
-	
-	public String getName() {
-		return this.TAG;
-	}
-	
-	private class BackgroundUpdate extends SilentBackgroundTask<Void> {
-		private final Updater updater;
+    protected String TAG = Updater.class.getSimpleName();
+    protected int version;
+    protected Context context;
 
-		public BackgroundUpdate(Context context, Updater updater) {
-			super(context);
-			this.updater = updater;
-		}
+    public Updater(int version) {
+        // 5.2 should show as 520 instead of 52
+        if(version < 100) {
+            version *= 10;
+        }
+        this.version = version;
+    }
 
-		@Override
-		protected Void doInBackground() {
-			try {
-				updater.update(context);
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to run update for " + updater.getName());
-			}
-			return null;
-		}
-	}
-	
-	public boolean shouldUpdate(int version) {
-		return this.version > version;
-	}
-	public void update(Context context) {
-		
-	}
+    public void checkUpdates(Context context) {
+        this.context = context;
+        List<Updater> updaters = new ArrayList<Updater>();
+        updaters.add(new UpdaterSongPress());
+
+        SharedPreferences prefs = Util.getPreferences(context);
+        int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
+        if(lastVersion == 0) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(Constants.LAST_VERSION, version);
+            editor.apply();
+        }
+        else if(version > lastVersion) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(Constants.LAST_VERSION, version);
+            editor.apply();
+
+            Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
+            for(Updater updater: updaters) {
+                if(updater.shouldUpdate(lastVersion)) {
+                    new BackgroundUpdate(context, updater).execute();
+                }
+            }
+        }
+    }
+
+    public String getName() {
+        return this.TAG;
+    }
+
+    private class BackgroundUpdate extends SilentBackgroundTask<Void> {
+        private final Updater updater;
+
+        public BackgroundUpdate(Context context, Updater updater) {
+            super(context);
+            this.updater = updater;
+        }
+
+        @Override
+        protected Void doInBackground() {
+            try {
+                updater.update(context);
+            } catch(Exception e) {
+                Log.w(TAG, "Failed to run update for " + updater.getName());
+            }
+            return null;
+        }
+    }
+
+    public boolean shouldUpdate(int version) {
+        return this.version > version;
+    }
+    public void update(Context context) {
+
+    }
 }

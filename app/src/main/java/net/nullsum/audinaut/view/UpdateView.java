@@ -41,270 +41,270 @@ import net.nullsum.audinaut.util.DrawableTint;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 
 public abstract class UpdateView<T> extends LinearLayout {
-	private static final String TAG = UpdateView.class.getSimpleName();
-	private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
+    private static final String TAG = UpdateView.class.getSimpleName();
+    private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
 
-	protected static Handler backgroundHandler;
-	protected static Handler uiHandler;
-	private static Runnable updateRunnable;
-	private static int activeActivities = 0;
+    protected static Handler backgroundHandler;
+    protected static Handler uiHandler;
+    private static Runnable updateRunnable;
+    private static int activeActivities = 0;
 
-	protected Context context;
-	protected T item;
-	protected ImageView moreButton;
-	protected View coverArtView;
-	
-	protected boolean exists = false;
-	protected boolean pinned = false;
-	protected boolean shaded = false;
-	protected SilentBackgroundTask<Void> imageTask = null;
-	protected Drawable startBackgroundDrawable;
-	
-	protected final boolean autoUpdate;
-	protected boolean checkable;
-	
-	public UpdateView(Context context) {
-		this(context, true);
-	}
-	public UpdateView(Context context, boolean autoUpdate) {
-		super(context);
-		this.context = context;
-		this.autoUpdate = autoUpdate;
-		
-		setLayoutParams(new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT));
-		
-		if(autoUpdate) {
-			INSTANCES.put(this, null);
-		}
-		startUpdater();
-	}
-	
-	@Override
-	public void setPressed(boolean pressed) {
-		
-	}
-	
-	public void setObject(T obj) {
-		if(item == obj) {
-			return;
-		}
+    protected Context context;
+    protected T item;
+    protected ImageView moreButton;
+    protected View coverArtView;
 
-		item = obj;
-		if(imageTask != null) {
-			imageTask.cancel();
-			imageTask = null;
-		}
-		if(coverArtView != null && coverArtView instanceof ImageView) {
-			((ImageView) coverArtView).setImageDrawable(null);
-		}
-		setObjectImpl(obj);
-		updateBackground();
-		update();
-	}
-	public void setObject(T obj1, Object obj2) {
-		setObject(obj1, null);
-	}
-	protected abstract void setObjectImpl(T obj);
-	
-	private static synchronized void startUpdater() {
-		if(uiHandler != null) {
-			return;
-		}
-		
-		uiHandler = new Handler();
-		// Needed so handler is never null until thread creates it
-		backgroundHandler = uiHandler;
-		updateRunnable = new Runnable() {
+    protected boolean exists = false;
+    protected boolean pinned = false;
+    protected boolean shaded = false;
+    protected SilentBackgroundTask<Void> imageTask = null;
+    protected Drawable startBackgroundDrawable;
+
+    protected final boolean autoUpdate;
+    protected boolean checkable;
+
+    public UpdateView(Context context) {
+        this(context, true);
+    }
+    public UpdateView(Context context, boolean autoUpdate) {
+        super(context);
+        this.context = context;
+        this.autoUpdate = autoUpdate;
+
+        setLayoutParams(new AbsListView.LayoutParams(
+                ViewGroup.LayoutParams.FILL_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        if(autoUpdate) {
+            INSTANCES.put(this, null);
+        }
+        startUpdater();
+    }
+
+    @Override
+    public void setPressed(boolean pressed) {
+
+    }
+
+    public void setObject(T obj) {
+        if(item == obj) {
+            return;
+        }
+
+        item = obj;
+        if(imageTask != null) {
+            imageTask.cancel();
+            imageTask = null;
+        }
+        if(coverArtView != null && coverArtView instanceof ImageView) {
+            ((ImageView) coverArtView).setImageDrawable(null);
+        }
+        setObjectImpl(obj);
+        updateBackground();
+        update();
+    }
+    public void setObject(T obj1, Object obj2) {
+        setObject(obj1, null);
+    }
+    protected abstract void setObjectImpl(T obj);
+
+    private static synchronized void startUpdater() {
+        if(uiHandler != null) {
+            return;
+        }
+
+        uiHandler = new Handler();
+        // Needed so handler is never null until thread creates it
+        backgroundHandler = uiHandler;
+        updateRunnable = new Runnable() {
             @Override
             public void run() {
                 updateAll();
             }
         };
-		
-		new Thread(new Runnable() {
-			public void run() {
-				Looper.prepare();
-				backgroundHandler = new Handler(Looper.myLooper());
-				uiHandler.post(updateRunnable);
-				Looper.loop();
-			}
-		}, "UpdateView").start();
+
+        new Thread(new Runnable() {
+            public void run() {
+                Looper.prepare();
+                backgroundHandler = new Handler(Looper.myLooper());
+                uiHandler.post(updateRunnable);
+                Looper.loop();
+            }
+        }, "UpdateView").start();
     }
 
-	public static synchronized void triggerUpdate() {
-		if(backgroundHandler != null) {
-			uiHandler.removeCallbacksAndMessages(null);
-			backgroundHandler.removeCallbacksAndMessages(null);
-			uiHandler.post(updateRunnable);
-		}
-	}
+    public static synchronized void triggerUpdate() {
+        if(backgroundHandler != null) {
+            uiHandler.removeCallbacksAndMessages(null);
+            backgroundHandler.removeCallbacksAndMessages(null);
+            uiHandler.post(updateRunnable);
+        }
+    }
 
     private static void updateAll() {
         try {
-			// If nothing can see this, stop updating
-			if(activeActivities == 0) {
-				activeActivities--;
-				return;
-			}
+            // If nothing can see this, stop updating
+            if(activeActivities == 0) {
+                activeActivities--;
+                return;
+            }
 
-			List<UpdateView> views = new ArrayList<UpdateView>();
+            List<UpdateView> views = new ArrayList<UpdateView>();
             for (UpdateView view : INSTANCES.keySet()) {
                 if (view.isShown()) {
-					views.add(view);
+                    views.add(view);
                 }
             }
-			if(views.size() > 0) {
-				updateAllLive(views);
-			} else {
-				uiHandler.postDelayed(updateRunnable, 2000L);
-			}
+            if(views.size() > 0) {
+                updateAllLive(views);
+            } else {
+                uiHandler.postDelayed(updateRunnable, 2000L);
+            }
         } catch (Throwable x) {
             Log.w(TAG, "Error when updating song views.", x);
         }
     }
-	private static void updateAllLive(final List<UpdateView> views) {
-		final Runnable runnable = new Runnable() {
-			@Override
+    private static void updateAllLive(final List<UpdateView> views) {
+        final Runnable runnable = new Runnable() {
+            @Override
             public void run() {
-				try {
-					for(UpdateView view: views) {
-						view.update();
-					}
-				} catch (Throwable x) {
-					Log.w(TAG, "Error when updating song views.", x);
-				}
-				uiHandler.postDelayed(updateRunnable, 1000L);
-			}
-		};
-		
-		backgroundHandler.post(new Runnable() {
-			@Override
+                try {
+                    for(UpdateView view: views) {
+                        view.update();
+                    }
+                } catch (Throwable x) {
+                    Log.w(TAG, "Error when updating song views.", x);
+                }
+                uiHandler.postDelayed(updateRunnable, 1000L);
+            }
+        };
+
+        backgroundHandler.post(new Runnable() {
+            @Override
             public void run() {
-				try {
-					for(UpdateView view: views) {
-						view.updateBackground();
-					}
-					uiHandler.post(runnable);
-				} catch (Throwable x) {
-					Log.w(TAG, "Error when updating song views.", x);
-				}
-			}
-		});
-	}
+                try {
+                    for(UpdateView view: views) {
+                        view.updateBackground();
+                    }
+                    uiHandler.post(runnable);
+                } catch (Throwable x) {
+                    Log.w(TAG, "Error when updating song views.", x);
+                }
+            }
+        });
+    }
 
-	public static boolean hasActiveActivity() {
-		return activeActivities > 0;
-	}
+    public static boolean hasActiveActivity() {
+        return activeActivities > 0;
+    }
 
-	public static void addActiveActivity() {
-		activeActivities++;
+    public static void addActiveActivity() {
+        activeActivities++;
 
-		if(activeActivities == 0 && uiHandler != null && updateRunnable != null) {
-			activeActivities++;
-			uiHandler.post(updateRunnable);
-		}
-	}
-	public static void removeActiveActivity() {
-		activeActivities--;
-	}
+        if(activeActivities == 0 && uiHandler != null && updateRunnable != null) {
+            activeActivities++;
+            uiHandler.post(updateRunnable);
+        }
+    }
+    public static void removeActiveActivity() {
+        activeActivities--;
+    }
 
-	public static MusicDirectory.Entry findEntry(MusicDirectory.Entry entry) {
-		for(UpdateView view: INSTANCES.keySet()) {
-			MusicDirectory.Entry check = null;
-			if(view instanceof SongView) {
-				check = ((SongView) view).getEntry();
-			} else if(view instanceof AlbumView) {
-				check = ((AlbumView) view).getEntry();
-			}
+    public static MusicDirectory.Entry findEntry(MusicDirectory.Entry entry) {
+        for(UpdateView view: INSTANCES.keySet()) {
+            MusicDirectory.Entry check = null;
+            if(view instanceof SongView) {
+                check = ((SongView) view).getEntry();
+            } else if(view instanceof AlbumView) {
+                check = ((AlbumView) view).getEntry();
+            }
 
-			if(check != null && entry != check && check.getId().equals(entry.getId())) {
-				return check;
-			}
-		}
+            if(check != null && entry != check && check.getId().equals(entry.getId())) {
+                return check;
+            }
+        }
 
-		return null;
-	}
-	
-	protected void updateBackground() {
-		
-	}
-	protected void update() {
-		if(moreButton != null) {
-			if(exists || pinned) {
-				if(!shaded) {
-					moreButton.setImageResource(exists ? R.drawable.download_cached : R.drawable.download_pinned);
-					shaded = true;
-				}
-			} else {
-				if(shaded) {
-					moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
-					shaded = false;
-				}
-			}
-		}
-		
-		if(coverArtView != null && coverArtView instanceof RecyclingImageView) {
-			RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
-			if(recyclingImageView.isInvalidated()) {
-				onUpdateImageView();
-			}
-		}
-	}
+        return null;
+    }
 
-	public boolean isCheckable() {
-		return checkable;
-	}
-	public void setChecked(boolean checked) {
-		View child = getChildAt(0);
-		if (checked && startBackgroundDrawable == null) {
-			startBackgroundDrawable = child.getBackground();
-			child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimary));
-		} else if (!checked && startBackgroundDrawable != null) {
-			child.setBackgroundDrawable(startBackgroundDrawable);
-			startBackgroundDrawable = null;
-		}
-	}
+    protected void updateBackground() {
 
-	public void onClick() {
+    }
+    protected void update() {
+        if(moreButton != null) {
+            if(exists || pinned) {
+                if(!shaded) {
+                    moreButton.setImageResource(exists ? R.drawable.download_cached : R.drawable.download_pinned);
+                    shaded = true;
+                }
+            } else {
+                if(shaded) {
+                    moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
+                    shaded = false;
+                }
+            }
+        }
 
-	}
+        if(coverArtView != null && coverArtView instanceof RecyclingImageView) {
+            RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
+            if(recyclingImageView.isInvalidated()) {
+                onUpdateImageView();
+            }
+        }
+    }
 
-	public void onUpdateImageView() {
+    public boolean isCheckable() {
+        return checkable;
+    }
+    public void setChecked(boolean checked) {
+        View child = getChildAt(0);
+        if (checked && startBackgroundDrawable == null) {
+            startBackgroundDrawable = child.getBackground();
+            child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimary));
+        } else if (!checked && startBackgroundDrawable != null) {
+            child.setBackgroundDrawable(startBackgroundDrawable);
+            startBackgroundDrawable = null;
+        }
+    }
 
-	}
+    public void onClick() {
 
-	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
-		private UpdateView updateView;
-		private View view;
-		private T item;
+    }
 
-		public UpdateViewHolder(UpdateView itemView) {
-			super(itemView);
+    public void onUpdateImageView() {
 
-			this.updateView = itemView;
-			this.view = itemView;
-		}
+    }
 
-		// Different is so that call is not ambiguous
-		public UpdateViewHolder(View view, boolean different) {
-			super(view);
-			this.view = view;
-		}
+    public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
+        private UpdateView updateView;
+        private View view;
+        private T item;
 
-		public UpdateView<T> getUpdateView() {
-			return updateView;
-		}
-		public View getView() {
-			return view;
-		}
-		public void setItem(T item) {
-			this.item = item;
-		}
-		public T getItem() {
-			return item;
-		}
-	}
+        public UpdateViewHolder(UpdateView itemView) {
+            super(itemView);
+
+            this.updateView = itemView;
+            this.view = itemView;
+        }
+
+        // Different is so that call is not ambiguous
+        public UpdateViewHolder(View view, boolean different) {
+            super(view);
+            this.view = view;
+        }
+
+        public UpdateView<T> getUpdateView() {
+            return updateView;
+        }
+        public View getView() {
+            return view;
+        }
+        public void setItem(T item) {
+            this.item = item;
+        }
+        public T getItem() {
+            return item;
+        }
+    }
 }
 

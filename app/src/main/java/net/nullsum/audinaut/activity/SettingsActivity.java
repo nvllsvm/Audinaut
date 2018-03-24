@@ -28,29 +28,29 @@ import net.nullsum.audinaut.fragments.SettingsFragment;
 import net.nullsum.audinaut.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
-	private static final String TAG = SettingsActivity.class.getSimpleName();
-	private PreferenceCompatFragment fragment;
+    private static final String TAG = SettingsActivity.class.getSimpleName();
+    private PreferenceCompatFragment fragment;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		lastSelectedPosition = R.id.drawer_settings;
-		setContentView(R.layout.settings_activity);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lastSelectedPosition = R.id.drawer_settings;
+        setContentView(R.layout.settings_activity);
 
-		if (savedInstanceState == null) {
-			fragment = new SettingsFragment();
-			Bundle args = new Bundle();
-			args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
+        if (savedInstanceState == null) {
+            fragment = new SettingsFragment();
+            Bundle args = new Bundle();
+            args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
 
-			fragment.setArguments(args);
-			fragment.setRetainInstance(true);
+            fragment.setArguments(args);
+            fragment.setRetainInstance(true);
 
-			currentFragment = fragment;
-			currentFragment.setPrimaryFragment(true);
-			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
-		}
+            currentFragment = fragment;
+            currentFragment.setPrimaryFragment(true);
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
+        }
 
-		Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		setSupportActionBar(mainToolbar);
-	}
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
+    }
 }

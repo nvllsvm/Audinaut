@@ -53,13 +53,13 @@ public class IndexesParser extends MusicDirectoryEntryParser {
 
         List<Artist> artists = new ArrayList<Artist>();
         List<Artist> shortcuts = new ArrayList<Artist>();
-		List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
+        List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
         Long lastModified = null;
         int eventType;
         String index = "#";
-		String ignoredArticles = null;
+        String ignoredArticles = null;
         boolean changed = false;
-		Map<String, Artist> artistList = new HashMap<String, Artist>();
+        Map<String, Artist> artistList = new HashMap<String, Artist>();
 
         do {
             eventType = nextParseEvent();
@@ -68,7 +68,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                 if ("indexes".equals(name) || "artists".equals(name)) {
                     changed = true;
                     lastModified = getLong("lastModified");
-					ignoredArticles = get("ignoredArticles");
+                    ignoredArticles = get("ignoredArticles");
                 } else if ("index".equals(name)) {
                     index = get("name");
 
@@ -78,14 +78,14 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     artist.setName(get("name"));
                     artist.setIndex(index);
 
-					// Combine the id's for the two artists
-					if(artistList.containsKey(artist.getName())) {
-						Artist originalArtist = artistList.get(artist.getName());
-						originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
-					} else {
-						artistList.put(artist.getName(), artist);
-						artists.add(artist);
-					}
+                    // Combine the id's for the two artists
+                    if(artistList.containsKey(artist.getName())) {
+                        Artist originalArtist = artistList.get(artist.getName());
+                        originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
+                    } else {
+                        artistList.put(artist.getName(), artist);
+                        artists.add(artist);
+                    }
 
                     if (artists.size() % 10 == 0) {
                         String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());
@@ -97,22 +97,22 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     shortcut.setName(get("name"));
                     shortcut.setIndex("*");
                     shortcuts.add(shortcut);
-				} else if("child".equals(name)) {
-					MusicDirectory.Entry entry = parseEntry("");
-					entries.add(entry);
-				} else if ("error".equals(name)) {
+                } else if("child".equals(name)) {
+                    MusicDirectory.Entry entry = parseEntry("");
+                    entries.add(entry);
+                } else if ("error".equals(name)) {
                     handleError();
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-		
-		if(ignoredArticles != null) {
-			SharedPreferences.Editor prefs = Util.getPreferences(context).edit();
-			prefs.putString(Constants.CACHE_KEY_IGNORE, ignoredArticles);
-			prefs.apply();
-		}
+
+        if(ignoredArticles != null) {
+            SharedPreferences.Editor prefs = Util.getPreferences(context).edit();
+            prefs.putString(Constants.CACHE_KEY_IGNORE, ignoredArticles);
+            prefs.apply();
+        }
 
         if (!changed) {
             return null;

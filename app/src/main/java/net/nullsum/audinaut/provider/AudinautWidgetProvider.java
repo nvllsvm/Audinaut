@@ -60,44 +60,44 @@ import net.nullsum.audinaut.util.Util;
  */
 public class AudinautWidgetProvider extends AppWidgetProvider {
     private static final String TAG = AudinautWidgetProvider.class.getSimpleName();
-	private static AudinautWidget4x1 instance4x1;
-	private static AudinautWidget4x2 instance4x2;
-	private static AudinautWidget4x3 instance4x3;
-	private static AudinautWidget4x4 instance4x4;
+    private static AudinautWidget4x1 instance4x1;
+    private static AudinautWidget4x2 instance4x2;
+    private static AudinautWidget4x3 instance4x3;
+    private static AudinautWidget4x4 instance4x4;
 
-	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
-		if(instance4x1 == null) {
-			instance4x1 = new AudinautWidget4x1();
-		}
-		if(instance4x2 == null) {
-			instance4x2 = new AudinautWidget4x2();
-		}
-		if(instance4x3 == null) {
-			instance4x3 = new AudinautWidget4x3();
-		}
-		if(instance4x4 == null) {
-			instance4x4 = new AudinautWidget4x4();
-		}
-		
-		instance4x1.notifyChange(context, service, playing);
-		instance4x2.notifyChange(context, service, playing);
-		instance4x3.notifyChange(context, service, playing);
-		instance4x4.notifyChange(context, service, playing);
-	}
+    public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
+        if(instance4x1 == null) {
+            instance4x1 = new AudinautWidget4x1();
+        }
+        if(instance4x2 == null) {
+            instance4x2 = new AudinautWidget4x2();
+        }
+        if(instance4x3 == null) {
+            instance4x3 = new AudinautWidget4x3();
+        }
+        if(instance4x4 == null) {
+            instance4x4 = new AudinautWidget4x4();
+        }
+
+        instance4x1.notifyChange(context, service, playing);
+        instance4x2.notifyChange(context, service, playing);
+        instance4x3.notifyChange(context, service, playing);
+        instance4x4.notifyChange(context, service, playing);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         defaultAppWidget(context, appWidgetIds);
     }
-    
-	@Override
-	public void onEnabled(Context context) {
-		notifyInstances(context, DownloadService.getInstance(), false);
-	}
-	
-	protected int getLayout() {
-		return 0;
-	}
+
+    @Override
+    public void onEnabled(Context context) {
+        notifyInstances(context, DownloadService.getInstance(), false);
+    }
+
+    protected int getLayout() {
+        return 0;
+    }
 
     /**
      * Initialize given widgets to default state, where we launch Subsonic on default click
@@ -108,12 +108,12 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
 
         views.setTextViewText(R.id.artist, res.getText(R.string.widget_initial_text));
-		if(getLayout() == R.layout.appwidget4x2) {
-			views.setTextViewText(R.id.album, "");
-		}
+        if(getLayout() == R.layout.appwidget4x2) {
+            views.setTextViewText(R.id.album, "");
+        }
 
         linkButtons(context, views, false);
-		performUpdate(context, null, appWidgetIds, false);
+        performUpdate(context, null, appWidgetIds, false);
     }
 
     private void pushUpdate(Context context, int[] appWidgetIds, RemoteViews views) {
@@ -151,20 +151,20 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
         final Resources res = context.getResources();
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
 
-		if(playing) {
-			views.setViewVisibility(R.id.widget_root, View.VISIBLE);
-		} else {
-			// Hide widget
-			SharedPreferences prefs = Util.getPreferences(context);
-			if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
-				views.setViewVisibility(R.id.widget_root, View.GONE);
-			}
-		}
+        if(playing) {
+            views.setViewVisibility(R.id.widget_root, View.VISIBLE);
+        } else {
+            // Hide widget
+            SharedPreferences prefs = Util.getPreferences(context);
+            if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
+                views.setViewVisibility(R.id.widget_root, View.GONE);
+            }
+        }
 
-	// Get Entry from current playing DownloadFile
+    // Get Entry from current playing DownloadFile
         MusicDirectory.Entry currentPlaying = null;
         if(service == null) {
-        	// Deserialize from playling list to setup
+            // Deserialize from playling list to setup
             try {
                 PlayerQueue state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, PlayerQueue.class);
                 if (state != null && state.currentPlayingIndex != -1) {
@@ -174,12 +174,12 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
                 Log.e(TAG, "Failed to grab current playing", e);
             }
         } else {
-			currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
+            currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         }
-        
+
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
         CharSequence artist = currentPlaying == null ? null : currentPlaying.getArtist();
-		CharSequence album = currentPlaying == null ? null : currentPlaying.getAlbum();
+        CharSequence album = currentPlaying == null ? null : currentPlaying.getAlbum();
         CharSequence errorState = null;
 
         // Show error message?
@@ -195,19 +195,19 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
 
         if (errorState != null) {
             // Show error state to user
-        	views.setTextViewText(R.id.title,null);
+            views.setTextViewText(R.id.title,null);
             views.setTextViewText(R.id.artist, errorState);
-			views.setTextViewText(R.id.album, "");
-			if(getLayout() != R.layout.appwidget4x1) {
-				views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
-			}
+            views.setTextViewText(R.id.album, "");
+            if(getLayout() != R.layout.appwidget4x1) {
+                views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
+            }
         } else {
             // No error, so show normal titles
             views.setTextViewText(R.id.title, title);
             views.setTextViewText(R.id.artist, artist);
-			if(getLayout() != R.layout.appwidget4x1) {
-				views.setTextViewText(R.id.album, album);
-			}
+            if(getLayout() != R.layout.appwidget4x1) {
+                views.setTextViewText(R.id.album, album);
+            }
         }
 
         // Set correct drawable for pause state
@@ -220,10 +220,10 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
         // Set the cover art
         try {
             boolean large = false;
-			if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2) {
-				large = true;
-			}
-			ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
+            if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2) {
+                large = true;
+            }
+            ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
             Bitmap bitmap = imageLoader == null ? null : imageLoader.getCachedImage(context, currentPlaying, large);
 
             if (bitmap == null) {
@@ -243,7 +243,7 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
 
         pushUpdate(context, appWidgetIds, views);
     }
-    
+
     /**
      * Round the corners of a bitmap for the cover art image
      */
@@ -276,29 +276,29 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
      * @param playerActive @param playerActive True if player is active in background.  Launch {@link net.nullsum.audinaut.activity.SubsonicFragmentActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
-		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(context, SubsonicFragmentActivity.class);
+        intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.appwidget_coverart, pendingIntent);
         views.setOnClickPendingIntent(R.id.appwidget_top, pendingIntent);
-        
+
         // Emulate media button clicks.
         intent = new Intent("Audinaut.PLAY_PAUSE");
         intent.setComponent(new ComponentName(context, DownloadService.class));
-		intent.setAction(DownloadService.CMD_TOGGLEPAUSE);
+        intent.setAction(DownloadService.CMD_TOGGLEPAUSE);
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_play, pendingIntent);
 
         intent = new Intent("Audinaut.NEXT");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadService.class));
-		intent.setAction(DownloadService.CMD_NEXT);
+        intent.setAction(DownloadService.CMD_NEXT);
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
-        
+
         intent = new Intent("Audinaut.PREVIOUS");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadService.class));
-		intent.setAction(DownloadService.CMD_PREVIOUS);
+        intent.setAction(DownloadService.CMD_PREVIOUS);
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
     }

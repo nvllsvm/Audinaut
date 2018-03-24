@@ -32,8 +32,8 @@ import java.io.InputStream;
 public class PlaylistParser extends MusicDirectoryEntryParser {
 
     public PlaylistParser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
     public MusicDirectory parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
         init(inputStream);
@@ -49,9 +49,9 @@ public class PlaylistParser extends MusicDirectoryEntryParser {
                 } else if ("error".equals(name)) {
                     handleError();
                 } else if ("playlist".equals(name)) {
-					dir.setName(get("name"));
-					dir.setId(get("id"));
-				}
+                    dir.setName(get("name"));
+                    dir.setId(get("id"));
+                }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);
 

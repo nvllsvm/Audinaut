@@ -29,27 +29,27 @@ public class AudioEffectsController {
     private static final String TAG = AudioEffectsController.class.getSimpleName();
 
     private final Context context;
-	private int audioSessionId = 0;
+    private int audioSessionId = 0;
 
-	private EqualizerController equalizerController;
+    private EqualizerController equalizerController;
 
     public AudioEffectsController(Context context, int audioSessionId) {
         this.context = context;
-		this.audioSessionId = audioSessionId;
+        this.audioSessionId = audioSessionId;
     }
 
-	public void release() {
-		if(equalizerController != null) {
-			equalizerController.release();
-		}
-	}
+    public void release() {
+        if(equalizerController != null) {
+            equalizerController.release();
+        }
+    }
 
-	public EqualizerController getEqualizerController() {
-		if (equalizerController == null) {
-			equalizerController = new EqualizerController(context, audioSessionId);
+    public EqualizerController getEqualizerController() {
+        if (equalizerController == null) {
+            equalizerController = new EqualizerController(context, audioSessionId);
             equalizerController.loadSettings();
-		}
-		return equalizerController;
-	}
+        }
+        return equalizerController;
+    }
 }
 

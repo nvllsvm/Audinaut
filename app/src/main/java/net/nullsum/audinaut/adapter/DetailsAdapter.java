@@ -1,16 +1,16 @@
 /*
   This file is part of Subsonic.
-	Subsonic is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	Subsonic is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
-	Copyright 2015 (C) Scott Jackson
+    Subsonic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Subsonic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+    Copyright 2015 (C) Scott Jackson
 */
 
 package net.nullsum.audinaut.adapter;
@@ -30,33 +30,33 @@ import java.util.List;
 import net.nullsum.audinaut.R;
 
 public class DetailsAdapter extends ArrayAdapter<String> {
-	private List<String> headers;
-	private List<String> details;
+    private List<String> headers;
+    private List<String> details;
 
-	public DetailsAdapter(Context context, int layout, List<String> headers, List<String> details) {
-		super(context, layout, headers);
+    public DetailsAdapter(Context context, int layout, List<String> headers, List<String> details) {
+        super(context, layout, headers);
 
-		this.headers = headers;
-		this.details = details;
-	}
+        this.headers = headers;
+        this.details = details;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
-		View view;
-		if(convertView == null) {
-			view = LayoutInflater.from(getContext()).inflate(R.layout.details_item, null);
-		} else {
-			view = convertView;
-		}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent){
+        View view;
+        if(convertView == null) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.details_item, null);
+        } else {
+            view = convertView;
+        }
 
-		TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-		TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+        TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+        TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
 
-		nameView.setText(headers.get(position));
+        nameView.setText(headers.get(position));
 
-		detailsView.setText(details.get(position));
-		Linkify.addLinks(detailsView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+        detailsView.setText(details.get(position));
+        Linkify.addLinks(detailsView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
-		return view;
-	}
+        return view;
+    }
 }

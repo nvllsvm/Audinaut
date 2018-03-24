@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	android:title="@string/settings.title">
+    android:title="@string/settings.title">
 
-	<PreferenceScreen
-		android:title="@string/settings.servers_title"
-		android:key="servers">
-	</PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/settings.servers_title"
+        android:key="servers">
+    </PreferenceScreen>
 
-	<PreferenceScreen
-		android:title="@string/settings.appearance_title"
-		android:key="appearance">
-	</PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/settings.appearance_title"
+        android:key="appearance">
+    </PreferenceScreen>
 
-	<PreferenceScreen
-		android:title="@string/settings.cache_screen_title"
-		android:key="cache">
-	</PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/settings.cache_screen_title"
+        android:key="cache">
+    </PreferenceScreen>
 
-	<PreferenceScreen
-		android:title="@string/settings.playback_title"
-		android:key="playback">
-	</PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/settings.playback_title"
+        android:key="playback">
+    </PreferenceScreen>
 </PreferenceScreen>

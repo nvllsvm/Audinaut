@@ -46,164 +46,164 @@ import net.nullsum.audinaut.util.Util;
  * @author Sindre Mehus
  */
 public class AudinautSearchProvider extends ContentProvider {
-	private static final String TAG = AudinautSearchProvider.class.getSimpleName();
+    private static final String TAG = AudinautSearchProvider.class.getSimpleName();
 
-	private static final String RESOURCE_PREFIX = "android.resource://net.nullsum.audinaut/";
-	private static final String[] COLUMNS = {"_id",
-			SearchManager.SUGGEST_COLUMN_TEXT_1,
-			SearchManager.SUGGEST_COLUMN_TEXT_2,
-			SearchManager.SUGGEST_COLUMN_INTENT_DATA,
-			SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
-			SearchManager.SUGGEST_COLUMN_ICON_1};
+    private static final String RESOURCE_PREFIX = "android.resource://net.nullsum.audinaut/";
+    private static final String[] COLUMNS = {"_id",
+            SearchManager.SUGGEST_COLUMN_TEXT_1,
+            SearchManager.SUGGEST_COLUMN_TEXT_2,
+            SearchManager.SUGGEST_COLUMN_INTENT_DATA,
+            SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA,
+            SearchManager.SUGGEST_COLUMN_ICON_1};
 
-	@Override
-	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-		if(selectionArgs[0].isEmpty()) {
-			return null;
-		}
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        if(selectionArgs[0].isEmpty()) {
+            return null;
+        }
 
-		String query = selectionArgs[0] + "*";
-		SearchResult searchResult = search(query);
-		return createCursor(selectionArgs[0], searchResult);
-	}
+        String query = selectionArgs[0] + "*";
+        SearchResult searchResult = search(query);
+        return createCursor(selectionArgs[0], searchResult);
+    }
 
-	private SearchResult search(String query) {
-		MusicService musicService = MusicServiceFactory.getMusicService(getContext());
-		if (musicService == null) {
-			return null;
-		}
+    private SearchResult search(String query) {
+        MusicService musicService = MusicServiceFactory.getMusicService(getContext());
+        if (musicService == null) {
+            return null;
+        }
 
-		try {
-			return musicService.search(new SearchCritera(query, 5, 10, 10), getContext(), null);
-		} catch (Exception e) {
-			return null;
-		}
-	}
+        try {
+            return musicService.search(new SearchCritera(query, 5, 10, 10), getContext(), null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-	private Cursor createCursor(String query, SearchResult searchResult) {
-		MatrixCursor cursor = new MatrixCursor(COLUMNS);
-		if (searchResult == null) {
-			return cursor;
-		}
-		
-		// Add all results into one pot
-		List<Object> results = new ArrayList<Object>();
-		results.addAll(searchResult.getArtists());
-		results.addAll(searchResult.getAlbums());
-		results.addAll(searchResult.getSongs());
-		
-		// For each, calculate its string distance to the query
-		for(Object obj: results) {
-			if(obj instanceof Artist) {
-				Artist artist = (Artist) obj;
-				artist.setCloseness(Util.getStringDistance(query, artist.getName()));
-			} else {
-				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
-				entry.setCloseness(Util.getStringDistance(query, entry.getTitle()));
-			}
-		}
-		
-		// Sort based on the closeness paramater
-		Collections.sort(results, new Comparator<Object>() {
-			@Override
-			public int compare(Object lhs, Object rhs) {
-				// Get the closeness of the two objects
-				int left, right;
-				boolean leftArtist = lhs instanceof Artist;
-				boolean rightArtist = rhs instanceof Artist;
-				if (leftArtist) {
-					left = ((Artist) lhs).getCloseness();
-				} else {
-					left = ((MusicDirectory.Entry) lhs).getCloseness();
-				}
-				if (rightArtist) {
-					right = ((Artist) rhs).getCloseness();
-				} else {
-					right = ((MusicDirectory.Entry) rhs).getCloseness();
-				}
+    private Cursor createCursor(String query, SearchResult searchResult) {
+        MatrixCursor cursor = new MatrixCursor(COLUMNS);
+        if (searchResult == null) {
+            return cursor;
+        }
 
-				if (left == right) {
-					if(leftArtist && rightArtist) {
-						return 0;
-					} else if(leftArtist) {
-						return -1;
-					} else if(rightArtist) {
-						return 1;
-					} else {
-						return 0;
-					}
-				} else if (left > right) {
-					return 1;
-				} else {
-					return -1;
-				}
-			}
-		});
-		
-		// Done sorting, add results to cursor
-		for(Object obj: results) {
-			if(obj instanceof Artist) {
-				Artist artist = (Artist) obj;
-				String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
-				cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
-			} else {
-				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
-				
-				if(entry.isDirectory()) {
-					String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
-				} else {
-					String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-					String id;
-					if(Util.isTagBrowsing(getContext())) {
-						id = entry.getAlbumId();
-					} else {
-						id = entry.getParent();
-					}
+        // Add all results into one pot
+        List<Object> results = new ArrayList<Object>();
+        results.addAll(searchResult.getArtists());
+        results.addAll(searchResult.getAlbums());
+        results.addAll(searchResult.getSongs());
 
-					String artistDisplay;
-					if(entry.getArtist() == null) {
-						if(entry.getAlbum() != null) {
-							artistDisplay = entry.getAlbumDisplay();
-						} else {
-							artistDisplay = "";
-						}
-					} else if(entry.getAlbum() != null) {
-						artistDisplay = entry.getArtist() + " - " + entry.getAlbumDisplay();
-					} else {
-						artistDisplay = entry.getArtist();
-					}
+        // For each, calculate its string distance to the query
+        for(Object obj: results) {
+            if(obj instanceof Artist) {
+                Artist artist = (Artist) obj;
+                artist.setCloseness(Util.getStringDistance(query, artist.getName()));
+            } else {
+                MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
+                entry.setCloseness(Util.getStringDistance(query, entry.getTitle()));
+            }
+        }
 
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "so-" + id, entry.getTitle(), icon});
-				}
-			}
-		}
-		return cursor;
-	}
+        // Sort based on the closeness paramater
+        Collections.sort(results, new Comparator<Object>() {
+            @Override
+            public int compare(Object lhs, Object rhs) {
+                // Get the closeness of the two objects
+                int left, right;
+                boolean leftArtist = lhs instanceof Artist;
+                boolean rightArtist = rhs instanceof Artist;
+                if (leftArtist) {
+                    left = ((Artist) lhs).getCloseness();
+                } else {
+                    left = ((MusicDirectory.Entry) lhs).getCloseness();
+                }
+                if (rightArtist) {
+                    right = ((Artist) rhs).getCloseness();
+                } else {
+                    right = ((MusicDirectory.Entry) rhs).getCloseness();
+                }
 
-	@Override
-	public boolean onCreate() {
-		return false;
-	}
+                if (left == right) {
+                    if(leftArtist && rightArtist) {
+                        return 0;
+                    } else if(leftArtist) {
+                        return -1;
+                    } else if(rightArtist) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                } else if (left > right) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+        });
 
-	@Override
-	public String getType(Uri uri) {
-		return null;
-	}
+        // Done sorting, add results to cursor
+        for(Object obj: results) {
+            if(obj instanceof Artist) {
+                Artist artist = (Artist) obj;
+                String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
+                cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
+            } else {
+                MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
 
-	@Override
-	public Uri insert(Uri uri, ContentValues contentValues) {
-		return null;
-	}
+                if(entry.isDirectory()) {
+                    String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
+                    cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
+                } else {
+                    String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
+                    String id;
+                    if(Util.isTagBrowsing(getContext())) {
+                        id = entry.getAlbumId();
+                    } else {
+                        id = entry.getParent();
+                    }
 
-	@Override
-	public int delete(Uri uri, String s, String[] strings) {
-		return 0;
-	}
+                    String artistDisplay;
+                    if(entry.getArtist() == null) {
+                        if(entry.getAlbum() != null) {
+                            artistDisplay = entry.getAlbumDisplay();
+                        } else {
+                            artistDisplay = "";
+                        }
+                    } else if(entry.getAlbum() != null) {
+                        artistDisplay = entry.getArtist() + " - " + entry.getAlbumDisplay();
+                    } else {
+                        artistDisplay = entry.getArtist();
+                    }
 
-	@Override
-	public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-		return 0;
-	}
+                    cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "so-" + id, entry.getTitle(), icon});
+                }
+            }
+        }
+        return cursor;
+    }
+
+    @Override
+    public boolean onCreate() {
+        return false;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        return null;
+    }
+
+    @Override
+    public int delete(Uri uri, String s, String[] strings) {
+        return 0;
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+        return 0;
+    }
 
 }

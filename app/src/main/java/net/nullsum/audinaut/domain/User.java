@@ -1,16 +1,16 @@
 /*
   This file is part of Subsonic.
-	Subsonic is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	Subsonic is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
-	Copyright 2014 (C) Scott Jackson
+    Subsonic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Subsonic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+    Copyright 2014 (C) Scott Jackson
 */
 
 package net.nullsum.audinaut.domain;
@@ -22,125 +22,125 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
-	public static final String ADMIN = "adminRole";
-	public static final String SETTINGS = "settingsRole";
-	public static final String DOWNLOAD = "downloadRole";
-	public static final String UPLOAD = "uploadRole";
-	public static final String COVERART = "coverArtRole";
-	public static final String COMMENT = "commentRole";
-	public static final String STREAM = "streamRole";
-	public static final List<String> ROLES = new ArrayList<>();
-	
-	static {
-		ROLES.add(ADMIN);
-		ROLES.add(SETTINGS);
-		ROLES.add(STREAM);
-		ROLES.add(DOWNLOAD);
-		ROLES.add(UPLOAD);
-		ROLES.add(COVERART);
-		ROLES.add(COMMENT);
-	}
-	
-	private String username;
-	private String password;
-	private String email;
+    public static final String ADMIN = "adminRole";
+    public static final String SETTINGS = "settingsRole";
+    public static final String DOWNLOAD = "downloadRole";
+    public static final String UPLOAD = "uploadRole";
+    public static final String COVERART = "coverArtRole";
+    public static final String COMMENT = "commentRole";
+    public static final String STREAM = "streamRole";
+    public static final List<String> ROLES = new ArrayList<>();
 
-	private List<Setting> settings = new ArrayList<Setting>();
-	private List<Setting> musicFolders;
+    static {
+        ROLES.add(ADMIN);
+        ROLES.add(SETTINGS);
+        ROLES.add(STREAM);
+        ROLES.add(DOWNLOAD);
+        ROLES.add(UPLOAD);
+        ROLES.add(COVERART);
+        ROLES.add(COMMENT);
+    }
 
-	public User() {
+    private String username;
+    private String password;
+    private String email;
 
-	}
+    private List<Setting> settings = new ArrayList<Setting>();
+    private List<Setting> musicFolders;
 
-	public String getUsername() {
-		return username;
-	}
+    public User() {
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public List<Setting> getSettings() {
-		return settings;
-	}
-	public void setSettings(List<Setting> settings) {
-		this.settings.clear();
-		this.settings.addAll(settings);
-	}
-	public void addSetting(String name, Boolean value) {
-		settings.add(new Setting(name, value));
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void addMusicFolder(MusicFolder musicFolder) {
-		if(musicFolders == null) {
-			musicFolders = new ArrayList<>();
-		}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-		musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
-	}
-	public void addMusicFolder(MusicFolderSetting musicFolderSetting, boolean defaultValue) {
-		if(musicFolders == null) {
-			musicFolders = new ArrayList<>();
-		}
+    public List<Setting> getSettings() {
+        return settings;
+    }
+    public void setSettings(List<Setting> settings) {
+        this.settings.clear();
+        this.settings.addAll(settings);
+    }
+    public void addSetting(String name, Boolean value) {
+        settings.add(new Setting(name, value));
+    }
 
-		musicFolders.add(new MusicFolderSetting(musicFolderSetting.getName(), musicFolderSetting.getLabel(), defaultValue));
-	}
-	public List<Setting> getMusicFolderSettings() {
-		return musicFolders;
-	}
+    public void addMusicFolder(MusicFolder musicFolder) {
+        if(musicFolders == null) {
+            musicFolders = new ArrayList<>();
+        }
 
-	public static class Setting implements Serializable {
-		private String name;
-		private Boolean value;
+        musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
+    }
+    public void addMusicFolder(MusicFolderSetting musicFolderSetting, boolean defaultValue) {
+        if(musicFolders == null) {
+            musicFolders = new ArrayList<>();
+        }
 
-		public Setting() {
-			
-		}
-		public Setting(String name, Boolean value) {
-			this.name = name;
-			this.value = value;
-		}
+        musicFolders.add(new MusicFolderSetting(musicFolderSetting.getName(), musicFolderSetting.getLabel(), defaultValue));
+    }
+    public List<Setting> getMusicFolderSettings() {
+        return musicFolders;
+    }
 
-		public String getName() {
-			return name;
-		}
-		public Boolean getValue() {
-			return value;
-		}
-		public void setValue(Boolean value) {
-			this.value = value;
-		}
-	}
+    public static class Setting implements Serializable {
+        private String name;
+        private Boolean value;
 
-	public static class MusicFolderSetting extends Setting {
-		private String label;
+        public Setting() {
 
-		public MusicFolderSetting() {
+        }
+        public Setting(String name, Boolean value) {
+            this.name = name;
+            this.value = value;
+        }
 
-		}
-		public MusicFolderSetting(String name, String label, Boolean value) {
-			super(name, value);
-			this.label = label;
-		}
+        public String getName() {
+            return name;
+        }
+        public Boolean getValue() {
+            return value;
+        }
+        public void setValue(Boolean value) {
+            this.value = value;
+        }
+    }
 
-		public String getLabel() {
-			return label;
-		}
-	}
+    public static class MusicFolderSetting extends Setting {
+        private String label;
+
+        public MusicFolderSetting() {
+
+        }
+        public MusicFolderSetting(String name, String label, Boolean value) {
+            super(name, value);
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
 }

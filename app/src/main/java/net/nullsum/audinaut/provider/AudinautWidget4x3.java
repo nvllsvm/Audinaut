@@ -21,8 +21,8 @@ package net.nullsum.audinaut.provider;
 import net.nullsum.audinaut.R;
 
 public class AudinautWidget4x3 extends AudinautWidgetProvider {
-	@Override
-	protected int getLayout() {
-		return R.layout.appwidget4x3;
-	}
+    @Override
+    protected int getLayout() {
+        return R.layout.appwidget4x3;
+    }
 }

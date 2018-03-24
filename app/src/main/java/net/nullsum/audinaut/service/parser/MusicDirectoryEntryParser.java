@@ -33,21 +33,21 @@ public class MusicDirectoryEntryParser extends AbstractParser {
     protected MusicDirectory.Entry parseEntry(String artist) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setId(get("id"));
-		entry.setParent(get("parent"));
-		entry.setArtistId(get("artistId"));
+        entry.setParent(get("parent"));
+        entry.setArtistId(get("artistId"));
         entry.setTitle(get("title"));
-		if(entry.getTitle() == null) {
-			entry.setTitle(get("name"));
-		}
+        if(entry.getTitle() == null) {
+            entry.setTitle(get("name"));
+        }
         entry.setDirectory(getBoolean("isDir"));
         entry.setCoverArt(get("coverArt"));
         entry.setArtist(get("artist"));
         entry.setYear(getInteger("year"));
         entry.setGenre(get("genre"));
-		entry.setAlbum(get("album"));
+        entry.setAlbum(get("album"));
 
         if (!entry.isDirectory()) {
-			entry.setAlbumId(get("albumId"));
+            entry.setAlbumId(get("albumId"));
             entry.setTrack(getInteger("track"));
             entry.setContentType(get("contentType"));
             entry.setSuffix(get("suffix"));
@@ -57,23 +57,23 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setDuration(getInteger("duration"));
             entry.setBitRate(getInteger("bitRate"));
             entry.setPath(get("path"));
-			entry.setDiscNumber(getInteger("discNumber"));
+            entry.setDiscNumber(getInteger("discNumber"));
 
-			String type = get("type");
+            String type = get("type");
         } else if(!"".equals(artist)) {
-			entry.setPath(artist + "/" + entry.getTitle());
-		}
+            entry.setPath(artist + "/" + entry.getTitle());
+        }
         return entry;
     }
-	
-	protected MusicDirectory.Entry parseArtist() {
-		MusicDirectory.Entry entry = new MusicDirectory.Entry();
-		
-		entry.setId(get("id"));
-		entry.setTitle(get("name"));
-		entry.setPath(entry.getTitle());
-		entry.setDirectory(true);
-		
-		return entry;
-	}
+
+    protected MusicDirectory.Entry parseArtist() {
+        MusicDirectory.Entry entry = new MusicDirectory.Entry();
+
+        entry.setId(get("id"));
+        entry.setTitle(get("name"));
+        entry.setPath(entry.getTitle());
+        entry.setDirectory(true);
+
+        return entry;
+    }
 }

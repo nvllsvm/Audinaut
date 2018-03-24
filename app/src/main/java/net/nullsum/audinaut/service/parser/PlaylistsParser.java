@@ -34,8 +34,8 @@ import java.util.List;
 public class PlaylistsParser extends AbstractParser {
 
     public PlaylistsParser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
     public List<Playlist> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
         init(inputStream);
@@ -49,13 +49,13 @@ public class PlaylistsParser extends AbstractParser {
                 if ("playlist".equals(tag)) {
                     String id = get("id");
                     String name = get("name");
-					String owner = get("owner");
-					String comment = get("comment");
-					String songCount = get("songCount");
-					String pub = get("public");
-					String created = get("created");
-					String changed = get("changed");
-					Integer duration = getInteger("duration");
+                    String owner = get("owner");
+                    String comment = get("comment");
+                    String songCount = get("songCount");
+                    String pub = get("public");
+                    String created = get("created");
+                    String changed = get("changed");
+                    Integer duration = getInteger("duration");
                     result.add(new Playlist(id, name, owner, comment, songCount, pub, created, changed, duration));
                 } else if ("error".equals(tag)) {
                     handleError();

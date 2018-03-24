@@ -6,7 +6,7 @@
     android:minHeight="110dp"
     android:background="@drawable/appwidget_bg"
     android:orientation="horizontal"
-	android:id="@+id/widget_root">
+    android:id="@+id/widget_root">
 
     <ImageView
         android:id="@+id/appwidget_coverart"
@@ -32,7 +32,7 @@
             android:orientation="vertical"
             android:paddingTop="4dip"
             android:paddingBottom="4dip"
-			style="@style/NotificationButton">
+            style="@style/NotificationButton">
 
             <TextView
                 android:id="@+id/title"
@@ -45,22 +45,22 @@
                 android:paddingLeft="4dip"
                 android:paddingRight="4dip"
                 android:paddingTop="4dip"
-				android:paddingBottom="2dip"
+                android:paddingBottom="2dip"
                 android:maxLines="1"
                 android:gravity="center_horizontal"
                 android:text="@string/widget.title"
                 android:textColor="@color/appwidget_text"
                 android:textSize="16sp"
-				android:textStyle="bold"
-				android:focusable="true"
-				android:focusableInTouchMode="true"
-				android:scrollHorizontally="true"
-				android:marqueeRepeatLimit="marquee_forever">
+                android:textStyle="bold"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever">
 
-				<requestFocus android:focusable="true"
-					android:focusableInTouchMode="true"
-					android:duplicateParentState="true" />
-			</TextView>
+                <requestFocus android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:duplicateParentState="true" />
+            </TextView>
 
             <TextView
                 android:id="@+id/artist"
@@ -72,13 +72,13 @@
                 android:minHeight="12sp"
                 android:paddingLeft="4dip"
                 android:paddingRight="4dip"
-				android:paddingBottom="2dip"
+                android:paddingBottom="2dip"
                 android:maxLines="1"
                 android:gravity="center_horizontal"
                 android:text="@string/widget.artist"
                 android:textColor="@color/appwidget_text"
                 android:textSize="12sp" />
-            
+
           <TextView
                 android:id="@+id/album"
                 android:layout_width="fill_parent"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/media_start_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/media_forward_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
         </LinearLayout>
     </LinearLayout>
 

@@ -43,19 +43,19 @@ import net.nullsum.audinaut.util.Util;
  * @author Sindre Mehus
  */
 public class MusicDirectory implements Serializable {
-	private static final String TAG = MusicDirectory.class.getSimpleName();
+    private static final String TAG = MusicDirectory.class.getSimpleName();
 
     private String name;
-	private String id;
-	private String parent;
+    private String id;
+    private String parent;
     private List<Entry> children;
 
-	public MusicDirectory() {
-		children = new ArrayList<Entry>();
-	}
-	public MusicDirectory(List<Entry> children) {
-		this.children = children;
-	}
+    public MusicDirectory() {
+        children = new ArrayList<Entry>();
+    }
+    public MusicDirectory(List<Entry> children) {
+        this.children = children;
+    }
 
     public String getName() {
         return name;
@@ -64,35 +64,35 @@ public class MusicDirectory implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-	
-	 public String getId() {
-		return id;
-	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public String getParent() {
-		return parent;
-	}
+     public String getId() {
+        return id;
+    }
 
-	public void setParent(String parent) {
-		this.parent = parent;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void addChild(Entry child) {
-		if(child != null) {
-			children.add(child);
-		}
-	}
-	public void addChildren(List<Entry> children) {
-		this.children.addAll(children);
-	}
-    
-	public void replaceChildren(List<Entry> children) {
-		this.children = children;
-	}
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public void addChild(Entry child) {
+        if(child != null) {
+            children.add(child);
+        }
+    }
+    public void addChildren(List<Entry> children) {
+        this.children.addAll(children);
+    }
+
+    public void replaceChildren(List<Entry> children) {
+        this.children = children;
+    }
 
     public synchronized List<Entry> getChildren() {
         return getChildren(true, true);
@@ -111,209 +111,209 @@ public class MusicDirectory implements Serializable {
         }
         return result;
     }
-	public synchronized List<Entry> getSongs() {
-		List<Entry> result = new ArrayList<Entry>();
-		for (Entry child : children) {
-			if (child != null && !child.isDirectory()) {
-				result.add(child);
-			}
-		}
-		return result;
-	}
-	
-	public synchronized int getChildrenSize() {
-		return children.size();
-	}
+    public synchronized List<Entry> getSongs() {
+        List<Entry> result = new ArrayList<Entry>();
+        for (Entry child : children) {
+            if (child != null && !child.isDirectory()) {
+                result.add(child);
+            }
+        }
+        return result;
+    }
 
-	public void shuffleChildren() {
-		Collections.shuffle(this.children);
-	}
-	
-	public void sortChildren(Context context, int instance) {
+    public synchronized int getChildrenSize() {
+        return children.size();
+    }
+
+    public void shuffleChildren() {
+        Collections.shuffle(this.children);
+    }
+
+    public void sortChildren(Context context, int instance) {
         sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
-	}
-	public void sortChildren(boolean byYear) {
-		EntryComparator.sort(children, byYear);
-	}
+    }
+    public void sortChildren(boolean byYear) {
+        EntryComparator.sort(children, byYear);
+    }
 
-	public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
-		boolean metadataUpdated = false;
-		Iterator<Entry> it = children.iterator();
-		while(it.hasNext()) {
-			Entry entry = it.next();
-			int index = refreshedDirectory.children.indexOf(entry);
-			if(index != -1) {
-				final Entry refreshed = refreshedDirectory.children.get(index);
+    public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
+        boolean metadataUpdated = false;
+        Iterator<Entry> it = children.iterator();
+        while(it.hasNext()) {
+            Entry entry = it.next();
+            int index = refreshedDirectory.children.indexOf(entry);
+            if(index != -1) {
+                final Entry refreshed = refreshedDirectory.children.get(index);
 
-				entry.setTitle(refreshed.getTitle());
-				entry.setAlbum(refreshed.getAlbum());
-				entry.setArtist(refreshed.getArtist());
-				entry.setTrack(refreshed.getTrack());
-				entry.setYear(refreshed.getYear());
-				entry.setGenre(refreshed.getGenre());
-				entry.setTranscodedContentType(refreshed.getTranscodedContentType());
-				entry.setTranscodedSuffix(refreshed.getTranscodedSuffix());
-				entry.setDiscNumber(refreshed.getDiscNumber());
-				entry.setType(refreshed.getType());
-				if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
-					metadataUpdated = true;
-					entry.setCoverArt(refreshed.getCoverArt());
-				}
+                entry.setTitle(refreshed.getTitle());
+                entry.setAlbum(refreshed.getAlbum());
+                entry.setArtist(refreshed.getArtist());
+                entry.setTrack(refreshed.getTrack());
+                entry.setYear(refreshed.getYear());
+                entry.setGenre(refreshed.getGenre());
+                entry.setTranscodedContentType(refreshed.getTranscodedContentType());
+                entry.setTranscodedSuffix(refreshed.getTranscodedSuffix());
+                entry.setDiscNumber(refreshed.getDiscNumber());
+                entry.setType(refreshed.getType());
+                if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
+                    metadataUpdated = true;
+                    entry.setCoverArt(refreshed.getCoverArt());
+                }
 
-				new UpdateHelper.EntryInstanceUpdater(entry) {
-					@Override
-					public void update(Entry found) {
-						found.setTitle(refreshed.getTitle());
-						found.setAlbum(refreshed.getAlbum());
-						found.setArtist(refreshed.getArtist());
-						found.setTrack(refreshed.getTrack());
-						found.setYear(refreshed.getYear());
-						found.setGenre(refreshed.getGenre());
-						found.setTranscodedContentType(refreshed.getTranscodedContentType());
-						found.setTranscodedSuffix(refreshed.getTranscodedSuffix());
-						found.setDiscNumber(refreshed.getDiscNumber());
-						found.setType(refreshed.getType());
-						if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
-							found.setCoverArt(refreshed.getCoverArt());
-							metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
-						}
-					}
-				}.execute();
-			}
-		}
+                new UpdateHelper.EntryInstanceUpdater(entry) {
+                    @Override
+                    public void update(Entry found) {
+                        found.setTitle(refreshed.getTitle());
+                        found.setAlbum(refreshed.getAlbum());
+                        found.setArtist(refreshed.getArtist());
+                        found.setTrack(refreshed.getTrack());
+                        found.setYear(refreshed.getYear());
+                        found.setGenre(refreshed.getGenre());
+                        found.setTranscodedContentType(refreshed.getTranscodedContentType());
+                        found.setTranscodedSuffix(refreshed.getTranscodedSuffix());
+                        found.setDiscNumber(refreshed.getDiscNumber());
+                        found.setType(refreshed.getType());
+                        if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
+                            found.setCoverArt(refreshed.getCoverArt());
+                            metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
+                        }
+                    }
+                }.execute();
+            }
+        }
 
-		return metadataUpdated;
-	}
-	public synchronized boolean updateEntriesList(Context context, int instance, MusicDirectory refreshedDirectory) {
-		boolean changed = false;
-		Iterator<Entry> it = children.iterator();
-		while(it.hasNext()) {
-			Entry entry = it.next();
-			// No longer exists in here
-			if(refreshedDirectory.children.indexOf(entry) == -1) {
-				it.remove();
-				changed = true;
-			}
-		}
+        return metadataUpdated;
+    }
+    public synchronized boolean updateEntriesList(Context context, int instance, MusicDirectory refreshedDirectory) {
+        boolean changed = false;
+        Iterator<Entry> it = children.iterator();
+        while(it.hasNext()) {
+            Entry entry = it.next();
+            // No longer exists in here
+            if(refreshedDirectory.children.indexOf(entry) == -1) {
+                it.remove();
+                changed = true;
+            }
+        }
 
-		// Make sure we contain all children from refreshed set
-		boolean resort = false;
-		for(Entry refreshed: refreshedDirectory.children) {
-			if(!this.children.contains(refreshed)) {
-				this.children.add(refreshed);
-				resort = true;
-				changed = true;
-			}
-		}
+        // Make sure we contain all children from refreshed set
+        boolean resort = false;
+        for(Entry refreshed: refreshedDirectory.children) {
+            if(!this.children.contains(refreshed)) {
+                this.children.add(refreshed);
+                resort = true;
+                changed = true;
+            }
+        }
 
-		if(resort) {
-			this.sortChildren(context, instance);
-		}
+        if(resort) {
+            this.sortChildren(context, instance);
+        }
 
-		return changed;
-	}
+        return changed;
+    }
 
     public static class Entry implements Serializable {
-		public static final int TYPE_SONG = 0;
+        public static final int TYPE_SONG = 0;
 
-		private String id;
-		private String parent;
-		private String grandParent;
-		private String albumId;
-		private String artistId;
-		private boolean directory;
-		private String title;
-		private String album;
-		private String artist;
-		private Integer track;
-		private Integer year;
-		private String genre;
-		private String contentType;
-		private String suffix;
-		private String transcodedContentType;
-		private String transcodedSuffix;
-		private String coverArt;
-		private Long size;
-		private Integer duration;
-		private Integer bitRate;
-		private String path;
-		private Integer discNumber;
-		private int type = 0;
-		private int closeness;
-		private transient Artist linkedArtist;
+        private String id;
+        private String parent;
+        private String grandParent;
+        private String albumId;
+        private String artistId;
+        private boolean directory;
+        private String title;
+        private String album;
+        private String artist;
+        private Integer track;
+        private Integer year;
+        private String genre;
+        private String contentType;
+        private String suffix;
+        private String transcodedContentType;
+        private String transcodedSuffix;
+        private String coverArt;
+        private Long size;
+        private Integer duration;
+        private Integer bitRate;
+        private String path;
+        private Integer discNumber;
+        private int type = 0;
+        private int closeness;
+        private transient Artist linkedArtist;
 
-		public Entry() {
+        public Entry() {
 
-		}
-		public Entry(String id) {
-			this.id = id;
-		}
-		public Entry(Artist artist) {
-			this.id = artist.getId();
-			this.title = artist.getName();
-			this.directory = true;
-			this.linkedArtist = artist;
-		}
-		
-		public void loadMetadata(File file) {
-			try {
-				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-				metadata.setDataSource(file.getAbsolutePath());
-				String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
-				if(discNumber == null) {
-					discNumber = "1/1";
-				}
-				int slashIndex = discNumber.indexOf("/");
-				if(slashIndex > 0) {
-					discNumber = discNumber.substring(0, slashIndex);
-				}
-				try {
-					setDiscNumber(Integer.parseInt(discNumber));
-				} catch(Exception e) {
-					Log.w(TAG, "Non numbers in disc field!");
-				}
-				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-				setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
-				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-				setDuration(Integer.parseInt(length) / 1000);
-				String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-				if(artist != null) {
-					setArtist(artist);
-				}
-				String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-				if(album != null) {
-					setAlbum(album);
-				}
-				metadata.release();
-			} catch(Exception e) {
-				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver", e);
-			}
-		}
-		public void rebaseTitleOffPath() {
-			try {
-				String filename = getPath();
-				if(filename == null) {
-					return;
-				}
+        }
+        public Entry(String id) {
+            this.id = id;
+        }
+        public Entry(Artist artist) {
+            this.id = artist.getId();
+            this.title = artist.getName();
+            this.directory = true;
+            this.linkedArtist = artist;
+        }
 
-				int index = filename.lastIndexOf('/');
-				if (index != -1) {
-					filename = filename.substring(index + 1);
-					if (getTrack() != null) {
-						filename = filename.replace(String.format("%02d ", getTrack()), "");
-					}
+        public void loadMetadata(File file) {
+            try {
+                MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+                metadata.setDataSource(file.getAbsolutePath());
+                String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
+                if(discNumber == null) {
+                    discNumber = "1/1";
+                }
+                int slashIndex = discNumber.indexOf("/");
+                if(slashIndex > 0) {
+                    discNumber = discNumber.substring(0, slashIndex);
+                }
+                try {
+                    setDiscNumber(Integer.parseInt(discNumber));
+                } catch(Exception e) {
+                    Log.w(TAG, "Non numbers in disc field!");
+                }
+                String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+                setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+                String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                setDuration(Integer.parseInt(length) / 1000);
+                String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if(artist != null) {
+                    setArtist(artist);
+                }
+                String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                if(album != null) {
+                    setAlbum(album);
+                }
+                metadata.release();
+            } catch(Exception e) {
+                Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver", e);
+            }
+        }
+        public void rebaseTitleOffPath() {
+            try {
+                String filename = getPath();
+                if(filename == null) {
+                    return;
+                }
 
-					index = filename.lastIndexOf('.');
-					if(index != -1) {
-						filename = filename.substring(0, index);
-					}
+                int index = filename.lastIndexOf('/');
+                if (index != -1) {
+                    filename = filename.substring(index + 1);
+                    if (getTrack() != null) {
+                        filename = filename.replace(String.format("%02d ", getTrack()), "");
+                    }
 
-					setTitle(filename);
-				}
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to update title based off of path", e);
-			}
-		}
+                    index = filename.lastIndexOf('.');
+                    if(index != -1) {
+                        filename = filename.substring(0, index);
+                    }
+
+                    setTitle(filename);
+                }
+            } catch(Exception e) {
+                Log.w(TAG, "Failed to update title based off of path", e);
+            }
+        }
 
         public String getId() {
             return id;
@@ -330,8 +330,8 @@ public class MusicDirectory implements Serializable {
         public void setParent(String parent) {
             this.parent = parent;
         }
-		
-		public String getGrandParent() {
+
+        public String getGrandParent() {
             return grandParent;
         }
 
@@ -339,21 +339,21 @@ public class MusicDirectory implements Serializable {
             this.grandParent = grandParent;
         }
 
-		public String getAlbumId() {
-			return albumId;
-		}
+        public String getAlbumId() {
+            return albumId;
+        }
 
-		public void setAlbumId(String albumId) {
-			this.albumId = albumId;
-		}
+        public void setAlbumId(String albumId) {
+            this.albumId = albumId;
+        }
 
-		public String getArtistId() {
-			return artistId;
-		}
+        public String getArtistId() {
+            return artistId;
+        }
 
-		public void setArtistId(String artistId) {
-			this.artistId = artistId;
-		}
+        public void setArtistId(String artistId) {
+            this.artistId = artistId;
+        }
 
         public boolean isDirectory() {
             return directory;
@@ -375,17 +375,17 @@ public class MusicDirectory implements Serializable {
             return album;
         }
 
-		public boolean isAlbum() {
-			return getParent() != null || getArtist() != null;
-		}
+        public boolean isAlbum() {
+            return getParent() != null || getArtist() != null;
+        }
 
-		public String getAlbumDisplay() {
-			if(album != null && title.startsWith("Disc ")) {
-				return album;
-			} else {
-				return title;
-			}
-		}
+        public String getAlbumDisplay() {
+            if(album != null && title.startsWith("Disc ")) {
+                return album;
+            } else {
+                return title;
+            }
+        }
 
         public void setAlbum(String album) {
             this.album = album;
@@ -495,43 +495,43 @@ public class MusicDirectory implements Serializable {
             this.path = path;
         }
 
-		public Integer getDiscNumber() {
-			return discNumber;
-		}
-		
-		public void setDiscNumber(Integer discNumber) {
-			this.discNumber = discNumber;
-		}
-        
-		public int getType() {
-			return type;
-		}
-		public void setType(int type) {
-			this.type = type;
-		}
-		public boolean isSong() {
-			return type == TYPE_SONG;
-		}
+        public Integer getDiscNumber() {
+            return discNumber;
+        }
 
-		public int getCloseness() {
-			return closeness;
-		}
+        public void setDiscNumber(Integer discNumber) {
+            this.discNumber = discNumber;
+        }
 
-		public void setCloseness(int closeness) {
-			this.closeness = closeness;
-		}
+        public int getType() {
+            return type;
+        }
+        public void setType(int type) {
+            this.type = type;
+        }
+        public boolean isSong() {
+            return type == TYPE_SONG;
+        }
 
-		public boolean isOnlineId(Context context) {
-			try {
-				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-				return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to check online id validity");
+        public int getCloseness() {
+            return closeness;
+        }
 
-				// Err on the side of default functionality
-				return true;
-			}
-		}
+        public void setCloseness(int closeness) {
+            this.closeness = closeness;
+        }
+
+        public boolean isOnlineId(Context context) {
+            try {
+                String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+                return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
+            } catch(Exception e) {
+                Log.w(TAG, "Failed to check online id validity");
+
+                // Err on the side of default functionality
+                return true;
+            }
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -555,72 +555,72 @@ public class MusicDirectory implements Serializable {
         public String toString() {
             return title;
         }
-	}
-	
-	public static class EntryComparator implements Comparator<Entry> {
-		private boolean byYear;
-		private Collator collator;
-		
-		public EntryComparator(boolean byYear) {
-			this.byYear = byYear;
-			this.collator = Collator.getInstance(Locale.US);
-			this.collator.setStrength(Collator.PRIMARY);
-		}
-		
-		public int compare(Entry lhs, Entry rhs) {
-			if(lhs.isDirectory() && !rhs.isDirectory()) {
-				return -1;
-			} else if(!lhs.isDirectory() && rhs.isDirectory()) {
-				return 1;
-			} else if(lhs.isDirectory() && rhs.isDirectory()) {
-				if(byYear) {
-					Integer lhsYear = lhs.getYear();
-					Integer rhsYear = rhs.getYear();
-					if(lhsYear != null && rhsYear != null) {
-						return lhsYear.compareTo(rhsYear);
-					} else if(lhsYear != null) {
-						return -1;
-					} else if(rhsYear != null) {
-						return 1;
-					}
-				}
+    }
 
-				return collator.compare(lhs.getAlbumDisplay(), rhs.getAlbumDisplay());
-			}
-			
-			Integer lhsDisc = lhs.getDiscNumber();
-			Integer rhsDisc = rhs.getDiscNumber();
-			
-			if(lhsDisc != null && rhsDisc != null) {
-				if(lhsDisc < rhsDisc) {
-					return -1;
-				} else if(lhsDisc > rhsDisc) {
-					return 1;
-				}
-			}
-			
-			Integer lhsTrack = lhs.getTrack();
-			Integer rhsTrack = rhs.getTrack();
-			if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
-				return lhsTrack.compareTo(rhsTrack);
-			} else if(lhsTrack != null) {
-				return -1;
-			} else if(rhsTrack != null) {
-				return 1;
-			}
+    public static class EntryComparator implements Comparator<Entry> {
+        private boolean byYear;
+        private Collator collator;
 
-			return collator.compare(lhs.getTitle(), rhs.getTitle());
-		}
-		
-		public static void sort(List<Entry> entries) {
-			sort(entries, true);
-		}
-		public static void sort(List<Entry> entries, boolean byYear) {
-			try {
-				Collections.sort(entries, new EntryComparator(byYear));
-			} catch (Exception e) {
-				Log.w(TAG, "Failed to sort MusicDirectory");
-			}
-		}
-	}
+        public EntryComparator(boolean byYear) {
+            this.byYear = byYear;
+            this.collator = Collator.getInstance(Locale.US);
+            this.collator.setStrength(Collator.PRIMARY);
+        }
+
+        public int compare(Entry lhs, Entry rhs) {
+            if(lhs.isDirectory() && !rhs.isDirectory()) {
+                return -1;
+            } else if(!lhs.isDirectory() && rhs.isDirectory()) {
+                return 1;
+            } else if(lhs.isDirectory() && rhs.isDirectory()) {
+                if(byYear) {
+                    Integer lhsYear = lhs.getYear();
+                    Integer rhsYear = rhs.getYear();
+                    if(lhsYear != null && rhsYear != null) {
+                        return lhsYear.compareTo(rhsYear);
+                    } else if(lhsYear != null) {
+                        return -1;
+                    } else if(rhsYear != null) {
+                        return 1;
+                    }
+                }
+
+                return collator.compare(lhs.getAlbumDisplay(), rhs.getAlbumDisplay());
+            }
+
+            Integer lhsDisc = lhs.getDiscNumber();
+            Integer rhsDisc = rhs.getDiscNumber();
+
+            if(lhsDisc != null && rhsDisc != null) {
+                if(lhsDisc < rhsDisc) {
+                    return -1;
+                } else if(lhsDisc > rhsDisc) {
+                    return 1;
+                }
+            }
+
+            Integer lhsTrack = lhs.getTrack();
+            Integer rhsTrack = rhs.getTrack();
+            if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
+                return lhsTrack.compareTo(rhsTrack);
+            } else if(lhsTrack != null) {
+                return -1;
+            } else if(rhsTrack != null) {
+                return 1;
+            }
+
+            return collator.compare(lhs.getTitle(), rhs.getTitle());
+        }
+
+        public static void sort(List<Entry> entries) {
+            sort(entries, true);
+        }
+        public static void sort(List<Entry> entries, boolean byYear) {
+            try {
+                Collections.sort(entries, new EntryComparator(byYear));
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to sort MusicDirectory");
+            }
+        }
+    }
 }

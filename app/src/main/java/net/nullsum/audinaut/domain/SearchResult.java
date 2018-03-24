@@ -50,13 +50,13 @@ public class SearchResult implements Serializable {
         return songs;
     }
 
-	public boolean hasArtists() {
-		return !artists.isEmpty();
-	}
-	public boolean hasAlbums() {
-		return !albums.isEmpty();
-	}
-	public boolean hasSongs() {
-		return !songs.isEmpty();
-	}
+    public boolean hasArtists() {
+        return !artists.isEmpty();
+    }
+    public boolean hasAlbums() {
+        return !albums.isEmpty();
+    }
+    public boolean hasSongs() {
+        return !songs.isEmpty();
+    }
 }

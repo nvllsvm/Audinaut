@@ -6,7 +6,7 @@
     android:minHeight="40dp"
     android:background="@drawable/appwidget_bg"
     android:orientation="horizontal"
-	android:id="@+id/widget_root">
+    android:id="@+id/widget_root">
 
     <ImageView
         android:id="@+id/appwidget_coverart"
@@ -30,7 +30,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
-			style="@style/NotificationButton">
+            style="@style/NotificationButton">
 
             <TextView
                 android:id="@+id/title"
@@ -49,15 +49,15 @@
                 android:textColor="@color/appwidget_text"
                 android:textSize="16sp"
                 android:textStyle="bold"
-				android:focusable="true"
-				android:focusableInTouchMode="true"
-				android:scrollHorizontally="true"
-				android:marqueeRepeatLimit="marquee_forever">
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever">
 
-				<requestFocus android:focusable="true"
-					android:focusableInTouchMode="true"
-					android:duplicateParentState="true" />
-			</TextView>
+                <requestFocus android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:duplicateParentState="true" />
+            </TextView>
 
             <TextView
                 android:id="@+id/artist"
@@ -95,7 +95,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:src="@drawable/media_start_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -103,7 +103,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:src="@drawable/media_forward_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
         </LinearLayout>
     </LinearLayout>
 

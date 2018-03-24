@@ -36,8 +36,8 @@ import java.util.ArrayList;
 public class SearchResult2Parser extends MusicDirectoryEntryParser {
 
     public SearchResult2Parser(Context context, int instance) {
-		super(context, instance);
-	}
+        super(context, instance);
+    }
 
     public SearchResult parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
         init(inputStream);
@@ -56,8 +56,8 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
                     artist.setName(get("name"));
                     artists.add(artist);
                 } else if ("album".equals(name)) {
-					MusicDirectory.Entry entry = parseEntry("");
-					entry.setDirectory(true);
+                    MusicDirectory.Entry entry = parseEntry("");
+                    entry.setDirectory(true);
                     albums.add(entry);
                 } else if ("song".equals(name)) {
                     songs.add(parseEntry(""));

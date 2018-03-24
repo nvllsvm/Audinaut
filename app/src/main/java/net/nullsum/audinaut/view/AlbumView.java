@@ -34,83 +34,83 @@ import net.nullsum.audinaut.util.Util;
 import java.io.File;
 
 public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
-	private static final String TAG = AlbumView.class.getSimpleName();
+    private static final String TAG = AlbumView.class.getSimpleName();
 
-	private File file;
-	private TextView titleView;
-	private TextView artistView;
-	private boolean showArtist = true;
-	private String coverArtId;
+    private File file;
+    private TextView titleView;
+    private TextView artistView;
+    private boolean showArtist = true;
+    private String coverArtId;
 
-	public AlbumView(Context context, boolean cell) {
-		super(context);
+    public AlbumView(Context context, boolean cell) {
+        super(context);
 
-		if(cell) {
-			LayoutInflater.from(context).inflate(R.layout.album_cell_item, this, true);
-		} else {
-			LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
-		}
+        if(cell) {
+            LayoutInflater.from(context).inflate(R.layout.album_cell_item, this, true);
+        } else {
+            LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
+        }
 
-		coverArtView = findViewById(R.id.album_coverart);
-		titleView = (TextView) findViewById(R.id.album_title);
-		artistView = (TextView) findViewById(R.id.album_artist);
+        coverArtView = findViewById(R.id.album_coverart);
+        titleView = (TextView) findViewById(R.id.album_title);
+        artistView = (TextView) findViewById(R.id.album_artist);
 
-		moreButton = (ImageView) findViewById(R.id.item_more);
+        moreButton = (ImageView) findViewById(R.id.item_more);
 
-		checkable = true;
-	}
+        checkable = true;
+    }
 
-	public void setShowArtist(boolean showArtist) {
-		this.showArtist = showArtist;
-	}
+    public void setShowArtist(boolean showArtist) {
+        this.showArtist = showArtist;
+    }
 
-	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
-		titleView.setText(album.getAlbumDisplay());
-		String artist = "";
-		if(showArtist) {
-			artist = album.getArtist();
-			if (artist == null) {
-				artist = "";
-			}
-			if (album.getYear() != null) {
-				artist += " - " + album.getYear();
-			}
-		} else if(album.getYear() != null) {
-			artist += album.getYear();
-		}
-		artistView.setText(album.getArtist() == null ? "" : artist);
-		onUpdateImageView();
-		file = null;
-	}
+    protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
+        titleView.setText(album.getAlbumDisplay());
+        String artist = "";
+        if(showArtist) {
+            artist = album.getArtist();
+            if (artist == null) {
+                artist = "";
+            }
+            if (album.getYear() != null) {
+                artist += " - " + album.getYear();
+            }
+        } else if(album.getYear() != null) {
+            artist += album.getYear();
+        }
+        artistView.setText(album.getArtist() == null ? "" : artist);
+        onUpdateImageView();
+        file = null;
+    }
 
-	public void onUpdateImageView() {
-		imageTask = item2.loadImage(coverArtView, item, false, true);
-		coverArtId = item.getCoverArt();
-	}
+    public void onUpdateImageView() {
+        imageTask = item2.loadImage(coverArtView, item, false, true);
+        coverArtId = item.getCoverArt();
+    }
 
-	@Override
-	protected void updateBackground() {
-		if(file == null) {
-			file = FileUtil.getAlbumDirectory(context, item);
-		}
+    @Override
+    protected void updateBackground() {
+        if(file == null) {
+            file = FileUtil.getAlbumDirectory(context, item);
+        }
 
-		exists = file.exists();
-	}
+        exists = file.exists();
+    }
 
-	@Override
-	public void update() {
-		super.update();
+    @Override
+    public void update() {
+        super.update();
 
-		if(!Util.equals(item.getCoverArt(), coverArtId)) {
-			onUpdateImageView();
-		}
-	}
+        if(!Util.equals(item.getCoverArt(), coverArtId)) {
+            onUpdateImageView();
+        }
+    }
 
-	public MusicDirectory.Entry getEntry() {
-		return item;
-	}
+    public MusicDirectory.Entry getEntry() {
+        return item;
+    }
 
-	public File getFile() {
-		return file;
-	}
+    public File getFile() {
+        return file;
+    }
 }

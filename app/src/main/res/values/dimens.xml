@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="Button">54dip</dimen>
-	<dimen name="Button.Large">60dip</dimen>
-	<dimen name="Button.Small">42dip</dimen>
-	<dimen name="AlbumArt.Small">78dip</dimen>
-	<dimen name="AlbumArt.Header">120dip</dimen>
-	<dimen name="SongStatusIcon">24dp</dimen>
-	<dimen name="Card.Radius">4dp</dimen>
-	<dimen name="Card.TextLeftPadding">8dp</dimen>
-	<dimen name="FastScroller.LeftAlignedMargin">6dp</dimen>
-	<dimen name="FastScroller.NormalBarMargin">4dp</dimen>
-	<dimen name="FastScroller.RightMargin">4dp</dimen>
+    <dimen name="Button">54dip</dimen>
+    <dimen name="Button.Large">60dip</dimen>
+    <dimen name="Button.Small">42dip</dimen>
+    <dimen name="AlbumArt.Small">78dip</dimen>
+    <dimen name="AlbumArt.Header">120dip</dimen>
+    <dimen name="SongStatusIcon">24dp</dimen>
+    <dimen name="Card.Radius">4dp</dimen>
+    <dimen name="Card.TextLeftPadding">8dp</dimen>
+    <dimen name="FastScroller.LeftAlignedMargin">6dp</dimen>
+    <dimen name="FastScroller.NormalBarMargin">4dp</dimen>
+    <dimen name="FastScroller.RightMargin">4dp</dimen>
 </resources>

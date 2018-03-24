@@ -34,62 +34,62 @@ import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.Util;
 
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
-	private static final String TAG = PlaylistSongView.class.getSimpleName();
+    private static final String TAG = PlaylistSongView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView countView;
-	private int count = 0;
+    private TextView titleView;
+    private TextView countView;
+    private int count = 0;
 
-	public PlaylistSongView(Context context) {
-		super(context, false);
-		this.context = context;
-		LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
+    public PlaylistSongView(Context context) {
+        super(context, false);
+        this.context = context;
+        LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.basic_count_name);
-		countView = (TextView) findViewById(R.id.basic_count_count);
-	}
+        titleView = (TextView) findViewById(R.id.basic_count_name);
+        countView = (TextView) findViewById(R.id.basic_count_count);
+    }
 
-	protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {
-		count = 0;
-		titleView.setText(playlist.getName());
-		// Make sure to hide initially so it's not present briefly before update
-		countView.setVisibility(View.GONE);
-	}
+    protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {
+        count = 0;
+        titleView.setText(playlist.getName());
+        // Make sure to hide initially so it's not present briefly before update
+        countView.setVisibility(View.GONE);
+    }
 
-	@Override
-	protected void updateBackground() {
-		// Make sure to reset when starting count
-		count = 0;
-		
-		// Don't try to lookup playlist for Create New
-		if(!"-1".equals(item.getId())) {
-			MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", item.getId()), MusicDirectory.class);
-			if(cache != null) {
-				// Try to find song instances in the given playlists
-				for(MusicDirectory.Entry song: item2) {
-					if(cache.getChildren().contains(song)) {
-						count++;
-					}
-				}
-			}
-		}
-	}
+    @Override
+    protected void updateBackground() {
+        // Make sure to reset when starting count
+        count = 0;
 
-	@Override
-	protected void update() {
-		// Update count display with appropriate information
-		if(count <= 0) {
-			countView.setVisibility(View.GONE);
-		} else {
-			String displayName;
-			if(count < 10) {
-				displayName = "0" + count;
-			} else {
-				displayName = "" + count;
-			}
+        // Don't try to lookup playlist for Create New
+        if(!"-1".equals(item.getId())) {
+            MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", item.getId()), MusicDirectory.class);
+            if(cache != null) {
+                // Try to find song instances in the given playlists
+                for(MusicDirectory.Entry song: item2) {
+                    if(cache.getChildren().contains(song)) {
+                        count++;
+                    }
+                }
+            }
+        }
+    }
 
-			countView.setText(displayName);
-			countView.setVisibility(View.VISIBLE);
-		}
-	}
+    @Override
+    protected void update() {
+        // Update count display with appropriate information
+        if(count <= 0) {
+            countView.setVisibility(View.GONE);
+        } else {
+            String displayName;
+            if(count < 10) {
+                displayName = "0" + count;
+            } else {
+                displayName = "" + count;
+            }
+
+            countView.setText(displayName);
+            countView.setVisibility(View.VISIBLE);
+        }
+    }
 }

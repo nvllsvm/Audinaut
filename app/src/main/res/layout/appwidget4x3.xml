@@ -4,14 +4,14 @@
     android:layout_height="fill_parent"
     android:background="@drawable/appwidget_bg"
     android:orientation="vertical"
-	android:id="@+id/widget_root">
+    android:id="@+id/widget_root">
 
     <ImageView
         android:id="@+id/appwidget_coverart"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-		android:scaleType="fitCenter"
-		android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
         android:focusable="true"
@@ -34,7 +34,7 @@
             android:orientation="vertical"
             android:paddingBottom="4dip"
             android:paddingTop="4dip"
-			style="@style/NotificationButton">
+            style="@style/NotificationButton">
 
             <TextView
                 android:id="@+id/title"
@@ -51,7 +51,7 @@
                 android:textSize="16sp"
                 android:text="@string/widget.title"
                 android:layout_gravity="center_horizontal"
-            	android:gravity="center"
+                android:gravity="center"
                 android:textStyle="bold"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -76,7 +76,7 @@
                 android:maxLines="1"
                 android:text="@string/widget.artist"
                 android:layout_gravity="center_horizontal"
-            	android:gravity="center"
+                android:gravity="center"
                 android:textColor="@color/appwidget_text"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:layout_height="56dip"
                 android:layout_weight="1"
                 android:src="@drawable/media_start_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -111,7 +111,7 @@
                 android:layout_height="56dip"
                 android:layout_weight="1"
                 android:src="@drawable/media_forward_dark"
-				style="@style/NotificationButton" />
+                style="@style/NotificationButton" />
         </LinearLayout>
 
     </LinearLayout>

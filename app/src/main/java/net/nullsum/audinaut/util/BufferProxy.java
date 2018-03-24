@@ -23,60 +23,60 @@ import android.content.Context;
 import net.nullsum.audinaut.util.FileProxy;
 
 public class BufferProxy extends FileProxy {
-	private static final String TAG = BufferProxy.class.getSimpleName();
-	protected BufferFile progress;
+    private static final String TAG = BufferProxy.class.getSimpleName();
+    protected BufferFile progress;
 
-	public BufferProxy(Context context) {
-		super(context);
-	}
+    public BufferProxy(Context context) {
+        super(context);
+    }
 
-	protected ProxyTask getTask(Socket client) {
-		return new BufferFileTask(client);
-	}
+    protected ProxyTask getTask(Socket client) {
+        return new BufferFileTask(client);
+    }
 
-	public void setBufferFile(BufferFile progress) {
-		this.progress = progress;
-	}
+    public void setBufferFile(BufferFile progress) {
+        this.progress = progress;
+    }
 
-	protected class BufferFileTask extends StreamFileTask {
-		public BufferFileTask(Socket client) {
-			super(client);
-		}
+    protected class BufferFileTask extends StreamFileTask {
+        public BufferFileTask(Socket client) {
+            super(client);
+        }
 
-		@Override
-		File getFile(String path) {
-			return progress.getFile();
-		}
+        @Override
+        File getFile(String path) {
+            return progress.getFile();
+        }
 
-		@Override
-		Long getContentLength() {
-			Long contentLength = progress.getContentLength();
-			if(contentLength == null && progress.isWorkDone()) {
-				contentLength = file.length();
-			}
-			return contentLength;
-		}
-		@Override
-		long getFileSize() {
-			return progress.getEstimatedSize();
-		}
+        @Override
+        Long getContentLength() {
+            Long contentLength = progress.getContentLength();
+            if(contentLength == null && progress.isWorkDone()) {
+                contentLength = file.length();
+            }
+            return contentLength;
+        }
+        @Override
+        long getFileSize() {
+            return progress.getEstimatedSize();
+        }
 
-		@Override
-		public void onStart() {
-			progress.onStart();
-		}
-		@Override
-		public void onStop() {
-			progress.onStop();
-		}
-		@Override
-		public void onResume() {
-			progress.onResume();
-		}
+        @Override
+        public void onStart() {
+            progress.onStart();
+        }
+        @Override
+        public void onStop() {
+            progress.onStop();
+        }
+        @Override
+        public void onResume() {
+            progress.onResume();
+        }
 
-		@Override
-		public boolean isWorkDone() {
-			return progress.isWorkDone() && cbSkip >= file.length();
-		}
-	}
+        @Override
+        public boolean isWorkDone() {
+            return progress.isWorkDone() && cbSkip >= file.length();
+        }
+    }
 }

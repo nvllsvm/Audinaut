@@ -40,54 +40,54 @@ import java.io.File;
  * @author Sindre Mehus
  */
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
-	private static final String TAG = SongView.class.getSimpleName();
+    private static final String TAG = SongView.class.getSimpleName();
 
-	private TextView trackTextView;
-	private TextView titleTextView;
-	private TextView playingTextView;
-	private TextView artistTextView;
-	private TextView durationTextView;
-	private TextView statusTextView;
-	private ImageView statusImageView;
-	private ImageView playedButton;
-	private View bottomRowView;
+    private TextView trackTextView;
+    private TextView titleTextView;
+    private TextView playingTextView;
+    private TextView artistTextView;
+    private TextView durationTextView;
+    private TextView statusTextView;
+    private ImageView statusImageView;
+    private ImageView playedButton;
+    private View bottomRowView;
 
-	private DownloadService downloadService;
-	private long revision = -1;
-	private DownloadFile downloadFile;
-	private boolean dontChangeDownloadFile = false;
+    private DownloadService downloadService;
+    private long revision = -1;
+    private DownloadFile downloadFile;
+    private boolean dontChangeDownloadFile = false;
 
-	private boolean playing = false;
-	private boolean rightImage = false;
-	private int moreImage = 0;
-	private boolean isWorkDone = false;
-	private boolean isSaved = false;
-	private File partialFile;
-	private boolean partialFileExists = false;
-	private boolean loaded = false;
-	private boolean isPlayed = false;
-	private boolean isPlayedShown = false;
-	private boolean showAlbum = false;
+    private boolean playing = false;
+    private boolean rightImage = false;
+    private int moreImage = 0;
+    private boolean isWorkDone = false;
+    private boolean isSaved = false;
+    private File partialFile;
+    private boolean partialFileExists = false;
+    private boolean loaded = false;
+    private boolean isPlayed = false;
+    private boolean isPlayedShown = false;
+    private boolean showAlbum = false;
 
-	public SongView(Context context) {
-		super(context);
-		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
+    public SongView(Context context) {
+        super(context);
+        LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
-		trackTextView = (TextView) findViewById(R.id.song_track);
-		titleTextView = (TextView) findViewById(R.id.song_title);
-		artistTextView = (TextView) findViewById(R.id.song_artist);
-		durationTextView = (TextView) findViewById(R.id.song_duration);
-		statusTextView = (TextView) findViewById(R.id.song_status);
-		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
-		playedButton = (ImageButton) findViewById(R.id.song_played);
-		moreButton = (ImageView) findViewById(R.id.item_more);
-		bottomRowView = findViewById(R.id.song_bottom);
-	}
+        trackTextView = (TextView) findViewById(R.id.song_track);
+        titleTextView = (TextView) findViewById(R.id.song_title);
+        artistTextView = (TextView) findViewById(R.id.song_artist);
+        durationTextView = (TextView) findViewById(R.id.song_duration);
+        statusTextView = (TextView) findViewById(R.id.song_status);
+        statusImageView = (ImageView) findViewById(R.id.song_status_icon);
+        playedButton = (ImageButton) findViewById(R.id.song_played);
+        moreButton = (ImageView) findViewById(R.id.item_more);
+        bottomRowView = findViewById(R.id.song_bottom);
+    }
 
-	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
-		this.checkable = checkable;
+    public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
+        this.checkable = checkable;
 
-		StringBuilder artist = new StringBuilder(40);
+        StringBuilder artist = new StringBuilder(40);
 
         if(showAlbum) {
             artist.append(song.getAlbum());
@@ -98,142 +98,142 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         bottomRowView.setVisibility(View.VISIBLE);
 
-		String title = song.getTitle();
-		Integer track = song.getTrack();
-		TextView newPlayingTextView;
-		if(track != null && Util.getDisplayTrack(context)) {
-			trackTextView.setText(String.format("%02d", track));
-			trackTextView.setVisibility(View.VISIBLE);
-			newPlayingTextView = trackTextView;
-		} else {
-			trackTextView.setVisibility(View.GONE);
-			newPlayingTextView = titleTextView;
-		}
+        String title = song.getTitle();
+        Integer track = song.getTrack();
+        TextView newPlayingTextView;
+        if(track != null && Util.getDisplayTrack(context)) {
+            trackTextView.setText(String.format("%02d", track));
+            trackTextView.setVisibility(View.VISIBLE);
+            newPlayingTextView = trackTextView;
+        } else {
+            trackTextView.setVisibility(View.GONE);
+            newPlayingTextView = titleTextView;
+        }
 
-		if(newPlayingTextView != playingTextView || playingTextView == null) {
-			if(playing) {
-				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-				playing = false;
-			}
+        if(newPlayingTextView != playingTextView || playingTextView == null) {
+            if(playing) {
+                playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                playing = false;
+            }
 
-			playingTextView = newPlayingTextView;
-		}
+            playingTextView = newPlayingTextView;
+        }
 
-		titleTextView.setText(title);
-		artistTextView.setText(artist);
+        titleTextView.setText(title);
+        artistTextView.setText(artist);
 
-		this.setBackgroundColor(0x00000000);
+        this.setBackgroundColor(0x00000000);
 
-		revision = -1;
-		loaded = false;
-		dontChangeDownloadFile = false;
-	}
+        revision = -1;
+        loaded = false;
+        dontChangeDownloadFile = false;
+    }
 
-	public void setDownloadFile(DownloadFile downloadFile) {
-		this.downloadFile = downloadFile;
-		dontChangeDownloadFile = true;
-	}
+    public void setDownloadFile(DownloadFile downloadFile) {
+        this.downloadFile = downloadFile;
+        dontChangeDownloadFile = true;
+    }
 
-	public DownloadFile getDownloadFile() {
-		return downloadFile;
-	}
+    public DownloadFile getDownloadFile() {
+        return downloadFile;
+    }
 
-	@Override
-	protected void updateBackground() {
-		if (downloadService == null) {
-			downloadService = DownloadService.getInstance();
-			if(downloadService == null) {
-				return;
-			}
-		}
+    @Override
+    protected void updateBackground() {
+        if (downloadService == null) {
+            downloadService = DownloadService.getInstance();
+            if(downloadService == null) {
+                return;
+            }
+        }
 
-		long newRevision = downloadService.getDownloadListUpdateRevision();
-		if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
-			downloadFile = downloadService.forSong(item);
-			revision = newRevision;
-		}
+        long newRevision = downloadService.getDownloadListUpdateRevision();
+        if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
+            downloadFile = downloadService.forSong(item);
+            revision = newRevision;
+        }
 
-		isWorkDone = downloadFile.isWorkDone();
-		isSaved = downloadFile.isSaved();
-		partialFile = downloadFile.getPartialFile();
-		partialFileExists = partialFile.exists();
+        isWorkDone = downloadFile.isWorkDone();
+        isSaved = downloadFile.isSaved();
+        partialFile = downloadFile.getPartialFile();
+        partialFileExists = partialFile.exists();
 
-		// Check if needs to load metadata: check against all fields that we know are null in offline mode
-		if(item.getBitRate() == null && item.getDuration() == null && item.getDiscNumber() == null && isWorkDone) {
-			item.loadMetadata(downloadFile.getCompleteFile());
-			loaded = true;
-		}
-	}
+        // Check if needs to load metadata: check against all fields that we know are null in offline mode
+        if(item.getBitRate() == null && item.getDuration() == null && item.getDiscNumber() == null && isWorkDone) {
+            item.loadMetadata(downloadFile.getCompleteFile());
+            loaded = true;
+        }
+    }
 
-	@Override
-	protected void update() {
-		if(loaded) {
-			setObjectImpl(item, item2);
-		}
-		if (downloadService == null || downloadFile == null) {
-			return;
-		}
+    @Override
+    protected void update() {
+        if(loaded) {
+            setObjectImpl(item, item2);
+        }
+        if (downloadService == null || downloadFile == null) {
+            return;
+        }
 
-		if (isWorkDone) {
-			int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
-			if(moreImage != this.moreImage) {
-				moreButton.setImageResource(moreImage);
-				this.moreImage = moreImage;
-			}
-		} else if(this.moreImage != R.drawable.download_none_light) {
-			moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
-			this.moreImage = R.drawable.download_none_light;
-		}
+        if (isWorkDone) {
+            int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
+            if(moreImage != this.moreImage) {
+                moreButton.setImageResource(moreImage);
+                this.moreImage = moreImage;
+            }
+        } else if(this.moreImage != R.drawable.download_none_light) {
+            moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
+            this.moreImage = R.drawable.download_none_light;
+        }
 
-		if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
-			double percentage = (partialFile.length() * 100.0) / downloadFile.getEstimatedSize();
-			percentage = Math.min(percentage, 100);
-			statusTextView.setText((int)percentage + " %");
-			if(!rightImage) {
-				statusImageView.setVisibility(View.VISIBLE);
-				rightImage = true;
-			}
-		} else if(rightImage) {
-			statusTextView.setText(null);
-			statusImageView.setVisibility(View.GONE);
-			rightImage = false;
-		}
+        if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
+            double percentage = (partialFile.length() * 100.0) / downloadFile.getEstimatedSize();
+            percentage = Math.min(percentage, 100);
+            statusTextView.setText((int)percentage + " %");
+            if(!rightImage) {
+                statusImageView.setVisibility(View.VISIBLE);
+                rightImage = true;
+            }
+        } else if(rightImage) {
+            statusTextView.setText(null);
+            statusImageView.setVisibility(View.GONE);
+            rightImage = false;
+        }
 
-		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
-		if (playing) {
-			if(!this.playing) {
-				this.playing = playing;
-				playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
-			}
-		} else {
-			if(this.playing) {
-				this.playing = playing;
-				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-			}
-		}
+        boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
+        if (playing) {
+            if(!this.playing) {
+                this.playing = playing;
+                playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
+            }
+        } else {
+            if(this.playing) {
+                this.playing = playing;
+                playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+        }
 
-		if(isPlayed) {
-			if(!isPlayedShown) {
-				if(playedButton.getDrawable() == null) {
-					playedButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_played));
-				}
+        if(isPlayed) {
+            if(!isPlayedShown) {
+                if(playedButton.getDrawable() == null) {
+                    playedButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_played));
+                }
 
-				playedButton.setVisibility(View.VISIBLE);
-				isPlayedShown = true;
-			}
-		} else {
-			if(isPlayedShown) {
-				playedButton.setVisibility(View.GONE);
-				isPlayedShown = false;
-			}
-		}
-	}
+                playedButton.setVisibility(View.VISIBLE);
+                isPlayedShown = true;
+            }
+        } else {
+            if(isPlayedShown) {
+                playedButton.setVisibility(View.GONE);
+                isPlayedShown = false;
+            }
+        }
+    }
 
-	public MusicDirectory.Entry getEntry() {
-		return item;
-	}
+    public MusicDirectory.Entry getEntry() {
+        return item;
+    }
 
-	public void setShowAlbum(boolean showAlbum) {
-		this.showAlbum = showAlbum;
-	}
+    public void setShowAlbum(boolean showAlbum) {
+        this.showAlbum = showAlbum;
+    }
 }

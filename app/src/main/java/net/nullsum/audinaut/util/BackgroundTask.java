@@ -45,62 +45,62 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
-	protected AtomicBoolean cancelled =  new AtomicBoolean(false);
-	protected OnCancelListener cancelListener;
-	protected Runnable onCompletionListener = null;
-	protected Task task;
+    protected AtomicBoolean cancelled =  new AtomicBoolean(false);
+    protected OnCancelListener cancelListener;
+    protected Runnable onCompletionListener = null;
+    protected Task task;
 
-	private static final int DEFAULT_CONCURRENCY = 8;
-	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
-	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
-	private static Handler handler = null;
-	static {
-		try {
-			handler = new Handler(Looper.getMainLooper());
-		} catch(Exception e) {
-			// Not called from main thread
-		}
-	}
+    private static final int DEFAULT_CONCURRENCY = 8;
+    private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
+    protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
+    private static Handler handler = null;
+    static {
+        try {
+            handler = new Handler(Looper.getMainLooper());
+        } catch(Exception e) {
+            // Not called from main thread
+        }
+    }
 
     public BackgroundTask(Context context) {
         this.context = context;
 
-		if(threads.size() < DEFAULT_CONCURRENCY) {
-			for(int i = threads.size(); i < DEFAULT_CONCURRENCY; i++) {
-				Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
-				threads.add(thread);
-				thread.start();
-			}
-		}
-		if(handler == null) {
-			try {
-				handler = new Handler(Looper.getMainLooper());
-			} catch(Exception e) {
-				// Not called from main thread
-			}
-		}
+        if(threads.size() < DEFAULT_CONCURRENCY) {
+            for(int i = threads.size(); i < DEFAULT_CONCURRENCY; i++) {
+                Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
+                threads.add(thread);
+                thread.start();
+            }
+        }
+        if(handler == null) {
+            try {
+                handler = new Handler(Looper.getMainLooper());
+            } catch(Exception e) {
+                // Not called from main thread
+            }
+        }
     }
 
-	public static void stopThreads() {
-		for(Thread thread: threads) {
-			thread.interrupt();
-		}
-		threads.clear();
-		queue.clear();
-	}
+    public static void stopThreads() {
+        for(Thread thread: threads) {
+            thread.interrupt();
+        }
+        threads.clear();
+        queue.clear();
+    }
 
     protected Activity getActivity() {
         return (context instanceof Activity) ? ((Activity) context) : null;
     }
 
-	protected Context getContext() {
-		return context;
-	}
+    protected Context getContext() {
+        return context;
+    }
     protected Handler getHandler() {
         return handler;
     }
 
-	public abstract void execute();
+    public abstract void execute();
 
     protected abstract T doInBackground() throws Throwable;
 
@@ -108,10 +108,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     protected void error(Throwable error) {
         Log.w(TAG, "Got exception: " + error, error);
-		Activity activity = getActivity();
-		if(activity != null) {
-        	new ErrorDialog(activity, getErrorMessage(error), true);
-		}
+        Activity activity = getActivity();
+        if(activity != null) {
+            new ErrorDialog(activity, getErrorMessage(error), true);
+        }
     }
 
     protected String getErrorMessage(Throwable error) {
@@ -139,33 +139,33 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         return error.getClass().getSimpleName();
     }
 
-	public void cancel() {
-		if(cancelled.compareAndSet(false, true)) {
-			if(isRunning()) {
-				if(cancelListener != null) {
-					cancelListener.onCancel();
-				} else {
-					task.cancel();
-				}
-			}
+    public void cancel() {
+        if(cancelled.compareAndSet(false, true)) {
+            if(isRunning()) {
+                if(cancelListener != null) {
+                    cancelListener.onCancel();
+                } else {
+                    task.cancel();
+                }
+            }
 
-			task = null;
-		}
-	}
-	public boolean isCancelled() {
-		return cancelled.get();
-	}
-	public void setOnCancelListener(OnCancelListener listener) {
-		cancelListener = listener;
-	}
+            task = null;
+        }
+    }
+    public boolean isCancelled() {
+        return cancelled.get();
+    }
+    public void setOnCancelListener(OnCancelListener listener) {
+        cancelListener = listener;
+    }
 
-	public boolean isRunning() {
-		if(task == null) {
-			return false;
-		} else {
-			return task.isRunning();
-		}
-	}
+    public boolean isRunning() {
+        if(task == null) {
+            return false;
+        } else {
+            return task.isRunning();
+        }
+    }
 
     @Override
     public abstract void updateProgress(final String message);
@@ -175,151 +175,151 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         updateProgress(context.getResources().getString(messageId));
     }
 
-	@Override
-	public void updateCache(int changeCode) {
+    @Override
+    public void updateCache(int changeCode) {
 
-	}
+    }
 
-	public void setOnCompletionListener(Runnable onCompletionListener) {
-		this.onCompletionListener = onCompletionListener;
-	}
+    public void setOnCompletionListener(Runnable onCompletionListener) {
+        this.onCompletionListener = onCompletionListener;
+    }
 
-	protected class Task {
-		private Thread thread;
-		private AtomicBoolean taskStart = new AtomicBoolean(false);
+    protected class Task {
+        private Thread thread;
+        private AtomicBoolean taskStart = new AtomicBoolean(false);
 
-		private void execute() throws Exception {
-			// Don't run if cancelled already
-			if(isCancelled()) {
-				return;
-			}
+        private void execute() throws Exception {
+            // Don't run if cancelled already
+            if(isCancelled()) {
+                return;
+            }
 
-			try {
-				thread = Thread.currentThread();
-				taskStart.set(true);
+            try {
+                thread = Thread.currentThread();
+                taskStart.set(true);
 
-				final T result = doInBackground();
-				if(isCancelled()) {
-					taskStart.set(false);
-					return;
-				}
+                final T result = doInBackground();
+                if(isCancelled()) {
+                    taskStart.set(false);
+                    return;
+                }
 
-				if(handler != null) {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							if (!isCancelled()) {
-								try {
-									onDone(result);
-								} catch (Throwable t) {
-									if(!isCancelled()) {
-										try {
-											onError(t);
-										} catch(Exception e) {
-											// Don't care
-										}
-									}
-								}
-							}
+                if(handler != null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isCancelled()) {
+                                try {
+                                    onDone(result);
+                                } catch (Throwable t) {
+                                    if(!isCancelled()) {
+                                        try {
+                                            onError(t);
+                                        } catch(Exception e) {
+                                            // Don't care
+                                        }
+                                    }
+                                }
+                            }
 
-							taskStart.set(false);
-						}
-					});
-				} else {
-					taskStart.set(false);
-				}
-			} catch(InterruptedException interrupt) {
-				if(taskStart.get()) {
-					// Don't exit root thread if task cancelled
-					throw interrupt;
-				}
-			} catch(final Throwable t) {
-				if(isCancelled()) {
-					taskStart.set(false);
-					return;
-				}
+                            taskStart.set(false);
+                        }
+                    });
+                } else {
+                    taskStart.set(false);
+                }
+            } catch(InterruptedException interrupt) {
+                if(taskStart.get()) {
+                    // Don't exit root thread if task cancelled
+                    throw interrupt;
+                }
+            } catch(final Throwable t) {
+                if(isCancelled()) {
+                    taskStart.set(false);
+                    return;
+                }
 
-				if(handler != null) {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							if(!isCancelled()) {
-								try {
-									onError(t);
-								} catch(Exception e) {
-									// Don't care
-								}
-							}
+                if(handler != null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!isCancelled()) {
+                                try {
+                                    onError(t);
+                                } catch(Exception e) {
+                                    // Don't care
+                                }
+                            }
 
-							taskStart.set(false);
-						}
-					});
-				} else {
-					taskStart.set(false);
-				}
-			} finally {
-				thread = null;
-			}
-		}
+                            taskStart.set(false);
+                        }
+                    });
+                } else {
+                    taskStart.set(false);
+                }
+            } finally {
+                thread = null;
+            }
+        }
 
-		public void cancel() {
-			if(taskStart.compareAndSet(true, false)) {
-				if (thread != null) {
-					thread.interrupt();
-				}
-			}
-		}
-		public boolean isCancelled() {
-			if(Thread.interrupted()) {
-				return true;
-			} else if(BackgroundTask.this.isCancelled()) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		public void onDone(T result) {
-			done(result);
+        public void cancel() {
+            if(taskStart.compareAndSet(true, false)) {
+                if (thread != null) {
+                    thread.interrupt();
+                }
+            }
+        }
+        public boolean isCancelled() {
+            if(Thread.interrupted()) {
+                return true;
+            } else if(BackgroundTask.this.isCancelled()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        public void onDone(T result) {
+            done(result);
 
-			if(onCompletionListener != null) {
-				onCompletionListener.run();
-			}
-		}
-		public void onError(Throwable t) {
-			error(t);
-		}
+            if(onCompletionListener != null) {
+                onCompletionListener.run();
+            }
+        }
+        public void onError(Throwable t) {
+            error(t);
+        }
 
-		public boolean isRunning() {
-			return taskStart.get();
-		}
-	}
+        public boolean isRunning() {
+            return taskStart.get();
+        }
+    }
 
-	private class TaskRunnable implements Runnable {
-		private boolean running = true;
+    private class TaskRunnable implements Runnable {
+        private boolean running = true;
 
-		public TaskRunnable() {
+        public TaskRunnable() {
 
-		}
+        }
 
-		@Override
-		public void run() {
-			Looper.prepare();
-			while(running) {
-				try {
-					Task task = queue.take();
-					task.execute();
-				} catch(InterruptedException stop) {
-					Log.e(TAG, "Thread died");
-					running = false;
-					threads.remove(Thread.currentThread());
-				} catch(Throwable t) {
-					Log.e(TAG, "Unexpected crash in BackgroundTask thread", t);
-				}
-			}
-		}
-	}
+        @Override
+        public void run() {
+            Looper.prepare();
+            while(running) {
+                try {
+                    Task task = queue.take();
+                    task.execute();
+                } catch(InterruptedException stop) {
+                    Log.e(TAG, "Thread died");
+                    running = false;
+                    threads.remove(Thread.currentThread());
+                } catch(Throwable t) {
+                    Log.e(TAG, "Unexpected crash in BackgroundTask thread", t);
+                }
+            }
+        }
+    }
 
-	public static interface OnCancelListener {
-		void onCancel();
-	}
+    public static interface OnCancelListener {
+        void onCancel();
+    }
 }

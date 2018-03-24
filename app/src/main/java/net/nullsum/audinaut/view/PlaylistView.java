@@ -34,33 +34,33 @@ import net.nullsum.audinaut.util.SyncUtil;
  * @author Sindre Mehus
  */
 public class PlaylistView extends UpdateView<Playlist> {
-	private static final String TAG = PlaylistView.class.getSimpleName();
+    private static final String TAG = PlaylistView.class.getSimpleName();
 
-	private TextView titleView;
-	private ImageLoader imageLoader;
+    private TextView titleView;
+    private ImageLoader imageLoader;
 
-	public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
-		super(context);
-		LayoutInflater.from(context).inflate(largeCell ? R.layout.basic_cell_item : R.layout.basic_art_item, this, true);
+    public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
+        super(context);
+        LayoutInflater.from(context).inflate(largeCell ? R.layout.basic_cell_item : R.layout.basic_art_item, this, true);
 
-		coverArtView = findViewById(R.id.item_art);
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+        coverArtView = findViewById(R.id.item_art);
+        titleView = (TextView) findViewById(R.id.item_name);
+        moreButton = (ImageView) findViewById(R.id.item_more);
 
-		this.imageLoader = imageLoader;
-	}
+        this.imageLoader = imageLoader;
+    }
 
-	protected void setObjectImpl(Playlist playlist) {
-		titleView.setText(playlist.getName());
-		imageTask = imageLoader.loadImage(coverArtView, playlist, false, true);
-	}
+    protected void setObjectImpl(Playlist playlist) {
+        titleView.setText(playlist.getName());
+        imageTask = imageLoader.loadImage(coverArtView, playlist, false, true);
+    }
 
-	public void onUpdateImageView() {
-		imageTask = imageLoader.loadImage(coverArtView, item, false, true);
-	}
+    public void onUpdateImageView() {
+        imageTask = imageLoader.loadImage(coverArtView, item, false, true);
+    }
 
-	@Override
-	protected void updateBackground() {
-		pinned = SyncUtil.isSyncedPlaylist(context, item.getId());
-	}
+    @Override
+    protected void updateBackground() {
+        pinned = SyncUtil.isSyncedPlaylist(context, item.getId());
+    }
 }

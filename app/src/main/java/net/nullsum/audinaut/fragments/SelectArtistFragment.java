@@ -29,224 +29,224 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> implements ArtistAdapter.OnMusicFolderChanged {
-	private static final String TAG = SelectArtistFragment.class.getSimpleName();
+    private static final String TAG = SelectArtistFragment.class.getSimpleName();
 
-	private List<MusicFolder> musicFolders = null;
-	private List<Entry> entries;
-	private String groupId;
-	private String groupName;
+    private List<MusicFolder> musicFolders = null;
+    private List<Entry> entries;
+    private String groupId;
+    private String groupName;
 
-	public SelectArtistFragment() {
-		super();
-	}
+    public SelectArtistFragment() {
+        super();
+    }
 
-	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
 
-		if(bundle != null) {
-			musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
-		}
-		artist = true;
-	}
+        if(bundle != null) {
+            musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
+        }
+        artist = true;
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
-	}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		Bundle args = getArguments();
-		if(args != null) {
-			if(args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false)) {
-				groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
-				groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+        Bundle args = getArguments();
+        if(args != null) {
+            if(args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false)) {
+                groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
+                groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
 
-				if (groupName != null) {
-					setTitle(groupName);
-					context.invalidateOptionsMenu();
-				}
-			}
-		}
+                if (groupName != null) {
+                    setTitle(groupName);
+                    context.invalidateOptionsMenu();
+                }
+            }
+        }
 
-		super.onCreateView(inflater, container, bundle);
+        super.onCreateView(inflater, container, bundle);
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	@Override
-	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Serializable> updateView, Serializable item) {
-		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
-		recreateContextMenu(menu);
-	}
+    @Override
+    public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Serializable> updateView, Serializable item) {
+        onCreateContextMenuSupport(menu, menuInflater, updateView, item);
+        recreateContextMenu(menu);
+    }
 
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Serializable> updateView, Serializable item) {
-		return onContextItemSelected(menuItem, item);
-	}
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Serializable> updateView, Serializable item) {
+        return onContextItemSelected(menuItem, item);
+    }
 
-	@Override
-	public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
-		SubsonicFragment fragment;
-		if(item instanceof Artist) {
-			Artist artist = (Artist) item;
+    @Override
+    public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
+        SubsonicFragment fragment;
+        if(item instanceof Artist) {
+            Artist artist = (Artist) item;
 
-			if ((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || groupId != null) {
-				fragment = new SelectDirectoryFragment();
-				Bundle args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+            if ((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || groupId != null) {
+                fragment = new SelectDirectoryFragment();
+                Bundle args = new Bundle();
+                args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+                args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
 
-				if (!Util.isOffline(context)) {
-					args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new Entry(artist));
-				}
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+                if (!Util.isOffline(context)) {
+                    args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new Entry(artist));
+                }
+                args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 
-				fragment.setArguments(args);
-			} else {
-				fragment = new SelectArtistFragment();
-				Bundle args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-				if (!Util.isOffline(context)) {
-					args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new Entry(artist));
-				}
+                fragment.setArguments(args);
+            } else {
+                fragment = new SelectArtistFragment();
+                Bundle args = new Bundle();
+                args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+                args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+                args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+                if (!Util.isOffline(context)) {
+                    args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new Entry(artist));
+                }
 
-				fragment.setArguments(args);
-			}
+                fragment.setArguments(args);
+            }
 
-			replaceFragment(fragment);
-		} else {
-			Entry entry = (Entry) item;
+            replaceFragment(fragment);
+        } else {
+            Entry entry = (Entry) item;
             onSongPress(entries, entry);
-		}
-	}
+        }
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		super.onCreateOptionsMenu(menu, menuInflater);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
 
-		if(Util.isOffline(context) || Util.isTagBrowsing(context) || groupId != null) {
-			menu.removeItem(R.id.menu_first_level_artist);
-		} else {
-			if (Util.isFirstLevelArtist(context)) {
-				menu.findItem(R.id.menu_first_level_artist).setChecked(true);
-			}
-		}
-	}
+        if(Util.isOffline(context) || Util.isTagBrowsing(context) || groupId != null) {
+            menu.removeItem(R.id.menu_first_level_artist);
+        } else {
+            if (Util.isFirstLevelArtist(context)) {
+                menu.findItem(R.id.menu_first_level_artist).setChecked(true);
+            }
+        }
+    }
 
-	@Override
-	public int getOptionsMenu() {
-		return R.menu.select_artist;
-	}
+    @Override
+    public int getOptionsMenu() {
+        return R.menu.select_artist;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(super.onOptionsItemSelected(item)) {
+            return true;
+        }
 
-		switch (item.getItemId()) {
-			case R.id.menu_first_level_artist:
-				toggleFirstLevelArtist();
-				break;
-		}
+        switch (item.getItemId()) {
+            case R.id.menu_first_level_artist:
+                toggleFirstLevelArtist();
+                break;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public SectionAdapter getAdapter(List<Serializable> objects) {
-		return new ArtistAdapter(context, objects, musicFolders, this, this);
-	}
+    @Override
+    public SectionAdapter getAdapter(List<Serializable> objects) {
+        return new ArtistAdapter(context, objects, musicFolders, this, this);
+    }
 
-	@Override
-	public List<Serializable> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		List<Serializable> items;
-		if(groupId == null) {
-			if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
-				musicFolders = musicService.getMusicFolders(refresh, context, listener);
+    @Override
+    public List<Serializable> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+        List<Serializable> items;
+        if(groupId == null) {
+            if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
+                musicFolders = musicService.getMusicFolders(refresh, context, listener);
 
-				// Hide folders option if there is only one
-				if (musicFolders.size() == 1) {
-					musicFolders = null;
-					Util.setSelectedMusicFolderId(context, null);
-				}
-			} else {
-				musicFolders = null;
-			}
-			String musicFolderId = Util.getSelectedMusicFolderId(context);
+                // Hide folders option if there is only one
+                if (musicFolders.size() == 1) {
+                    musicFolders = null;
+                    Util.setSelectedMusicFolderId(context, null);
+                }
+            } else {
+                musicFolders = null;
+            }
+            String musicFolderId = Util.getSelectedMusicFolderId(context);
 
-			Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
-			indexes.sortChildren(context);
-			items = new ArrayList<>(indexes.getShortcuts().size() + indexes.getArtists().size());
-			items.addAll(indexes.getShortcuts());
-			items.addAll(indexes.getArtists());
-			entries = indexes.getEntries();
-			items.addAll(entries);
-		} else {
-			List<Artist> artists = new ArrayList<>();
-			items = new ArrayList<>();
-			MusicDirectory dir = musicService.getMusicDirectory(groupId, groupName, refresh, context, listener);
-			for(Entry entry: dir.getChildren(true, false)) {
-				Artist artist = new Artist();
-				artist.setId(entry.getId());
-				artist.setName(entry.getTitle());
-				artists.add(artist);
-			}
+            Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
+            indexes.sortChildren(context);
+            items = new ArrayList<>(indexes.getShortcuts().size() + indexes.getArtists().size());
+            items.addAll(indexes.getShortcuts());
+            items.addAll(indexes.getArtists());
+            entries = indexes.getEntries();
+            items.addAll(entries);
+        } else {
+            List<Artist> artists = new ArrayList<>();
+            items = new ArrayList<>();
+            MusicDirectory dir = musicService.getMusicDirectory(groupId, groupName, refresh, context, listener);
+            for(Entry entry: dir.getChildren(true, false)) {
+                Artist artist = new Artist();
+                artist.setId(entry.getId());
+                artist.setName(entry.getTitle());
+                artists.add(artist);
+            }
 
-			Indexes indexes = new Indexes();
-			//indexes.setArtists = artists;
-			indexes.sortChildren(context);
-			items.addAll(indexes.getArtists());
+            Indexes indexes = new Indexes();
+            //indexes.setArtists = artists;
+            indexes.sortChildren(context);
+            items.addAll(indexes.getArtists());
 
-			entries = dir.getChildren(false, true);
-			for(Entry entry: entries) {
-				items.add(entry);
-			}
-		}
-		
-		return items;
-	}
+            entries = dir.getChildren(false, true);
+            for(Entry entry: entries) {
+                items.add(entry);
+            }
+        }
 
-	@Override
-	public int getTitleResource() {
-		return groupId == null ? R.string.button_bar_browse : 0;
-	}
+        return items;
+    }
 
-	@Override
-	public void setEmpty(boolean empty) {
-		super.setEmpty(empty);
+    @Override
+    public int getTitleResource() {
+        return groupId == null ? R.string.button_bar_browse : 0;
+    }
 
-		if(empty && !Util.isOffline(context)) {
-			objects.clear();
-			recyclerView.setAdapter(new ArtistAdapter(context, objects, musicFolders, this, this));
-			recyclerView.setVisibility(View.VISIBLE);
+    @Override
+    public void setEmpty(boolean empty) {
+        super.setEmpty(empty);
 
-			View view = rootView.findViewById(R.id.tab_progress);
-			LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-			params.height = 0;
-			params.weight = 5;
-			view.setLayoutParams(params);
-		}
-	}
+        if(empty && !Util.isOffline(context)) {
+            objects.clear();
+            recyclerView.setAdapter(new ArtistAdapter(context, objects, musicFolders, this, this));
+            recyclerView.setVisibility(View.VISIBLE);
 
-	private void toggleFirstLevelArtist() {
-		Util.toggleFirstLevelArtist(context);
-		context.invalidateOptionsMenu();
-	}
+            View view = rootView.findViewById(R.id.tab_progress);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+            params.height = 0;
+            params.weight = 5;
+            view.setLayoutParams(params);
+        }
+    }
 
-	@Override
-	public void onMusicFolderChanged(MusicFolder selectedFolder) {
-		String startMusicFolderId = Util.getSelectedMusicFolderId(context);
-		String musicFolderId = selectedFolder == null ? null : selectedFolder.getId();
+    private void toggleFirstLevelArtist() {
+        Util.toggleFirstLevelArtist(context);
+        context.invalidateOptionsMenu();
+    }
 
-		if(!Util.equals(startMusicFolderId, musicFolderId)) {
-			Util.setSelectedMusicFolderId(context, musicFolderId);
-			context.invalidate();
-		}
-	}
+    @Override
+    public void onMusicFolderChanged(MusicFolder selectedFolder) {
+        String startMusicFolderId = Util.getSelectedMusicFolderId(context);
+        String musicFolderId = selectedFolder == null ? null : selectedFolder.getId();
+
+        if(!Util.equals(startMusicFolderId, musicFolderId)) {
+            Util.setSelectedMusicFolderId(context, musicFolderId);
+            context.invalidate();
+        }
+    }
 }

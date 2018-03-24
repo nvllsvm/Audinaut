@@ -36,24 +36,24 @@ import net.nullsum.audinaut.util.Util;
  */
 public class MediaStoreService {
 
-	private static final String TAG = MediaStoreService.class.getSimpleName();
-	private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
+    private static final String TAG = MediaStoreService.class.getSimpleName();
+    private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
 
-	private final Context context;
+    private final Context context;
 
-	public MediaStoreService(Context context) {
-		this.context = context;
-	}
+    public MediaStoreService(Context context) {
+        this.context = context;
+    }
 
-	public void saveInMediaStore(DownloadFile downloadFile) {
-		MusicDirectory.Entry song = downloadFile.getSong();
-		File songFile = downloadFile.getCompleteFile();
+    public void saveInMediaStore(DownloadFile downloadFile) {
+        MusicDirectory.Entry song = downloadFile.getSong();
+        File songFile = downloadFile.getCompleteFile();
 
-		// Delete existing row in case the song has been downloaded before.
-		deleteFromMediaStore(downloadFile);
+        // Delete existing row in case the song has been downloaded before.
+        deleteFromMediaStore(downloadFile);
 
-		ContentResolver contentResolver = context.getContentResolver();
-		ContentValues values = new ContentValues();
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
         values.put(MediaStore.MediaColumns.DATA, songFile.getAbsolutePath());
         values.put(MediaStore.Audio.AudioColumns.ARTIST, song.getArtist());
@@ -84,68 +84,68 @@ public class MediaStoreService {
         }
 
         cursor.close();
-	}
+    }
 
-	public void deleteFromMediaStore(DownloadFile downloadFile) {
-		ContentResolver contentResolver = context.getContentResolver();
-		MusicDirectory.Entry song = downloadFile.getSong();
-		File file = downloadFile.getCompleteFile();
+    public void deleteFromMediaStore(DownloadFile downloadFile) {
+        ContentResolver contentResolver = context.getContentResolver();
+        MusicDirectory.Entry song = downloadFile.getSong();
+        File file = downloadFile.getCompleteFile();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
-		int n = contentResolver.delete(uri,
-				MediaStore.MediaColumns.DATA + "=?",
-				new String[]{file.getAbsolutePath()});
-		if (n > 0) {
-			Log.i(TAG, "Deleting media store row for " + song);
-		}
-	}
+        int n = contentResolver.delete(uri,
+                MediaStore.MediaColumns.DATA + "=?",
+                new String[]{file.getAbsolutePath()});
+        if (n > 0) {
+            Log.i(TAG, "Deleting media store row for " + song);
+        }
+    }
 
-	public void deleteFromMediaStore(File file) {
-		ContentResolver contentResolver = context.getContentResolver();
+    public void deleteFromMediaStore(File file) {
+        ContentResolver contentResolver = context.getContentResolver();
 
-		Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
-		int n = contentResolver.delete(uri,
-				MediaStore.MediaColumns.DATA + "=?",
-				new String[]{file.getAbsolutePath()});
-		if (n > 0) {
-			Log.i(TAG, "Deleting media store row for " + file);
-		}
-	}
+        int n = contentResolver.delete(uri,
+                MediaStore.MediaColumns.DATA + "=?",
+                new String[]{file.getAbsolutePath()});
+        if (n > 0) {
+            Log.i(TAG, "Deleting media store row for " + file);
+        }
+    }
 
-	public void renameInMediaStore(File start, File end) {
-		ContentResolver contentResolver = context.getContentResolver();
+    public void renameInMediaStore(File start, File end) {
+        ContentResolver contentResolver = context.getContentResolver();
 
-		ContentValues values = new ContentValues();
-		values.put(MediaStore.MediaColumns.DATA, end.getAbsolutePath());
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.MediaColumns.DATA, end.getAbsolutePath());
 
-		int n = contentResolver.update(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-				values,
-				MediaStore.MediaColumns.DATA + "=?",
-				new String[]{start.getAbsolutePath()});
-		if (n > 0) {
-			Log.i(TAG, "Rename media store row for " + start + " to " + end);
-		}
-	}
+        int n = contentResolver.update(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                values,
+                MediaStore.MediaColumns.DATA + "=?",
+                new String[]{start.getAbsolutePath()});
+        if (n > 0) {
+            Log.i(TAG, "Rename media store row for " + start + " to " + end);
+        }
+    }
 
-	private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
-		ContentResolver contentResolver = context.getContentResolver();
+    private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
+        ContentResolver contentResolver = context.getContentResolver();
 
-		Cursor cursor = contentResolver.query(Uri.withAppendedPath(ALBUM_ART_URI, String.valueOf(albumId)), null, null, null, null);
-		if (!cursor.moveToFirst()) {
+        Cursor cursor = contentResolver.query(Uri.withAppendedPath(ALBUM_ART_URI, String.valueOf(albumId)), null, null, null, null);
+        if (!cursor.moveToFirst()) {
 
-			// No album art found, add it.
-			File albumArtFile = FileUtil.getAlbumArtFile(context, downloadFile.getSong());
-			if (albumArtFile.exists()) {
-				ContentValues values = new ContentValues();
-				values.put(MediaStore.Audio.AlbumColumns.ALBUM_ID, albumId);
-				values.put(MediaStore.MediaColumns.DATA, albumArtFile.getPath());
-				contentResolver.insert(ALBUM_ART_URI, values);
-				Log.i(TAG, "Added album art: " + albumArtFile);
-			}
-		}
-		cursor.close();
-	}
+            // No album art found, add it.
+            File albumArtFile = FileUtil.getAlbumArtFile(context, downloadFile.getSong());
+            if (albumArtFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Audio.AlbumColumns.ALBUM_ID, albumId);
+                values.put(MediaStore.MediaColumns.DATA, albumArtFile.getPath());
+                contentResolver.insert(ALBUM_ART_URI, values);
+                Log.i(TAG, "Added album art: " + albumArtFile);
+            }
+        }
+        cursor.close();
+    }
 
 }

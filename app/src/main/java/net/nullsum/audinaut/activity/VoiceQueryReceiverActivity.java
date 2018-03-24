@@ -40,7 +40,7 @@ import net.nullsum.audinaut.provider.AudinautSearchProvider;
  * @author Sindre Mehus
  */
 public class VoiceQueryReceiverActivity extends Activity {
-	private static final String TAG = VoiceQueryReceiverActivity.class.getSimpleName();
+    private static final String TAG = VoiceQueryReceiverActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class VoiceQueryReceiverActivity extends Activity {
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
             intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_FOCUS));
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
         }
         finish();

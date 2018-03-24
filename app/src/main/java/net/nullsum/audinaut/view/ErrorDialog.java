@@ -60,16 +60,16 @@ public class ErrorDialog {
             }
         });
 
-		try {
-        	builder.create().show();
-		} catch(Exception e) {
-			// Don't care, just means no activity to attach to
-		}
+        try {
+            builder.create().show();
+        } catch(Exception e) {
+            // Don't care, just means no activity to attach to
+        }
     }
-    
-	private void restart(Activity activity) {
-		Intent intent = new Intent(activity, SubsonicFragmentActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Util.startActivityWithoutTransition(activity, intent);
-	}
+
+    private void restart(Activity activity) {
+        Intent intent = new Intent(activity, SubsonicFragmentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Util.startActivityWithoutTransition(activity, intent);
+    }
 }

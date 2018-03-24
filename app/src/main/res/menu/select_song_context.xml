@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-		android:id="@+id/song_menu_info"
-		android:title="@string/common.info"/>
+    <item
+        android:id="@+id/song_menu_info"
+        android:title="@string/common.info"/>
 
 
-	<group android:id="@+id/hide_show_artist">
-		<item
-		android:id="@+id/song_menu_show_album"
-			android:title="@string/download.menu_show_album"/>
+    <group android:id="@+id/hide_show_artist">
+        <item
+        android:id="@+id/song_menu_show_album"
+            android:title="@string/download.menu_show_album"/>
 
-		<item
-			android:id="@+id/song_menu_show_artist"
-			android:title="@string/menu.show_artist"/>
-	</group>
+        <item
+            android:id="@+id/song_menu_show_artist"
+            android:title="@string/menu.show_artist"/>
+    </group>
 
-	<group android:id="@+id/hide_play_now">
-		<item
-			android:id="@+id/song_menu_play_now"
-			android:title="@string/common.play_now"/>
-	</group>
+    <group android:id="@+id/hide_play_now">
+        <item
+            android:id="@+id/song_menu_play_now"
+            android:title="@string/common.play_now"/>
+    </group>
 
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/song_menu_play_next"
-			android:title="@string/common.play_next"/>
-	</group>
+    <group android:id="@+id/hide_play_next">
+        <item
+            android:id="@+id/song_menu_play_next"
+            android:title="@string/common.play_next"/>
+    </group>
 
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/song_menu_play_last"
-			android:title="@string/common.play_last"/>
-	</group>
+    <group android:id="@+id/hide_play_last">
+        <item
+            android:id="@+id/song_menu_play_last"
+            android:title="@string/common.play_last"/>
+    </group>
 
-	<group android:id="@+id/hide_download">
-		<item
-			android:id="@+id/song_menu_download"
-			android:title="@string/common.download"/>
-	</group>
+    <group android:id="@+id/hide_download">
+        <item
+            android:id="@+id/song_menu_download"
+            android:title="@string/common.download"/>
+    </group>
 
-	<group android:id="@+id/hide_pin">
-		<item
-			android:id="@+id/song_menu_pin"
-			android:title="@string/common.pin"/>
-	</group>
+    <group android:id="@+id/hide_pin">
+        <item
+            android:id="@+id/song_menu_pin"
+            android:title="@string/common.pin"/>
+    </group>
 
-	<group android:id="@+id/hide_delete">
-		<item
-			android:id="@+id/song_menu_delete"
-			android:title="@string/menu.delete_cache"/>
-	</group>
-	
-	<group android:id="@+id/server_1.8">
-		<item 
-			android:id="@+id/song_menu_add_playlist"
-			android:title="@string/menu.add_playlist"/>
-	</group>
-		
-	<item 
-		android:id="@+id/song_menu_remove_playlist"
-		android:title="@string/menu.remove_playlist"/>
+    <group android:id="@+id/hide_delete">
+        <item
+            android:id="@+id/song_menu_delete"
+            android:title="@string/menu.delete_cache"/>
+    </group>
+
+    <group android:id="@+id/server_1.8">
+        <item
+            android:id="@+id/song_menu_add_playlist"
+            android:title="@string/menu.add_playlist"/>
+    </group>
+
+    <item
+        android:id="@+id/song_menu_remove_playlist"
+        android:title="@string/menu.remove_playlist"/>
 </menu>

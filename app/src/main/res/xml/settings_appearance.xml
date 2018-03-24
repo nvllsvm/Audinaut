@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:myns="http://schemas.android.com/apk/res/net.nullsum.audinaut"
-	android:title="@string/settings.appearance_title">
+    xmlns:myns="http://schemas.android.com/apk/res/net.nullsum.audinaut"
+    android:title="@string/settings.appearance_title">
 
-	<PreferenceCategory
-		android:title="@string/settings.theme_title">
+    <PreferenceCategory
+        android:title="@string/settings.theme_title">
 
-		<ListPreference
-			android:title="@string/settings.theme_title"
-			android:key="theme"
-			android:defaultValue="light"
-			android:entryValues="@array/themeValues"
-			android:entries="@array/themeNames"/>
+        <ListPreference
+            android:title="@string/settings.theme_title"
+            android:key="theme"
+            android:defaultValue="light"
+            android:entryValues="@array/themeValues"
+            android:entries="@array/themeNames"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.theme_fullscreen"
-			android:summary="@string/settings.theme_fullscreen_summary"
-			android:key="fullScreen"
-			android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/settings.theme_fullscreen"
+            android:summary="@string/settings.theme_fullscreen_summary"
+            android:key="fullScreen"
+            android:defaultValue="false"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.color_action_bar"
-			android:summary="@string/settings.color_action_bar.summary"
-			android:key="colorActionBar"
-			android:defaultValue="true"/>
-	</PreferenceCategory>
+        <CheckBoxPreference
+            android:title="@string/settings.color_action_bar"
+            android:summary="@string/settings.color_action_bar.summary"
+            android:key="colorActionBar"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
 
-	<PreferenceCategory
-		android:title="@string/settings.appearance_title">
+    <PreferenceCategory
+        android:title="@string/settings.appearance_title">
 
-		<CheckBoxPreference
-			android:title="@string/settings.track_title"
-			android:summary="@string/settings.track_summary"
-			android:key="displayTrack"
-			android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/settings.track_title"
+            android:summary="@string/settings.track_summary"
+            android:key="displayTrack"
+            android:defaultValue="false"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.hide_widget_title"
-			android:summary="@string/settings.hide_widget_summary"
-			android:key="hideWidget"
-			android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/settings.hide_widget_title"
+            android:summary="@string/settings.hide_widget_summary"
+            android:key="hideWidget"
+            android:defaultValue="false"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.custom_sort"
-			android:summary="@string/settings.custom_sort_summary"
-			android:key="customSortEnabled"
-			android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:title="@string/settings.custom_sort"
+            android:summary="@string/settings.custom_sort_summary"
+            android:key="customSortEnabled"
+            android:defaultValue="true"/>
 
-		<CheckBoxPreference
-			android:title="@string/settings.large_album_art"
-			android:summary="@string/settings.large_album_art_summary"
-			android:key="largeAlbumArt"
-			android:defaultValue="true"/>
-	</PreferenceCategory>
+        <CheckBoxPreference
+            android:title="@string/settings.large_album_art"
+            android:summary="@string/settings.large_album_art_summary"
+            android:key="largeAlbumArt"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>

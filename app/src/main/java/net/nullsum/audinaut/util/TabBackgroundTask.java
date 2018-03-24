@@ -19,22 +19,22 @@ public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
     public void execute() {
         tabFragment.setProgressVisible(true);
 
-		queue.offer(task = new Task() {
-			@Override
-			public void onDone(T result) {
-				tabFragment.setProgressVisible(false);
-				done(result);
-			}
+        queue.offer(task = new Task() {
+            @Override
+            public void onDone(T result) {
+                tabFragment.setProgressVisible(false);
+                done(result);
+            }
 
-			@Override
-			public void onError(Throwable t) {
-				tabFragment.setProgressVisible(false);
-				error(t);
-			}
-		});
+            @Override
+            public void onError(Throwable t) {
+                tabFragment.setProgressVisible(false);
+                error(t);
+            }
+        });
     }
 
-	@Override
+    @Override
     public boolean isCancelled() {
         return !tabFragment.isAdded() || cancelled.get();
     }

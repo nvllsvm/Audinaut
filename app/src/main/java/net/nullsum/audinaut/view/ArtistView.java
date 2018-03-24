@@ -36,9 +36,9 @@ import java.io.File;
  * @author Sindre Mehus
  */
 public class ArtistView extends UpdateView<Artist> {
-	private static final String TAG = ArtistView.class.getSimpleName();
+    private static final String TAG = ArtistView.class.getSimpleName();
 
-	private File file;
+    private File file;
     private TextView titleView;
 
     public ArtistView(Context context) {
@@ -46,25 +46,25 @@ public class ArtistView extends UpdateView<Artist> {
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
-		moreButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				v.showContextMenu();
-			}
-		});
+        moreButton = (ImageView) findViewById(R.id.item_more);
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                v.showContextMenu();
+            }
+        });
     }
-    
-    protected void setObjectImpl(Artist artist) {
-    	titleView.setText(artist.getName());
-		file = FileUtil.getArtistDirectory(context, artist);
-    }
-    
-    @Override
-	protected void updateBackground() {
-		exists = file.exists();
-	}
 
-	public File getFile() {
-		return file;
-	}
+    protected void setObjectImpl(Artist artist) {
+        titleView.setText(artist.getName());
+        file = FileUtil.getArtistDirectory(context, artist);
+    }
+
+    @Override
+    protected void updateBackground() {
+        exists = file.exists();
+    }
+
+    public File getFile() {
+        return file;
+    }
 }
