@@ -1,0 +1,25 @@
+Privacy policy
+
+General
+
+Audinaut is developed by one main developer.
+
+Privacy Policy ("Policy") describes how information obtained from users is collected, used and disclosed.
+
+By using Audinaut, you agree that your personal information will be handled as described in this Policy.
+
+Information being collected
+
+Audinaut does not collect any personal identifiable information.
+
+The `READ_PHONE_STATE` permission is used to handle playback pause and resume when a call begins and ends.
+
+Changes to the Policy
+
+If the Policy changes, the modification date below will be updated. The Policy may change from time to time, so please be sure to check back periodically.
+
+Last modified: 24 March, 2018.
+
+Contact
+
+If you have any questions about the Policy, please contact me via nullsum.net@gmail.com
