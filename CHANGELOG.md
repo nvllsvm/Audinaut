@@ -1,7 +1,8 @@
 Changelog
 =========
 
-## Next
+## Version 0.2.5
+_2018-03-24_
 * Fix pausing playback on disconnect on API 26+
 * Allow testing connection in settings while offline
 
