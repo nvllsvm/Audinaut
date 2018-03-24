@@ -1,6 +1,5 @@
 package net.nullsum.audinaut.fragments;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,7 +56,6 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		Bundle args = getArguments();

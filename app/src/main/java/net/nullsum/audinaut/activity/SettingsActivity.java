@@ -18,7 +18,6 @@
  */
 package net.nullsum.audinaut.activity;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +31,6 @@ public class SettingsActivity extends SubsonicActivity {
 	private static final String TAG = SettingsActivity.class.getSimpleName();
 	private PreferenceCompatFragment fragment;
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

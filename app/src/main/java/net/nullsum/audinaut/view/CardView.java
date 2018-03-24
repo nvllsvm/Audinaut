@@ -1,6 +1,5 @@
 package net.nullsum.audinaut.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
@@ -32,7 +31,6 @@ public class CardView extends FrameLayout{
 		init(context);
 	}
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public CardView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		init(context);

@@ -832,14 +832,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);
 		if(fullScreen ) {
-			// Hide additional elements on higher Android versions
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-				int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-						View.SYSTEM_UI_FLAG_FULLSCREEN |
-						View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
-				getWindow().getDecorView().setSystemUiVisibility(flags);
-			}
+            getWindow().getDecorView().setSystemUiVisibility(flags);
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
 	}

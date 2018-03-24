@@ -58,7 +58,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -186,12 +185,8 @@ public class DownloadService extends Service {
 
                 if(audioSessionId == -1) {
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    try {
-                        audioSessionId = mediaPlayer.getAudioSessionId();
-                        prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).apply();
-                    } catch (Throwable t) {
-                        // Froyo or lower
-                    }
+                    audioSessionId = mediaPlayer.getAudioSessionId();
+                    prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).apply();
                 }
 
                 mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -201,15 +196,6 @@ public class DownloadService extends Service {
                         return false;
                     }
                 });
-
-                /*try {
-                    Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-                    i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
-                    i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-                    sendBroadcast(i);
-                } catch(Throwable e) {
-                    // Froyo or lower
-                }*/
 
                 effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
                 if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
@@ -285,14 +271,10 @@ public class DownloadService extends Service {
         if(currentPlaying != null) currentPlaying.setPlaying(false);
         lifecycleSupport.onDestroy();
 
-        try {
-            Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
-            i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
-            i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-            sendBroadcast(i);
-        } catch(Throwable e) {
-            // Froyo or lower
-        }
+        Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+        i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
+        i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+        sendBroadcast(i);
 
         mediaPlayer.release();
         if(nextMediaPlayer != null) {

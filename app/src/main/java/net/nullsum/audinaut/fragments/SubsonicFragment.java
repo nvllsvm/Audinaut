@@ -18,7 +18,6 @@
  */
 package net.nullsum.audinaut.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;

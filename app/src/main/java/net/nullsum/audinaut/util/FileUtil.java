@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -775,7 +774,6 @@ public class FileUtil {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static <T extends Serializable> T deserializeCompressed(Context context, String fileName, Class<T> tClass) {
 		Input in = null;
 		try {

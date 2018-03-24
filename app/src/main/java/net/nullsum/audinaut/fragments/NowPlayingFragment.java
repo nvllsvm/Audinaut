@@ -20,7 +20,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.annotation.TargetApi;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -711,7 +710,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	// Scroll to current playing/downloading.
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
 			scrollWhenLoaded = true;

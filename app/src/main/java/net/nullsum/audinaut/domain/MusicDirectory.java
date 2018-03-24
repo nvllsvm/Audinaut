@@ -18,7 +18,6 @@
  */
 package net.nullsum.audinaut.domain;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
@@ -256,7 +255,6 @@ public class MusicDirectory implements Serializable {
 			this.linkedArtist = artist;
 		}
 		
-		@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 		public void loadMetadata(File file) {
 			try {
 				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
