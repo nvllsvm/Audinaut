@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## Next
+* Fix pausing playback on disconnect on API 26+
+
+
 ## Version 0.2.4
 _2018-03-24_
 * Fix launch crash on Lollipop and earlier (added READ_PHONE_STATE for API <= 22) [#23](https://github.com/nvllsvm/Audinaut/issues/23)

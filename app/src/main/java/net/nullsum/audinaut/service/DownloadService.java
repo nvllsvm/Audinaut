@@ -35,6 +35,7 @@ import net.nullsum.audinaut.audiofx.EqualizerController;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.PlayerState;
 import net.nullsum.audinaut.domain.RepeatMode;
+import net.nullsum.audinaut.receiver.AudioNoisyReceiver;
 import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
 import net.nullsum.audinaut.util.BufferProxy;
 import net.nullsum.audinaut.util.Constants;
@@ -63,6 +64,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -157,6 +159,8 @@ public class DownloadService extends Service {
     private long subtractNextPosition = 0;
     private int subtractPosition = 0;
 
+    private AudioNoisyReceiver audioNoisyReceiver = new AudioNoisyReceiver();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -239,6 +243,10 @@ public class DownloadService extends Service {
         instance = this;
         shufflePlayBuffer = new ShufflePlayBuffer(this);
         lifecycleSupport.onCreate();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.media.AUDIO_BECOMING_NOISY");
+        registerReceiver(audioNoisyReceiver, filter);
     }
 
     @Override
@@ -308,6 +316,8 @@ public class DownloadService extends Service {
         }
         Notifications.hidePlayingNotification(this, this, handler);
         Notifications.hideDownloadingNotification(this, this, handler);
+
+        unregisterReceiver(audioNoisyReceiver);
     }
 
     public static DownloadService getInstance() {
