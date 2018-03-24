@@ -3,7 +3,7 @@ Changelog
 
 ## Version 0.2.4
 _2018-03-24_
-* Fix launch crash on Lollipop and earlier [#23](https://github.com/nvllsvm/Audinaut/issues/23)
+* Fix launch crash on Lollipop and earlier (added READ_PHONE_STATE for API <= 22) [#23](https://github.com/nvllsvm/Audinaut/issues/23)
 
 
 ## Version 0.2.3
