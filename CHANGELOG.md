@@ -3,6 +3,7 @@ Changelog
 
 ## Next
 * Fix pausing playback on disconnect on API 26+
+* Allow testing connection in settings while offline
 
 
 ## Version 0.2.4

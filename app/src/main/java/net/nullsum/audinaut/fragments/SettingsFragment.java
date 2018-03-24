@@ -650,7 +650,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
                 previousInstance = Util.getActiveServer(context);
                 testingConnection = true;
-                MusicService musicService = MusicServiceFactory.getMusicService(context);
+                MusicService musicService = MusicServiceFactory.getOnlineService();
                 try {
                     musicService.setInstance(instance);
                     musicService.ping(context, this);
