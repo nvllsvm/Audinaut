@@ -17,7 +17,6 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.EditTextPreference;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -28,25 +27,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import net.nullsum.audinaut.R;
 
 import java.io.File;
 
-import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.util.FileUtil;
-
 public class CacheLocationPreference extends EditTextPreference {
     private static final String TAG = CacheLocationPreference.class.getSimpleName();
-    private Context context;
+    private final Context context;
 
     public CacheLocationPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
     }
+
     public CacheLocationPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
     }
+
     public CacheLocationPreference(Context context) {
         super(context);
         this.context = context;
@@ -58,15 +57,15 @@ public class CacheLocationPreference extends EditTextPreference {
 
         view.setLayoutParams(new ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        final EditText editText = (EditText) view.findViewById(android.R.id.edit);
+        final EditText editText = view.findViewById(android.R.id.edit);
         ViewGroup vg = (ViewGroup) editText.getParent();
 
         LinearLayout cacheButtonsWrapper = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cache_location_buttons, vg, true);
-        Button internalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_internal);
-        Button externalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_external);
+        Button internalLocation = cacheButtonsWrapper.findViewById(R.id.location_internal);
+        Button externalLocation = cacheButtonsWrapper.findViewById(R.id.location_external);
 
         File[] dirs;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             dirs = context.getExternalMediaDirs();
         } else {
             dirs = ContextCompat.getExternalFilesDirs(context, null);
@@ -74,19 +73,19 @@ public class CacheLocationPreference extends EditTextPreference {
 
         // Past 5.0 we can query directly for SD Card
         File internalDir = null, externalDir = null;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            for(int i = 0; i < dirs.length; i++) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (File dir : dirs) {
                 try {
-                    if (dirs[i] != null) {
-                        if(Environment.isExternalStorageRemovable(dirs[i])) {
-                            if(externalDir != null) {
-                                externalDir = dirs[i];
+                    if (dir != null) {
+                        if (Environment.isExternalStorageRemovable(dir)) {
+                            if (externalDir != null) {
+                                externalDir = dir;
                             }
                         } else {
-                            internalDir = dirs[i];
+                            internalDir = dir;
                         }
 
-                        if(internalDir != null && externalDir != null) {
+                        if (internalDir != null && externalDir != null) {
                             break;
                         }
                     }
@@ -97,7 +96,7 @@ public class CacheLocationPreference extends EditTextPreference {
         }
 
         // Before 5.0, we have to guess.  Most of the time the SD card is last
-        if(externalDir == null) {
+        if (externalDir == null) {
             for (int i = dirs.length - 1; i >= 0; i--) {
                 if (dirs[i] != null) {
                     externalDir = dirs[i];
@@ -105,10 +104,10 @@ public class CacheLocationPreference extends EditTextPreference {
                 }
             }
         }
-        if(internalDir == null) {
-            for (int i = 0; i < dirs.length; i++) {
-                if (dirs[i] != null) {
-                    internalDir = dirs[i];
+        if (internalDir == null) {
+            for (File dir : dirs) {
+                if (dir != null) {
+                    internalDir = dir;
                     break;
                 }
             }
@@ -116,25 +115,19 @@ public class CacheLocationPreference extends EditTextPreference {
         final File finalInternalDir = new File(internalDir, "music");
         final File finalExternalDir = new File(externalDir, "music");
 
-        if(finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
-            internalLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String path = finalInternalDir.getPath();
-                    editText.setText(path);
-                }
+        if (finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
+            internalLocation.setOnClickListener(v -> {
+                String path = finalInternalDir.getPath();
+                editText.setText(path);
             });
         } else {
             internalLocation.setEnabled(false);
         }
 
-        if(finalExternalDir != null && !finalInternalDir.equals(finalExternalDir) && (finalExternalDir.exists() || finalExternalDir.mkdirs())) {
-            externalLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String path = finalExternalDir.getPath();
-                    editText.setText(path);
-                }
+        if (finalExternalDir != null && !finalInternalDir.equals(finalExternalDir) && (finalExternalDir.exists() || finalExternalDir.mkdirs())) {
+            externalLocation.setOnClickListener(v -> {
+                String path = finalExternalDir.getPath();
+                editText.setText(path);
             });
         } else {
             externalLocation.setEnabled(false);

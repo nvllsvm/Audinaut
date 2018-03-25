@@ -21,48 +21,46 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
-import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.TypedValue;
+
+import net.nullsum.audinaut.R;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import net.nullsum.audinaut.R;
-
 public class DrawableTint {
     private static final Map<Integer, Integer> attrMap = new HashMap<>();
     private static final WeakHashMap<Integer, Drawable> tintedDrawables = new WeakHashMap<>();
 
-    public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes) {
-        return getTintedDrawable(context, drawableRes, R.attr.colorAccent);
-    }
-    public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes, @AttrRes int colorAttr) {
-        if(tintedDrawables.containsKey(drawableRes)) {
-            return tintedDrawables.get(drawableRes);
+    public static Drawable getTintedDrawable(Context context) {
+        if (tintedDrawables.containsKey(R.drawable.ic_toggle_played)) {
+            return tintedDrawables.get(R.drawable.ic_toggle_played);
         }
 
-        int color = getColorRes(context, colorAttr);
-        Drawable background = context.getResources().getDrawable(drawableRes);
+        int color = getColorRes(context, R.attr.colorAccent);
+        Drawable background = context.getResources().getDrawable(R.drawable.ic_toggle_played);
         background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        tintedDrawables.put(drawableRes, background);
+        tintedDrawables.put(R.drawable.ic_toggle_played, background);
         return background;
     }
-    public static Drawable getTintedDrawableFromColor(Context context, @DrawableRes int drawableRes, @ColorRes int colorRes) {
-        if(tintedDrawables.containsKey(drawableRes)) {
-            return tintedDrawables.get(drawableRes);
+
+    public static Drawable getTintedDrawableFromColor(Context context) {
+        if (tintedDrawables.containsKey(R.drawable.abc_spinner_mtrl_am_alpha)) {
+            return tintedDrawables.get(R.drawable.abc_spinner_mtrl_am_alpha);
         }
 
-        int color = context.getResources().getColor(colorRes);
-        Drawable background = context.getResources().getDrawable(drawableRes);
+        int color = context.getResources().getColor(android.R.color.white);
+        Drawable background = context.getResources().getDrawable(R.drawable.abc_spinner_mtrl_am_alpha);
         background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        tintedDrawables.put(drawableRes, background);
+        tintedDrawables.put(R.drawable.abc_spinner_mtrl_am_alpha, background);
         return background;
     }
+
     public static int getColorRes(Context context, @AttrRes int colorAttr) {
         int color;
-        if(attrMap.containsKey(colorAttr)) {
+        if (attrMap.containsKey(colorAttr)) {
             color = attrMap.get(colorAttr);
         } else {
             TypedValue typedValue = new TypedValue();
@@ -74,8 +72,9 @@ public class DrawableTint {
 
         return color;
     }
+
     public static int getDrawableRes(Context context, @AttrRes int drawableAttr) {
-        if(attrMap.containsKey(drawableAttr)) {
+        if (attrMap.containsKey(drawableAttr)) {
             return attrMap.get(drawableAttr);
         } else {
             int[] attrs = new int[]{drawableAttr};
@@ -85,14 +84,6 @@ public class DrawableTint {
             attrMap.put(drawableAttr, drawableRes);
             return drawableRes;
         }
-    }
-    public static Drawable getTintedAttrDrawable(Context context, @AttrRes int drawableAttr, @AttrRes int colorAttr) {
-        if(tintedDrawables.containsKey(drawableAttr)) {
-            return getTintedDrawable(context, attrMap.get(drawableAttr), colorAttr);
-        }
-
-        @DrawableRes int drawableRes = getDrawableRes(context, drawableAttr);
-        return getTintedDrawable(context, drawableRes, colorAttr);
     }
 
     public static void wipeTintCache() {

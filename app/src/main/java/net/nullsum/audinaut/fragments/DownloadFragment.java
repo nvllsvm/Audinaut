@@ -15,7 +15,6 @@
 
 package net.nullsum.audinaut.fragments;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -26,13 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.DownloadFileAdapter;
 import net.nullsum.audinaut.adapter.SectionAdapter;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.service.DownloadFile;
@@ -42,8 +36,13 @@ import net.nullsum.audinaut.util.DownloadFileItemHelperCallback;
 import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.Util;
-import net.nullsum.audinaut.adapter.DownloadFileAdapter;
 import net.nullsum.audinaut.view.UpdateView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {
     private long currentRevision;
@@ -69,17 +68,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
         super.onResume();
 
         final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        update();
-                    }
-                });
-            }
-        };
+        Runnable runnable = () -> handler.post(this::update);
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
@@ -104,11 +93,11 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
     @Override
     public List<DownloadFile> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
         DownloadService downloadService = getDownloadService();
-        if(downloadService == null) {
-            return new ArrayList<DownloadFile>();
+        if (downloadService == null) {
+            return new ArrayList<>();
         }
 
-        List<DownloadFile> songList = new ArrayList<DownloadFile>();
+        List<DownloadFile> songList = new ArrayList<>();
         songList.addAll(downloadService.getBackgroundDownloads());
         currentRevision = downloadService.getDownloadListUpdateRevision();
         return songList;
@@ -128,7 +117,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
     public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
         MusicDirectory.Entry selectedItem = downloadFile.getSong();
         onCreateContextMenuSupport(menu, menuInflater, updateView, selectedItem);
-        if(!Util.isOffline(context)) {
+        if (!Util.isOffline(context)) {
             menu.removeItem(R.id.song_menu_remove_playlist);
         }
 
@@ -143,29 +132,24 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if(super.onOptionsItemSelected(menuItem)) {
+        if (super.onOptionsItemSelected(menuItem)) {
             return true;
         }
 
         switch (menuItem.getItemId()) {
             case R.id.menu_remove_all:
-                Util.confirmDialog(context, R.string.download_menu_remove_all, "", new DialogInterface.OnClickListener() {
+                Util.confirmDialog(context, R.string.download_menu_remove_all, "", (dialog, which) -> new SilentBackgroundTask<Void>(context) {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new SilentBackgroundTask<Void>(context) {
-                            @Override
-                            protected Void doInBackground() throws Throwable {
-                                getDownloadService().clearBackground();
-                                return null;
-                            }
-
-                            @Override
-                            protected void done(Void result) {
-                                update();
-                            }
-                        }.execute();
+                    protected Void doInBackground() throws Throwable {
+                        getDownloadService().clearBackground();
+                        return null;
                     }
-                });
+
+                    @Override
+                    protected void done(Void result) {
+                        update();
+                    }
+                }.execute());
                 return true;
         }
 

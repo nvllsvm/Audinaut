@@ -20,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicDirectory.Entry;
@@ -32,8 +30,10 @@ import net.nullsum.audinaut.util.ImageLoader;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.util.List;
+
 public class EntryInfiniteGridAdapter extends EntryGridAdapter {
-    public static int VIEW_TYPE_LOADING = 4;
+    public static final int VIEW_TYPE_LOADING = 4;
 
     private String type;
     private String extra;
@@ -48,10 +48,10 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 
     @Override
     public UpdateView.UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_LOADING) {
+        if (viewType == VIEW_TYPE_LOADING) {
             View progress = LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
             progress.setVisibility(View.VISIBLE);
-            return new UpdateView.UpdateViewHolder(progress, false);
+            return new UpdateView.UpdateViewHolder(progress);
         }
 
         return super.onCreateViewHolder(parent, viewType);
@@ -59,7 +59,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(isLoadingView(position)) {
+        if (isLoadingView(position)) {
             return VIEW_TYPE_LOADING;
         }
 
@@ -68,7 +68,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 
     @Override
     public void onBindViewHolder(UpdateView.UpdateViewHolder holder, int position) {
-        if(!isLoadingView(position)) {
+        if (!isLoadingView(position)) {
             super.onBindViewHolder(holder, position);
         }
     }
@@ -77,7 +77,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
     public int getItemCount() {
         int size = super.getItemCount();
 
-        if(!allLoaded) {
+        if (!allLoaded) {
             size++;
         }
 
@@ -89,13 +89,13 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
         this.extra = extra;
         this.size = size;
 
-        if(super.getItemCount() < size) {
+        if (super.getItemCount() < size) {
             allLoaded = true;
         }
     }
 
     public void loadMore() {
-        if(loading || allLoaded) {
+        if (loading || allLoaded) {
             return;
         }
         loading = true;
@@ -114,7 +114,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
                 appendCachedData(newData);
                 loading = false;
 
-                if(newData.size() < size) {
+                if (newData.size() < size) {
                     allLoaded = true;
                     notifyDataSetChanged();
                 }
@@ -122,15 +122,15 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
         }.execute();
     }
 
-    protected List<Entry> cacheInBackground() throws Exception {
+    private List<Entry> cacheInBackground() throws Exception {
         MusicService service = MusicServiceFactory.getMusicService(context);
         MusicDirectory result;
         int offset = sections.get(0).size();
-        if("genres".equals(type) || "years".equals(type)) {
+        if ("genres".equals(type) || "years".equals(type)) {
             result = service.getAlbumList(type, extra, size, offset, false, context, null);
-        } else if("genres".equals(type) || "genres-songs".equals(type)) {
+        } else if ("genres".equals(type) || "genres-songs".equals(type)) {
             result = service.getSongsByGenre(extra, size, offset, context, null);
-        }else if(type.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+        } else if (type.contains(MainFragment.SONGS_LIST_PREFIX)) {
             result = service.getSongList(type, size, offset, context, null);
         } else {
             result = service.getAlbumList(type, size, offset, false, context, null);
@@ -138,15 +138,15 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
         return result.getChildren();
     }
 
-    protected void appendCachedData(List<Entry> newData) {
-        if(newData.size() > 0) {
+    private void appendCachedData(List<Entry> newData) {
+        if (newData.size() > 0) {
             int start = sections.get(0).size();
             sections.get(0).addAll(newData);
             this.notifyItemRangeInserted(start, newData.size());
         }
     }
 
-    protected boolean isLoadingView(int position) {
+    private boolean isLoadingView(int position) {
         return !allLoaded && position >= sections.get(0).size();
     }
 }

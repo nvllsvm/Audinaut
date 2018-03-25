@@ -1,56 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@id/drag_handle"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="?attr/selectableItemBackground">
+    android:id="@id/drag_handle"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
 
-    <LinearLayout android:orientation="vertical"
-                  android:layout_width="0dip"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:layout_gravity="center_vertical">
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <LinearLayout android:orientation="horizontal"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/song_track"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:textColorPrimary"
+                android:drawablePadding="6dip"
                 android:paddingLeft="6dip"
                 android:paddingRight="6dip"
-                android:drawablePadding="6dip"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:textColorPrimary" />
 
             <TextView
                 android:id="@+id/song_title"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="left|top"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:maxLines="1"
+                android:layout_weight="1"
+                android:drawablePadding="6dip"
                 android:ellipsize="marquee"
                 android:paddingLeft="6dip"
                 android:paddingRight="6dip"
-                android:drawablePadding="6dip"
-                android:textColor="?android:textColorPrimary"/>
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:textColorPrimary" />
 
             <ImageButton
                 android:id="@+id/song_played"
                 android:layout_width="@dimen/SongStatusIcon"
                 android:layout_height="@dimen/SongStatusIcon"
-                android:scaleType="fitCenter"
                 android:layout_gravity="right|top"
                 android:background="@null"
                 android:focusable="false"
-                android:visibility="gone"/>
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/song_status"
@@ -58,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|top"
                 android:drawablePadding="1dip"
-                android:paddingRight="2dip"/>
+                android:paddingRight="2dip" />
 
             <ImageView
                 android:id="@+id/song_status_icon"
@@ -66,47 +68,47 @@
                 android:layout_height="@dimen/SongStatusIcon"
                 android:layout_gravity="top"
                 android:src="?attr/downloading"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/song_bottom"
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                    android:id="@+id/song_artist"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="left|center_vertical"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:maxLines="1"
-                    android:ellipsize="middle"
-                    android:paddingLeft="6dip"
-                    android:textColor="?android:textColorSecondary"/>
+                android:id="@+id/song_artist"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="middle"
+                android:paddingLeft="6dip"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:textColorSecondary" />
 
             <TextView
-                    android:id="@+id/song_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:maxLines="1"
-                    android:paddingLeft="3dip"
-                    android:paddingRight="4dip"
-                    android:textColor="?android:textColorSecondary"/>
+                android:id="@+id/song_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="3dip"
+                android:paddingRight="4dip"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:textColorSecondary" />
 
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
         android:id="@+id/item_more"
-        android:src="?attr/download_none"
+        style="@style/MoreButton"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        style="@style/MoreButton"/>
+        android:src="?attr/download_none" />
 </LinearLayout>

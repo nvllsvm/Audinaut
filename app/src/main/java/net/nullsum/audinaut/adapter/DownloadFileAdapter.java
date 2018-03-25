@@ -18,12 +18,6 @@ package net.nullsum.audinaut.adapter;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.service.DownloadFile;
@@ -32,8 +26,10 @@ import net.nullsum.audinaut.view.FastScroller;
 import net.nullsum.audinaut.view.SongView;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.util.List;
+
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
-    public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
+    private static final int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
     public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
         super(context, entries);
@@ -42,7 +38,7 @@ public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements
     }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         return new UpdateView.UpdateViewHolder(new SongView(context));
     }
 
@@ -65,7 +61,7 @@ public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements
 
     @Override
     public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
-        if(Util.isOffline(context)) {
+        if (Util.isOffline(context)) {
             menuInflater.inflate(R.menu.multiselect_nowplaying_offline, menu);
         } else {
             menuInflater.inflate(R.menu.multiselect_nowplaying, menu);

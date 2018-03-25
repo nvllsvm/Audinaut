@@ -19,9 +19,9 @@
 package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
-import net.nullsum.audinaut.R;
+
 import net.nullsum.audinaut.domain.MusicDirectory;
-import net.nullsum.audinaut.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
@@ -35,7 +35,7 @@ public class PlaylistParser extends MusicDirectoryEntryParser {
         super(context, instance);
     }
 
-    public MusicDirectory parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(InputStream inputStream) throws Exception {
         init(inputStream);
 
         MusicDirectory dir = new MusicDirectory();

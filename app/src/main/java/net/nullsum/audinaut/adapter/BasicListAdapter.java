@@ -16,15 +16,14 @@
 package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
-import android.view.ViewGroup;
-
-import java.util.List;
 
 import net.nullsum.audinaut.view.BasicListView;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.util.List;
+
 public class BasicListAdapter extends SectionAdapter<String> {
-    public static int VIEW_TYPE_LINE = 1;
+    private static final int VIEW_TYPE_LINE = 1;
 
     public BasicListAdapter(Context context, List<String> strings, OnItemClickedListener listener) {
         super(context, strings);
@@ -32,7 +31,7 @@ public class BasicListAdapter extends SectionAdapter<String> {
     }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         return new UpdateView.UpdateViewHolder(new BasicListView(context));
     }
 

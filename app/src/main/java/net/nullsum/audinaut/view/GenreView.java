@@ -22,29 +22,29 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Genre;
 
 public class GenreView extends UpdateView<Genre> {
-    private static final String TAG = GenreView.class.getSimpleName();
 
-    private TextView titleView;
-    private TextView songsView;
-    private TextView albumsView;
+    private final TextView titleView;
+    private final TextView songsView;
+    private final TextView albumsView;
 
     public GenreView(Context context) {
         super(context, false);
         LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.genre_name);
-        songsView = (TextView) findViewById(R.id.genre_songs);
-        albumsView = (TextView) findViewById(R.id.genre_albums);
+        titleView = findViewById(R.id.genre_name);
+        songsView = findViewById(R.id.genre_songs);
+        albumsView = findViewById(R.id.genre_albums);
     }
 
     public void setObjectImpl(Genre genre) {
         titleView.setText(genre.getName());
 
-        if(genre.getAlbumCount() != 0) {
+        if (genre.getAlbumCount() != 0) {
             songsView.setVisibility(View.VISIBLE);
             albumsView.setVisibility(View.VISIBLE);
             songsView.setText(context.getResources().getString(R.string.select_genre_songs, genre.getSongCount()));

@@ -9,6 +9,6 @@
         <Preference
             android:key="serverAdd"
             android:order="1000000"
-            android:title="@string/settings.servers_add"/>
+            android:title="@string/settings.servers_add" />
     </PreferenceCategory>
 </PreferenceScreen>

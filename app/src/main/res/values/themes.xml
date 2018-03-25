@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="LaunchScreen" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/black</item>
     </style>
+
     <style name="Theme.Audinaut.Light.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="offline_icon">@drawable/main_offline_light</item>
         <item name="media_button_backward">@drawable/media_backward_light</item>
@@ -48,18 +50,27 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorAccent">@color/lightAccent</item>
         <item name="actionbarBackgroundColor">@color/lightPrimary</item>
-        <item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-        <item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="actionbarTitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse
+        </item>
+        <item name="actionbarSubtitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse
+        </item>
         <item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:spinnerItemStyle">@style/DarkSpinnerItem</item>
-        <item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-        <item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="drawerTitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse
+        </item>
+        <item name="drawerSubtitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse
+        </item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">?attr/colorPrimary</item>
         <item name="cardBackgroundDrawable">@drawable/card_rounded_corners_light</item>
         <item name="drawerHeaderBackground">@color/lightPrimary</item>
     </style>
+
     <style name="Theme.Audinaut.Dark.Base" parent="@style/Theme.AppCompat">
         <item name="offline_icon">@drawable/main_offline_dark</item>
         <item name="media_button_backward">@drawable/media_backward_dark</item>
@@ -105,36 +116,43 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorAccent">@color/lightAccent</item>
         <item name="actionbarBackgroundColor">@color/lightPrimary</item>
-        <item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-        <item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+        <item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title
+        </item>
+        <item name="actionbarSubtitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle
+        </item>
         <item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-        <item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+        <item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle
+        </item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">?attr/colorPrimary</item>
         <item name="cardBackgroundDrawable">@drawable/card_rounded_corners_dark</item>
         <item name="drawerHeaderBackground">@color/lightPrimaryDark</item>
     </style>
-    <style name="Theme.Audinaut.Light" parent="Theme.Audinaut.Light.Base">
-    </style>
-    <style name="Theme.Audinaut.Dark" parent="Theme.Audinaut.Dark.Base">
-    </style>
+
+    <style name="Theme.Audinaut.Light" parent="Theme.Audinaut.Light.Base" />
+
+    <style name="Theme.Audinaut.Dark" parent="Theme.Audinaut.Dark.Base" />
+
     <style name="Theme.Audinaut.Black.Base" parent="Theme.Audinaut.Dark.Base">
         <item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
         <item name="android:windowBackground">@android:color/black</item>
     </style>
-    <style name="Theme.Audinaut.Black" parent="Theme.Audinaut.Black.Base">
-    </style>
+
+    <style name="Theme.Audinaut.Black" parent="Theme.Audinaut.Black.Base" />
 
     <style name="Theme.Audinaut.Light.No_Actionbar" parent="Theme.Audinaut.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.Audinaut.Black.No_Actionbar" parent="Theme.Audinaut.Black">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.Audinaut.Dark.No_Actionbar" parent="Theme.Audinaut.Dark">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -143,11 +161,18 @@
     <style name="Theme.Audinaut.Light.No_Color.Base" parent="Theme.Audinaut.Light.No_Actionbar">
         <item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="actionbarBackgroundColor">@android:color/transparent</item>
-        <item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-        <item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+        <item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title
+        </item>
+        <item name="actionbarSubtitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle
+        </item>
         <item name="android:spinnerItemStyle">@style/LightSpinnerItem</item>
-        <item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-        <item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="drawerTitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse
+        </item>
+        <item name="drawerSubtitleStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse
+        </item>
         <item name="actionbar_backward">@drawable/media_backward_light</item>
         <item name="actionbar_forward">@drawable/media_forward_light</item>
         <item name="actionbar_pause">@drawable/media_pause_light</item>
@@ -168,21 +193,22 @@
         <item name="actionModeStyle">@style/LightActionMode</item>
         <item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
     </style>
+
     <style name="Theme.Audinaut.Black.No_Color.Base" parent="Theme.Audinaut.Black.No_Actionbar">
         <item name="actionbarBackgroundColor">@android:color/transparent</item>
         <item name="actionModeBackground">@android:color/black</item>
     </style>
+
     <style name="Theme.Audinaut.Dark.No_Color.Base" parent="Theme.Audinaut.Dark.No_Actionbar">
         <item name="actionbarBackgroundColor">@android:color/transparent</item>
         <item name="actionModeBackground">@color/background_material_dark</item>
     </style>
 
-    <style name="Theme.Audinaut.Light.No_Color" parent="Theme.Audinaut.Light.No_Color.Base">
-    </style>
-    <style name="Theme.Audinaut.Black.No_Color" parent="Theme.Audinaut.Black.No_Color.Base">
-    </style>
-    <style name="Theme.Audinaut.Dark.No_Color" parent="Theme.Audinaut.Dark.No_Color.Base">
-    </style>
+    <style name="Theme.Audinaut.Light.No_Color" parent="Theme.Audinaut.Light.No_Color.Base" />
+
+    <style name="Theme.Audinaut.Black.No_Color" parent="Theme.Audinaut.Black.No_Color.Base" />
+
+    <style name="Theme.Audinaut.Dark.No_Color" parent="Theme.Audinaut.Dark.No_Color.Base" />
 
     <style name="Audinaut.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
@@ -191,13 +217,19 @@
     <style name="LightSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
     <style name="DarkSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
     </style>
+
     <style name="LightActionMode" parent="@style/Widget.AppCompat.ActionMode">
-        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse
+        </item>
+        <item name="subtitleTextStyle">
+            @style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse
+        </item>
     </style>
+
     <style name="DarkCloseButton" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
         <item name="colorControlNormal">@android:color/black</item>
     </style>

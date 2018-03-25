@@ -20,34 +20,29 @@ package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
-import net.nullsum.audinaut.R;
+
 import net.nullsum.audinaut.domain.Genre;
-import net.nullsum.audinaut.util.ProgressListener;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
  * @author Joshua Bahnsen
  */
 public class GenreParser extends AbstractParser {
-    private static final String TAG = GenreParser.class.getSimpleName();
 
     public GenreParser(Context context, int instance) {
         super(context, instance);
     }
 
-    public List<Genre> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public List<Genre> parse(InputStream inputStream) throws Exception {
         init(inputStream);
 
-        List<Genre> result = new ArrayList<Genre>();
+        List<Genre> result = new ArrayList<>();
 
         Genre genre = null;
 
@@ -80,12 +75,7 @@ public class GenreParser extends AbstractParser {
 
         validate();
 
-        Collections.sort(result, new Comparator<Genre>() {
-            @Override
-            public int compare(Genre genre1, Genre genre2) {
-                return genre1.getName().compareTo(genre2.getName());
-            }
-        });
+        Collections.sort(result, (genre1, genre2) -> genre1.getName().compareTo(genre2.getName()));
         return result;
     }
 }

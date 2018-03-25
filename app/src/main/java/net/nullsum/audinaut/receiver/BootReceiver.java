@@ -22,10 +22,10 @@ import android.content.Intent;
 import net.nullsum.audinaut.service.HeadphoneListenerService;
 import net.nullsum.audinaut.util.Util;
 
-public class BootReceiver  extends BroadcastReceiver {
+public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(Util.shouldStartOnHeadphones(context)) {
+        if (Util.shouldStartOnHeadphones(context)) {
             Intent serviceIntent = new Intent();
             serviceIntent.setClassName(context.getPackageName(), HeadphoneListenerService.class.getName());
             context.startService(serviceIntent);

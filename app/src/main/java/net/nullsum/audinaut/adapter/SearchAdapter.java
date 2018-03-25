@@ -19,25 +19,20 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory.Entry;
 import net.nullsum.audinaut.domain.SearchResult;
-import net.nullsum.audinaut.util.DrawableTint;
 import net.nullsum.audinaut.util.ImageLoader;
 import net.nullsum.audinaut.util.Util;
 import net.nullsum.audinaut.view.AlbumView;
 import net.nullsum.audinaut.view.ArtistView;
-import net.nullsum.audinaut.view.BasicHeaderView;
 import net.nullsum.audinaut.view.SongView;
 import net.nullsum.audinaut.view.UpdateView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.nullsum.audinaut.adapter.ArtistAdapter.VIEW_TYPE_ARTIST;
 import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_CELL;
@@ -45,12 +40,11 @@ import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_LINE
 import static net.nullsum.audinaut.adapter.EntryGridAdapter.VIEW_TYPE_SONG;
 
 public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
-    private ImageLoader imageLoader;
-    private boolean largeAlbums;
-
     private static final int MAX_ARTISTS = 10;
     private static final int MAX_ALBUMS = 4;
     private static final int MAX_SONGS = 10;
+    private final ImageLoader imageLoader;
+    private final boolean largeAlbums;
 
     public SearchAdapter(Context context, SearchResult searchResult, ImageLoader imageLoader, boolean largeAlbums, OnItemClickedListener listener) {
         this.imageLoader = imageLoader;
@@ -60,17 +54,17 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
         List<String> headers = new ArrayList<>();
         List<Integer> defaultVisible = new ArrayList<>();
         Resources res = context.getResources();
-        if(!searchResult.getArtists().isEmpty()) {
+        if (!searchResult.getArtists().isEmpty()) {
             sections.add((List<Serializable>) (List<?>) searchResult.getArtists());
             headers.add(res.getString(R.string.search_artists));
             defaultVisible.add(MAX_ARTISTS);
         }
-        if(!searchResult.getAlbums().isEmpty()) {
+        if (!searchResult.getAlbums().isEmpty()) {
             sections.add((List<Serializable>) (List<?>) searchResult.getAlbums());
             headers.add(res.getString(R.string.search_albums));
             defaultVisible.add(MAX_ALBUMS);
         }
-        if(!searchResult.getSongs().isEmpty()) {
+        if (!searchResult.getSongs().isEmpty()) {
             sections.add((List<Serializable>) (List<?>) searchResult.getSongs());
             headers.add(res.getString(R.string.search_songs));
             defaultVisible.add(MAX_SONGS);
@@ -82,13 +76,13 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
     }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         UpdateView updateView = null;
-        if(viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
+        if (viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
             updateView = new AlbumView(context, viewType == VIEW_TYPE_ALBUM_CELL);
-        } else if(viewType == VIEW_TYPE_SONG) {
+        } else if (viewType == VIEW_TYPE_SONG) {
             updateView = new SongView(context);
-        } else if(viewType == VIEW_TYPE_ARTIST) {
+        } else if (viewType == VIEW_TYPE_ARTIST) {
             updateView = new ArtistView(context);
         }
 
@@ -98,20 +92,20 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
     @Override
     public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
         UpdateView view = holder.getUpdateView();
-        if(viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
+        if (viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
             AlbumView albumView = (AlbumView) view;
             albumView.setObject((Entry) item, imageLoader);
-        } else if(viewType == VIEW_TYPE_SONG) {
+        } else if (viewType == VIEW_TYPE_SONG) {
             SongView songView = (SongView) view;
             songView.setObject((Entry) item, true);
-        } else if(viewType == VIEW_TYPE_ARTIST) {
+        } else if (viewType == VIEW_TYPE_ARTIST) {
             view.setObject(item);
         }
     }
 
     @Override
     public int getItemViewType(Serializable item) {
-        if(item instanceof Entry) {
+        if (item instanceof Entry) {
             Entry entry = (Entry) item;
             if (entry.isDirectory()) {
                 if (largeAlbums) {
@@ -129,7 +123,7 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
 
     @Override
     public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
-        if(Util.isOffline(context)) {
+        if (Util.isOffline(context)) {
             menuInflater.inflate(R.menu.multiselect_media_offline, menu);
         } else {
             menuInflater.inflate(R.menu.multiselect_media, menu);

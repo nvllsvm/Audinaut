@@ -5,41 +5,41 @@
     android:layout_margin="2dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical">
 
         <net.nullsum.audinaut.view.SquareImageView
             android:id="@+id/item_art"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="4dp"
-            android:paddingLeft="2dp">
+            android:paddingLeft="2dp"
+            android:paddingTop="4dp">
 
             <TextView
                 android:id="@+id/item_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:maxLines="1"
                 android:ellipsize="marquee"
-                android:textColor="?android:textColorPrimary"
-                android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+                android:paddingLeft="@dimen/Card.TextLeftPadding"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:textColorPrimary" />
 
             <ImageView
                 android:id="@+id/item_more"
-                android:src="?attr/download_none"
+                style="@style/MoreButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                style="@style/MoreButton"/>
+                android:src="?attr/download_none" />
         </LinearLayout>
     </LinearLayout>
 </net.nullsum.audinaut.view.CardView>

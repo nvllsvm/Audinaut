@@ -1,6 +1,5 @@
 package net.nullsum.audinaut.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> implements ArtistAdapter.OnMusicFolderChanged {
-    private static final String TAG = SelectArtistFragment.class.getSimpleName();
 
     private List<MusicFolder> musicFolders = null;
     private List<Entry> entries;
@@ -44,7 +42,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        if(bundle != null) {
+        if (bundle != null) {
             musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
         }
         artist = true;
@@ -59,8 +57,8 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         Bundle args = getArguments();
-        if(args != null) {
-            if(args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false)) {
+        if (args != null) {
+            if (args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false)) {
                 groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
                 groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
 
@@ -90,10 +88,10 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     @Override
     public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
         SubsonicFragment fragment;
-        if(item instanceof Artist) {
+        if (item instanceof Artist) {
             Artist artist = (Artist) item;
 
-            if ((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || groupId != null) {
+            if ((Util.isFirstLevelArtist(context) || Util.isOffline(context)) || groupId != null) {
                 fragment = new SelectDirectoryFragment();
                 Bundle args = new Bundle();
                 args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
@@ -129,7 +127,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        if(Util.isOffline(context) || Util.isTagBrowsing(context) || groupId != null) {
+        if (Util.isOffline(context) || groupId != null) {
             menu.removeItem(R.id.menu_first_level_artist);
         } else {
             if (Util.isFirstLevelArtist(context)) {
@@ -145,7 +143,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(super.onOptionsItemSelected(item)) {
+        if (super.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -166,18 +164,8 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     @Override
     public List<Serializable> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
         List<Serializable> items;
-        if(groupId == null) {
-            if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
-                musicFolders = musicService.getMusicFolders(refresh, context, listener);
-
-                // Hide folders option if there is only one
-                if (musicFolders.size() == 1) {
-                    musicFolders = null;
-                    Util.setSelectedMusicFolderId(context, null);
-                }
-            } else {
-                musicFolders = null;
-            }
+        if (groupId == null) {
+            musicFolders = null;
             String musicFolderId = Util.getSelectedMusicFolderId(context);
 
             Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
@@ -191,7 +179,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
             List<Artist> artists = new ArrayList<>();
             items = new ArrayList<>();
             MusicDirectory dir = musicService.getMusicDirectory(groupId, groupName, refresh, context, listener);
-            for(Entry entry: dir.getChildren(true, false)) {
+            for (Entry entry : dir.getChildren(true, false)) {
                 Artist artist = new Artist();
                 artist.setId(entry.getId());
                 artist.setName(entry.getTitle());
@@ -204,9 +192,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
             items.addAll(indexes.getArtists());
 
             entries = dir.getChildren(false, true);
-            for(Entry entry: entries) {
-                items.add(entry);
-            }
+            items.addAll(entries);
         }
 
         return items;
@@ -221,7 +207,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
     public void setEmpty(boolean empty) {
         super.setEmpty(empty);
 
-        if(empty && !Util.isOffline(context)) {
+        if (empty && !Util.isOffline(context)) {
             objects.clear();
             recyclerView.setAdapter(new ArtistAdapter(context, objects, musicFolders, this, this));
             recyclerView.setVisibility(View.VISIBLE);
@@ -244,7 +230,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
         String startMusicFolderId = Util.getSelectedMusicFolderId(context);
         String musicFolderId = selectedFolder == null ? null : selectedFolder.getId();
 
-        if(!Util.equals(startMusicFolderId, musicFolderId)) {
+        if (!Util.equals(startMusicFolderId, musicFolderId)) {
             Util.setSelectedMusicFolderId(context, musicFolderId);
             context.invalidate();
         }

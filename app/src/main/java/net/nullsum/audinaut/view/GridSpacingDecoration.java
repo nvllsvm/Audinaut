@@ -18,17 +18,13 @@ package net.nullsum.audinaut.view;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import static android.widget.LinearLayout.*;
-
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
-    private static final String TAG = GridSpacingDecoration.class.getSimpleName();
     public static final int SPACING = 10;
 
     @Override
@@ -39,20 +35,20 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
         int halfSpacing = spacing / 2;
 
         int childCount = parent.getChildCount();
-        int childIndex = parent.getChildPosition(view);
+        int childIndex = parent.getChildAdapterPosition(view);
         // Not an actual child (ie: during delete event)
-        if(childIndex == -1) {
+        if (childIndex == -1) {
             return;
         }
-        int spanCount = getTotalSpan(view, parent);
+        int spanCount = getTotalSpan(parent);
         int spanIndex = childIndex % spanCount;
 
         // If we can, use the SpanSizeLookup since headers screw up the index calculation
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        if(layoutManager instanceof GridLayoutManager) {
+        if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
-            if(spanSizeLookup != null) {
+            if (spanSizeLookup != null) {
                 spanIndex = spanSizeLookup.getSpanIndex(childIndex, spanCount);
             }
         }
@@ -62,7 +58,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
         if (spanCount < 1 || spanSize > 1) return;
 
         int margins = 0;
-        if(view instanceof UpdateView) {
+        if (view instanceof UpdateView) {
             View firstChild = ((ViewGroup) view).getChildAt(0);
             ViewGroup.LayoutParams layoutParams = firstChild.getLayoutParams();
             if (layoutParams instanceof LinearLayout.LayoutParams) {
@@ -82,7 +78,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
             outRect.top = spacing - doubleMargins;
         }
 
-        if (isLeftEdge(spanIndex, spanCount)) {
+        if (isLeftEdge(spanIndex)) {
             outRect.left = spacing - doubleMargins;
         }
 
@@ -95,7 +91,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    protected int getTotalSpan(View view, RecyclerView parent) {
+    private int getTotalSpan(RecyclerView parent) {
         RecyclerView.LayoutManager mgr = parent.getLayoutManager();
         if (mgr instanceof GridLayoutManager) {
             return ((GridLayoutManager) mgr).getSpanCount();
@@ -103,11 +99,12 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 
         return -1;
     }
-    protected int getSpanSize(RecyclerView parent, int childIndex) {
+
+    private int getSpanSize(RecyclerView parent, int childIndex) {
         RecyclerView.LayoutManager mgr = parent.getLayoutManager();
         if (mgr instanceof GridLayoutManager) {
             GridLayoutManager.SpanSizeLookup lookup = ((GridLayoutManager) mgr).getSpanSizeLookup();
-            if(lookup != null) {
+            if (lookup != null) {
                 return lookup.getSpanSize(childIndex);
             }
         }
@@ -115,19 +112,19 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
         return 1;
     }
 
-    protected boolean isLeftEdge(int spanIndex, int spanCount) {
+    private boolean isLeftEdge(int spanIndex) {
         return spanIndex == 0;
     }
 
-    protected boolean isRightEdge(int spanIndex, int spanCount) {
+    private boolean isRightEdge(int spanIndex, int spanCount) {
         return spanIndex == spanCount - 1;
     }
 
-    protected boolean isTopEdge(int childIndex, int spanIndex, int spanCount) {
+    private boolean isTopEdge(int childIndex, int spanIndex, int spanCount) {
         return childIndex < spanCount && childIndex == spanIndex;
     }
 
-    protected boolean isBottomEdge(int childIndex, int childCount, int spanCount) {
+    private boolean isBottomEdge(int childIndex, int childCount, int spanCount) {
         return childIndex >= childCount - spanCount;
     }
 }

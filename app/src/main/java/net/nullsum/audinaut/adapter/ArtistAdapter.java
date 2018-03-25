@@ -18,17 +18,12 @@ package net.nullsum.audinaut.adapter;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.util.List;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Artist;
-import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicDirectory.Entry;
 import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.util.Util;
@@ -37,16 +32,14 @@ import net.nullsum.audinaut.view.FastScroller;
 import net.nullsum.audinaut.view.SongView;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.io.Serializable;
+import java.util.List;
+
 public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
-    public static int VIEW_TYPE_SONG = 3;
-    public static int VIEW_TYPE_ARTIST = 4;
-
-    private List<MusicFolder> musicFolders;
-    private OnMusicFolderChanged onMusicFolderChanged;
-
-    public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
-        this(context, artists, null, listener, null);
-    }
+    public static final int VIEW_TYPE_ARTIST = 4;
+    private static final int VIEW_TYPE_SONG = 3;
+    private final List<MusicFolder> musicFolders;
+    private final OnMusicFolderChanged onMusicFolderChanged;
 
     public ArtistAdapter(Context context, List<Serializable> artists, List<MusicFolder> musicFolders, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
         super(context, artists);
@@ -54,7 +47,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
         this.onItemClickedListener = onItemClickedListener;
         this.onMusicFolderChanged = onMusicFolderChanged;
 
-        if(musicFolders != null) {
+        if (musicFolders != null) {
             this.singleSectionHeader = true;
         }
     }
@@ -62,46 +55,41 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
     @Override
     public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
         final View header = LayoutInflater.from(context).inflate(R.layout.select_artist_header, parent, false);
-        header.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(context, header.findViewById(R.id.select_artist_folder_2));
+        header.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(context, header.findViewById(R.id.select_artist_folder_2));
 
-                popup.getMenu().add(R.string.select_artist_all_folders);
+            popup.getMenu().add(R.string.select_artist_all_folders);
+            for (MusicFolder musicFolder : musicFolders) {
+                popup.getMenu().add(musicFolder.getName());
+            }
+
+            popup.setOnMenuItemClickListener(item -> {
                 for (MusicFolder musicFolder : musicFolders) {
-                    popup.getMenu().add(musicFolder.getName());
-                }
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        for (MusicFolder musicFolder : musicFolders) {
-                            if(item.getTitle().equals(musicFolder.getName())) {
-                                if(onMusicFolderChanged != null) {
-                                    onMusicFolderChanged.onMusicFolderChanged(musicFolder);
-                                }
-                                return true;
-                            }
-                        }
-
-                        if(onMusicFolderChanged != null) {
-                            onMusicFolderChanged.onMusicFolderChanged(null);
+                    if (item.getTitle().equals(musicFolder.getName())) {
+                        if (onMusicFolderChanged != null) {
+                            onMusicFolderChanged.onMusicFolderChanged(musicFolder);
                         }
                         return true;
                     }
-                });
-                popup.show();
-            }
+                }
+
+                if (onMusicFolderChanged != null) {
+                    onMusicFolderChanged.onMusicFolderChanged(null);
+                }
+                return true;
+            });
+            popup.show();
         });
 
-        return new UpdateView.UpdateViewHolder(header, false);
+        return new UpdateView.UpdateViewHolder(header);
     }
+
     @Override
     public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
-        TextView folderName = (TextView) holder.getView().findViewById(R.id.select_artist_folder_2);
+        TextView folderName = holder.getView().findViewById(R.id.select_artist_folder_2);
 
         String musicFolderId = Util.getSelectedMusicFolderId(context);
-        if(musicFolderId != null) {
+        if (musicFolderId != null) {
             for (MusicFolder musicFolder : musicFolders) {
                 if (musicFolder.getId().equals(musicFolderId)) {
                     folderName.setText(musicFolder.getName());
@@ -114,11 +102,11 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
     }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         UpdateView updateView = null;
-        if(viewType == VIEW_TYPE_ARTIST) {
+        if (viewType == VIEW_TYPE_ARTIST) {
             updateView = new ArtistView(context);
-        } else if(viewType == VIEW_TYPE_SONG) {
+        } else if (viewType == VIEW_TYPE_SONG) {
             updateView = new SongView(context);
         }
 
@@ -128,9 +116,9 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
     @Override
     public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
         UpdateView view = holder.getUpdateView();
-        if(viewType == VIEW_TYPE_ARTIST) {
+        if (viewType == VIEW_TYPE_ARTIST) {
             view.setObject(item);
-        } else if(viewType == VIEW_TYPE_SONG) {
+        } else if (viewType == VIEW_TYPE_SONG) {
             SongView songView = (SongView) view;
             Entry entry = (Entry) item;
             songView.setObject(entry, checkable);
@@ -139,7 +127,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 
     @Override
     public int getItemViewType(Serializable item) {
-        if(item instanceof Artist) {
+        if (item instanceof Artist) {
             return VIEW_TYPE_ARTIST;
         } else {
             return VIEW_TYPE_SONG;
@@ -149,7 +137,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
     @Override
     public String getTextToShowInBubble(int position) {
         Object item = getItemForPosition(position);
-        if(item instanceof Artist) {
+        if (item instanceof Artist) {
             return getNameIndex(((Artist) item).getName(), true);
         } else {
             return null;

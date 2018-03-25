@@ -18,19 +18,17 @@ package net.nullsum.audinaut.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.util.Util;
 
 public class HeadphonePlugReceiver extends BroadcastReceiver {
-    private static final String TAG = HeadphonePlugReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(Intent.ACTION_HEADSET_PLUG.equals(intent.getAction())) {
+        if (Intent.ACTION_HEADSET_PLUG.equals(intent.getAction())) {
             int headphoneState = intent.getIntExtra("state", -1);
-            if(headphoneState == 1 && Util.shouldStartOnHeadphones(context)) {
+            if (headphoneState == 1 && Util.shouldStartOnHeadphones(context)) {
                 Intent start = new Intent(context, DownloadService.class);
                 start.setAction(DownloadService.START_PLAY);
                 context.startService(start);

@@ -19,72 +19,51 @@
 
 package net.nullsum.audinaut.util;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.View;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.domain.Artist;
-import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicDirectory.Entry;
-import net.nullsum.audinaut.fragments.SubsonicFragment;
 import net.nullsum.audinaut.service.DownloadFile;
 import net.nullsum.audinaut.service.DownloadService;
-import net.nullsum.audinaut.service.MusicService;
-import net.nullsum.audinaut.service.MusicServiceFactory;
-import net.nullsum.audinaut.service.OfflineException;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.util.List;
+
 public final class UpdateHelper {
-    private static final String TAG = UpdateHelper.class.getSimpleName();
 
     public static abstract class EntryInstanceUpdater {
-        private Entry entry;
+        private final Entry entry;
         protected int metadataUpdate = DownloadService.METADATA_UPDATED_ALL;
 
         public EntryInstanceUpdater(Entry entry) {
             this.entry = entry;
-        }
-        public EntryInstanceUpdater(Entry entry, int metadataUpdate) {
-            this.entry = entry;
-            this.metadataUpdate = metadataUpdate;
         }
 
         public abstract void update(Entry found);
 
         public void execute() {
             DownloadService downloadService = DownloadService.getInstance();
-            if(downloadService != null && !entry.isDirectory()) {
+            if (downloadService != null && !entry.isDirectory()) {
                 boolean serializeChanges = false;
                 List<DownloadFile> downloadFiles = downloadService.getDownloads();
                 DownloadFile currentPlaying = downloadService.getCurrentPlaying();
 
-                for(DownloadFile file: downloadFiles) {
+                for (DownloadFile file : downloadFiles) {
                     Entry check = file.getSong();
-                    if(entry.getId().equals(check.getId())) {
+                    if (entry.getId().equals(check.getId())) {
                         update(check);
                         serializeChanges = true;
 
-                        if(currentPlaying != null && currentPlaying.getSong() != null && currentPlaying.getSong().getId().equals(entry.getId())) {
+                        if (currentPlaying != null && currentPlaying.getSong() != null && currentPlaying.getSong().getId().equals(entry.getId())) {
                             downloadService.onMetadataUpdate(metadataUpdate);
                         }
                     }
                 }
 
-                if(serializeChanges) {
+                if (serializeChanges) {
                     downloadService.serializeQueue();
                 }
             }
 
             Entry find = UpdateView.findEntry(entry);
-            if(find != null) {
+            if (find != null) {
                 update(find);
             }
         }

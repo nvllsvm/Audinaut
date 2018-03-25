@@ -37,7 +37,6 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_DIRECTORY = "subsonic.directory";
     public static final String INTENT_EXTRA_NAME_CHILD_ID = "subsonic.child.id";
     public static final String INTENT_EXTRA_NAME_ARTIST = "subsonic.artist";
-    public static final String INTENT_EXTRA_NAME_TITLE = "subsonic.title";
     public static final String INTENT_EXTRA_NAME_AUTOPLAY = "subsonic.playall";
     public static final String INTENT_EXTRA_NAME_QUERY = "subsonic.query";
     public static final String INTENT_EXTRA_NAME_PLAYLIST_ID = "subsonic.playlist.id";
@@ -48,18 +47,14 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_SIZE = "subsonic.albumlistsize";
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET = "subsonic.albumlistoffset";
     public static final String INTENT_EXTRA_NAME_SHUFFLE = "subsonic.shuffle";
-    public static final String INTENT_EXTRA_REQUEST_SEARCH = "subsonic.requestsearch";
-    public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit" ;
+    public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit";
     public static final String INTENT_EXTRA_NAME_DOWNLOAD = "subsonic.download";
     public static final String INTENT_EXTRA_NAME_DOWNLOAD_VIEW = "subsonic.download_view";
     public static final String INTENT_EXTRA_VIEW_ALBUM = "subsonic.view_album";
-    public static final String INTENT_EXTRA_NAME_SHARE = "subsonic.share";
     public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
     public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
     public static final String INTENT_EXTRA_SEARCH_SONG = "searchSong";
     public static final String INTENT_EXTRA_TOP_TRACKS = "topTracks";
-    public static final String INTENT_EXTRA_PLAY_LAST = "playLast";
-    public static final String INTENT_EXTRA_ENTRY = "passedEntry";
 
     // Preferences keys.
     public static final String PREFERENCES_KEY_SERVER_KEY = "server";
@@ -76,7 +71,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
-    public static final String PREFERENCES_KEY_INSTALL_TIME = "installTime";
     public static final String PREFERENCES_KEY_THEME = "theme";
     public static final String PREFERENCES_KEY_FULL_SCREEN = "fullScreen";
     public static final String PREFERENCES_KEY_DISPLAY_TRACK = "displayTrack";
@@ -98,7 +92,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SHUFFLE_START_YEAR = "startYear";
     public static final String PREFERENCES_KEY_SHUFFLE_END_YEAR = "endYear";
     public static final String PREFERENCES_KEY_SHUFFLE_GENRE = "genre";
-    public static final String PREFERENCES_KEY_KEEP_SCREEN_ON = "keepScreenOn";
     public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
     public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
     public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
@@ -106,7 +99,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_REMOVE_PLAYED = "removePlayed";
     public static final String PREFERENCES_KEY_KEEP_PLAYED_CNT = "keepPlayedCount";
     public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode2";
-    public static final String PREFERENCES_KEY_SHUFFLE_MODE_EXTRA = "shuffleModeExtra";
     public static final String PREFERENCES_KEY_SYNC_ENABLED = "syncEnabled";
     public static final String PREFERENCES_KEY_SYNC_INTERVAL = "syncInterval";
     public static final String PREFERENCES_KEY_SYNC_WIFI = "syncWifi";
@@ -115,8 +107,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_PAUSE_DISCONNECT = "pauseOnDisconnect";
     public static final String PREFERENCES_KEY_HIDE_WIDGET = "hideWidget";
     public static final String PREFERENCES_KEY_CUSTOM_SORT_ENABLED = "customSortEnabled";
-    public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";
-    public static final String PREFERENCES_KEY_OPEN_TO_TAB = "openToTab";
     // public static final String PREFERENCES_KEY_PLAY_NOW_AFTER = "playNowAfter";
     public static final String PREFERENCES_KEY_SONG_PRESS_ACTION = "songPressAction";
     public static final String PREFERENCES_KEY_LARGE_ALBUM_ART = "largeAlbumArt";
@@ -126,7 +116,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_REPLAY_GAIN = "replayGain";
     public static final String PREFERENCES_KEY_REPLAY_GAIN_BUMP = "replayGainBump2";
     public static final String PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED = "replayGainUntagged2";
-    public static final String PREFERENCES_KEY_REPLAY_GAIN_TYPE= "replayGainType";
+    public static final String PREFERENCES_KEY_REPLAY_GAIN_TYPE = "replayGainType";
     public static final String PREFERENCES_KEY_ALBUMS_PER_FOLDER = "albumsPerFolder";
     public static final String PREFERENCES_KEY_FIRST_LEVEL_ARTIST = "firstLevelArtist";
     public static final String PREFERENCES_KEY_START_ON_HEADPHONES = "startOnHeadphones";
@@ -134,12 +124,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SHUFFLE_BY_ALBUM = "shuffleByAlbum";
     public static final String PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER = "neverResumePlayQueue";
     public static final String PREFERENCES_KEY_BATCH_MODE = "batchMode";
-    public static final String PREFERENCES_KEY_HEADS_UP_NOTIFICATION = "headsUpNotification";
-
-    public static final String OFFLINE_STAR_COUNT = "starCount";
-    public static final String OFFLINE_STAR_ID = "starID";
-    public static final String OFFLINE_STAR_SEARCH = "starTitle";
-    public static final String OFFLINE_STAR_SETTING = "starSetting";
 
     public static final String CACHE_KEY_IGNORE = "ignoreArticles";
     public static final String CACHE_AUDIO_SESSION_ID = "audioSessionId";
@@ -152,21 +136,17 @@ public final class Constants {
     public static final String MAIN_SLIDE_PANEL_STATE = "slidePanelState";
     public static final String FRAGMENT_LIST = "fragmentList";
     public static final String FRAGMENT_LIST2 = "fragmentList2";
-    public static final String FRAGMENT_EXTRA = "fragmentExtra";
     public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
     public static final String FRAGMENT_NAME = "fragmentName";
     public static final String FRAGMENT_POSITION = "fragmentPosition";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "net.nullsum.audinaut_preferences";
-    public static final String OFFLINE_SYNC_NAME = "net.nullsum.audinaut.offline";
-    public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
 
     // Account prefs
     public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
     public static final String SYNC_ACCOUNT_TYPE = "Audinaut";
     public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "net.nullsum.audinaut.playlists.provider";
-    public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "net.nullsum.audinaut.mostrecent.provider";
 
     public static final String TASKER_EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
 

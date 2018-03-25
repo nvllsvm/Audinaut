@@ -18,21 +18,20 @@
  */
 package net.nullsum.audinaut.util;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import net.nullsum.audinaut.domain.MusicDirectory;
+import net.nullsum.audinaut.service.DownloadService;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import net.nullsum.audinaut.domain.MusicDirectory;
-import net.nullsum.audinaut.service.DownloadService;
-import net.nullsum.audinaut.service.MusicService;
-import net.nullsum.audinaut.service.MusicServiceFactory;
-import net.nullsum.audinaut.util.FileUtil;
 
 /**
  * @author Sindre Mehus
@@ -42,17 +41,15 @@ public class ShufflePlayBuffer {
 
     private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
     private static final String CACHE_FILENAME = "shuffleBuffer.ser";
-
+    private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<>();
+    private final Runnable runnable;
+    private final DownloadService context;
+    private final int refillThreshold;
     private ScheduledExecutorService executorService;
-    private Runnable runnable;
     private boolean firstRun = true;
-    private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
     private int lastCount = -1;
-    private DownloadService context;
     private boolean awaitingResults = false;
     private int capacity;
-    private int refillThreshold;
-
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private int currentServer;
     private String currentFolder = "";
@@ -64,12 +61,7 @@ public class ShufflePlayBuffer {
         this.context = context;
 
         executorService = Executors.newSingleThreadScheduledExecutor();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                refill();
-            }
-        };
+        runnable = this::refill;
         executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
 
         // Calculate out the capacity and refill threshold based on the user's random size preference
@@ -87,7 +79,7 @@ public class ShufflePlayBuffer {
         // Make sure fetcher is running if needed
         restart();
 
-        List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
+        List<MusicDirectory.Entry> result = new ArrayList<>(size);
         synchronized (buffer) {
             boolean removed = false;
             while (!buffer.isEmpty() && result.size() < size) {
@@ -96,12 +88,12 @@ public class ShufflePlayBuffer {
             }
 
             // Re-cache if anything is taken out
-            if(removed) {
+            if (removed) {
                 FileUtil.serialize(context, buffer, CACHE_FILENAME);
             }
         }
         Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
-        if(result.isEmpty()) {
+        if (result.isEmpty()) {
             awaitingResults = true;
         }
         return result;
@@ -113,8 +105,8 @@ public class ShufflePlayBuffer {
     }
 
     private void restart() {
-        synchronized(buffer) {
-            if(buffer.size() <= refillThreshold && lastCount != 0 && executorService.isShutdown()) {
+        synchronized (buffer) {
+            if (buffer.size() <= refillThreshold && lastCount != 0 && executorService.isShutdown()) {
                 executorService = Executors.newSingleThreadScheduledExecutor();
                 executorService.scheduleWithFixedDelay(runnable, 0, 10, TimeUnit.SECONDS);
             }
@@ -136,15 +128,12 @@ public class ShufflePlayBuffer {
             // Get capacity based
             int n = capacity - buffer.size();
             String folder = null;
-            if(!Util.isTagBrowsing(context)) {
-                folder = Util.getSelectedMusicFolderId(context);
-            }
             MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
 
             synchronized (buffer) {
                 lastCount = 0;
-                for(MusicDirectory.Entry entry: songs.getChildren()) {
-                    if(!buffer.contains(entry)) {
+                for (MusicDirectory.Entry entry : songs.getChildren()) {
+                    if (!buffer.contains(entry)) {
                         buffer.add(entry);
                         lastCount++;
                     }
@@ -156,15 +145,15 @@ public class ShufflePlayBuffer {
             }
         } catch (Exception x) {
             // Give it one more try before quitting
-            if(lastCount != -2) {
+            if (lastCount != -2) {
                 lastCount = -2;
-            } else if(lastCount == -2) {
+            } else if (lastCount == -2) {
                 lastCount = 0;
             }
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
         }
 
-        if(awaitingResults) {
+        if (awaitingResults) {
             awaitingResults = false;
             context.checkDownloads();
         }
@@ -186,18 +175,15 @@ public class ShufflePlayBuffer {
                 endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
                 buffer.clear();
 
-                if(firstRun) {
+                if (firstRun) {
                     ArrayList cacheList = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);
-                    if(cacheList != null) {
+                    if (cacheList != null) {
                         buffer.addAll(cacheList);
                     }
 
-                    listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                        @Override
-                        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                            clearBufferIfnecessary();
-                            restart();
-                        }
+                    listener = (prefs1, key) -> {
+                        clearBufferIfnecessary();
+                        restart();
                     };
                     prefs.registerOnSharedPreferenceChangeListener(listener);
                     firstRun = false;

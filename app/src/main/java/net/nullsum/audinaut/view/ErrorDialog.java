@@ -19,9 +19,8 @@
 package net.nullsum.audinaut.view;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
@@ -32,8 +31,8 @@ import net.nullsum.audinaut.util.Util;
  */
 public class ErrorDialog {
 
-    public ErrorDialog(Activity activity, int messageId, boolean finishActivityOnCancel) {
-        this(activity, activity.getResources().getString(messageId), finishActivityOnCancel);
+    public ErrorDialog(Activity activity, int messageId) {
+        this(activity, activity.getResources().getString(messageId), false);
     }
 
     public ErrorDialog(final Activity activity, String message, final boolean finishActivityOnClose) {
@@ -43,26 +42,20 @@ public class ErrorDialog {
         builder.setTitle(R.string.error_label);
         builder.setMessage(message);
         builder.setCancelable(true);
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                if (finishActivityOnClose) {
-                     restart(activity);
-                }
+        builder.setOnCancelListener(dialogInterface -> {
+            if (finishActivityOnClose) {
+                restart(activity);
             }
         });
-        builder.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (finishActivityOnClose) {
-                    restart(activity);
-                }
+        builder.setPositiveButton(R.string.common_ok, (dialogInterface, i) -> {
+            if (finishActivityOnClose) {
+                restart(activity);
             }
         });
 
         try {
             builder.create().show();
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Don't care, just means no activity to attach to
         }
     }

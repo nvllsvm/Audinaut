@@ -15,26 +15,15 @@
 
 package net.nullsum.audinaut.fragments;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.SectionAdapter;
@@ -45,23 +34,27 @@ import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.TabBackgroundTask;
 import net.nullsum.audinaut.view.FastScroller;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class SelectRecyclerFragment<T> extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<T> {
     private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
-    protected RecyclerView recyclerView;
-    protected FastScroller fastScroller;
-    protected SectionAdapter<T> adapter;
-    protected UpdateTask currentTask;
-    protected List<T> objects;
-    protected boolean serialize = true;
-    protected boolean largeAlbums = false;
-    protected boolean pullToRefresh = true;
-    protected boolean backgroundUpdate = true;
+    RecyclerView recyclerView;
+    SectionAdapter<T> adapter;
+    List<T> objects;
+    boolean serialize = true;
+    boolean largeAlbums = false;
+    boolean pullToRefresh = true;
+    boolean backgroundUpdate = true;
+    private FastScroller fastScroller;
+    private UpdateTask currentTask;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        if(bundle != null && serialize) {
+        if (bundle != null && serialize) {
             objects = (List<T>) bundle.getSerializable(Constants.FRAGMENT_LIST);
         }
     }
@@ -69,7 +62,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(serialize) {
+        if (serialize) {
             outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) objects);
         }
     }
@@ -78,20 +71,20 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
-        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+        refreshLayout = rootView.findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(this);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
-        fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
+        recyclerView = rootView.findViewById(R.id.fragment_recycler);
+        fastScroller = rootView.findViewById(R.id.fragment_fast_scroller);
         setupLayoutManager();
 
-        if(pullToRefresh) {
+        if (pullToRefresh) {
             setupScrollList(recyclerView);
         } else {
             refreshLayout.setEnabled(false);
         }
 
-        if(objects == null) {
+        if (objects == null) {
             refresh(false);
         } else {
             recyclerView.setAdapter(adapter = getAdapter(objects));
@@ -102,7 +95,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        if(!primaryFragment) {
+        if (!primaryFragment) {
             return;
         }
 
@@ -111,43 +104,38 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void setIsOnlyVisible(boolean isOnlyVisible) {
         boolean update = this.isOnlyVisible != isOnlyVisible;
         super.setIsOnlyVisible(isOnlyVisible);
-        if(update && adapter != null) {
+        if (update && adapter != null) {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if(layoutManager instanceof GridLayoutManager) {
+            if (layoutManager instanceof GridLayoutManager) {
                 ((GridLayoutManager) layoutManager).setSpanCount(getRecyclerColumnCount());
             }
         }
     }
 
     @Override
-    protected void refresh(final boolean refresh) {
+    void refresh(final boolean refresh) {
         int titleRes = getTitleResource();
-        if(titleRes != 0) {
+        if (titleRes != 0) {
             setTitle(getTitleResource());
         }
-        if(backgroundUpdate) {
+        if (backgroundUpdate) {
             recyclerView.setVisibility(View.GONE);
         }
 
         // Cancel current running task before starting another one
-        if(currentTask != null) {
+        if (currentTask != null) {
             currentTask.cancel();
         }
 
         currentTask = new UpdateTask(this, refresh);
 
-        if(backgroundUpdate) {
+        if (backgroundUpdate) {
             currentTask.execute();
         } else {
-            objects = new ArrayList<T>();
+            objects = new ArrayList<>();
 
             try {
                 objects = getObjects(null, refresh, null);
@@ -167,17 +155,20 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
         setupLayoutManager(recyclerView, largeAlbums);
     }
 
-    public abstract int getOptionsMenu();
-    public abstract SectionAdapter<T> getAdapter(List<T> objs);
-    public abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
-    public abstract int getTitleResource();
+    protected abstract int getOptionsMenu();
 
-    public void onFinishRefresh() {
+    protected abstract SectionAdapter<T> getAdapter(List<T> objs);
+
+    protected abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
+
+    protected abstract int getTitleResource();
+
+    void onFinishRefresh() {
 
     }
 
     private class UpdateTask extends TabBackgroundTask<List<T>> {
-        private boolean refresh;
+        private final boolean refresh;
 
         public UpdateTask(SubsonicFragment fragment, boolean refresh) {
             super(fragment);
@@ -188,7 +179,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
         public List<T> doInBackground() throws Exception {
             MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-            objects = new ArrayList<T>();
+            objects = new ArrayList<>();
 
             try {
                 objects = getObjects(musicService, refresh, this);
@@ -203,7 +194,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
         public void done(List<T> result) {
             if (result != null && !result.isEmpty()) {
                 recyclerView.setAdapter(adapter = getAdapter(result));
-                if(!fastScroller.isAttached()) {
+                if (!fastScroller.isAttached()) {
                     fastScroller.attachRecyclerView(recyclerView);
                 }
 

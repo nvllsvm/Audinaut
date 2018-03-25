@@ -18,8 +18,6 @@
  */
 package net.nullsum.audinaut.service;
 
-import java.io.File;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,9 +25,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.util.FileUtil;
-import net.nullsum.audinaut.util.Util;
+
+import java.io.File;
 
 /**
  * @author Sindre Mehus
@@ -67,7 +67,7 @@ public class MediaStoreService {
         if (song.getYear() != null) {
             values.put(MediaStore.Audio.AudioColumns.YEAR, song.getYear());
         }
-        if(song.getTranscodedContentType() != null) {
+        if (song.getTranscodedContentType() != null) {
             values.put(MediaStore.MediaColumns.MIME_TYPE, song.getTranscodedContentType());
         } else {
             values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());

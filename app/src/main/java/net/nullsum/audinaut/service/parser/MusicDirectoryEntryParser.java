@@ -25,21 +25,21 @@ import net.nullsum.audinaut.domain.MusicDirectory;
 /**
  * @author Sindre Mehus
  */
-public class MusicDirectoryEntryParser extends AbstractParser {
-    public MusicDirectoryEntryParser(Context context, int instance) {
+class MusicDirectoryEntryParser extends AbstractParser {
+    MusicDirectoryEntryParser(Context context, int instance) {
         super(context, instance);
     }
 
-    protected MusicDirectory.Entry parseEntry(String artist) {
+    MusicDirectory.Entry parseEntry(String artist) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setId(get("id"));
         entry.setParent(get("parent"));
         entry.setArtistId(get("artistId"));
         entry.setTitle(get("title"));
-        if(entry.getTitle() == null) {
+        if (entry.getTitle() == null) {
             entry.setTitle(get("name"));
         }
-        entry.setDirectory(getBoolean("isDir"));
+        entry.setDirectory(getBoolean());
         entry.setCoverArt(get("coverArt"));
         entry.setArtist(get("artist"));
         entry.setYear(getInteger("year"));
@@ -53,27 +53,14 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setSuffix(get("suffix"));
             entry.setTranscodedContentType(get("transcodedContentType"));
             entry.setTranscodedSuffix(get("transcodedSuffix"));
-            entry.setSize(getLong("size"));
             entry.setDuration(getInteger("duration"));
             entry.setBitRate(getInteger("bitRate"));
             entry.setPath(get("path"));
             entry.setDiscNumber(getInteger("discNumber"));
-
-            String type = get("type");
-        } else if(!"".equals(artist)) {
+        } else if (!"".equals(artist)) {
             entry.setPath(artist + "/" + entry.getTitle());
         }
         return entry;
     }
 
-    protected MusicDirectory.Entry parseArtist() {
-        MusicDirectory.Entry entry = new MusicDirectory.Entry();
-
-        entry.setId(get("id"));
-        entry.setTitle(get("name"));
-        entry.setPath(entry.getTitle());
-        entry.setDirectory(true);
-
-        return entry;
-    }
 }

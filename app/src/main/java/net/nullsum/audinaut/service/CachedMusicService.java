@@ -18,17 +18,6 @@
  */
 package net.nullsum.audinaut.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Response;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -36,19 +25,26 @@ import android.util.Log;
 import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;
-import net.nullsum.audinaut.domain.PlayerQueue;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.domain.SearchCritera;
 import net.nullsum.audinaut.domain.SearchResult;
 import net.nullsum.audinaut.domain.User;
-import net.nullsum.audinaut.util.SilentBackgroundTask;
+import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.SongDBHandler;
 import net.nullsum.audinaut.util.TimeLimitedCache;
-import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.Util;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import okhttp3.Response;
 
 import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
 
@@ -56,21 +52,16 @@ import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
  * @author Sindre Mehus
  */
 public class CachedMusicService implements MusicService {
+    public static final int CACHE_UPDATE_LIST = 1;
+    private static final int CACHE_UPDATE_METADATA = 2;
     private static final String TAG = CachedMusicService.class.getSimpleName();
 
-    private static final int MUSIC_DIR_CACHE_SIZE = 20;
-    private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
-    public static final int CACHE_UPDATE_LIST = 1;
-    public static final int CACHE_UPDATE_METADATA = 2;
-    private static final int CACHED_LAST_FM = 24 * 60;
-
     private final RESTMusicService musicService;
-    private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
-    private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
-    private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
+    private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<>(60 * 60);
+    private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<>(3600);
+    private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<>(10 * 3600);
     private String restUrl;
     private String musicFolderId;
-    private boolean isTagBrowsing = false;
 
     public CachedMusicService(RESTMusicService musicService) {
         this.musicService = musicService;
@@ -90,13 +81,13 @@ public class CachedMusicService implements MusicService {
         }
         List<MusicFolder> result = cachedMusicFolders.get();
         if (result == null) {
-            if(!refresh) {
+            if (!refresh) {
                 result = FileUtil.deserialize(context, getCacheName(context, "musicFolders"), ArrayList.class);
             }
 
-            if(result == null) {
+            if (result == null) {
                 result = musicService.getMusicFolders(refresh, context, progressListener);
-                FileUtil.serialize(context, new ArrayList<MusicFolder>(result), getCacheName(context, "musicFolders"));
+                FileUtil.serialize(context, new ArrayList<>(result), getCacheName(context, "musicFolders"));
             }
 
             MusicFolder.sort(result);
@@ -114,13 +105,13 @@ public class CachedMusicService implements MusicService {
         }
         Indexes result = cachedIndexes.get();
         if (result == null) {
-            String name = Util.isTagBrowsing(context, musicService.getInstance(context)) ? "artists" : "indexes";
+            String name = "artists";
             name = getCacheName(context, name, musicFolderId);
-            if(!refresh) {
+            if (!refresh) {
                 result = FileUtil.deserialize(context, name, Indexes.class);
             }
 
-            if(result == null) {
+            if (result == null) {
                 result = musicService.getIndexes(musicFolderId, refresh, context, progressListener);
                 FileUtil.serialize(context, result, name);
             }
@@ -133,7 +124,7 @@ public class CachedMusicService implements MusicService {
     public MusicDirectory getMusicDirectory(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
         MusicDirectory dir = null;
         final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-        if(!refresh && cached != null) {
+        if (!refresh && cached != null) {
             dir = cached;
 
             new SilentBackgroundTask<Void>(context) {
@@ -153,11 +144,11 @@ public class CachedMusicService implements MusicService {
                 // Update which entries exist
                 @Override
                 public void done(Void result) {
-                    if(progressListener != null) {
-                        if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+                    if (progressListener != null) {
+                        if (cached.updateEntriesList(context, refreshed)) {
                             progressListener.updateCache(CACHE_UPDATE_LIST);
                         }
-                        if(metadataUpdated) {
+                        if (metadataUpdated) {
                             progressListener.updateCache(CACHE_UPDATE_METADATA);
                         }
                     }
@@ -170,7 +161,7 @@ public class CachedMusicService implements MusicService {
             }.execute();
         }
 
-        if(dir == null) {
+        if (dir == null) {
             dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
             updateAllSongs(context, dir);
             FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
@@ -178,7 +169,7 @@ public class CachedMusicService implements MusicService {
             // If a cached copy exists to check against, look for removes
             deleteRemovedEntries(context, dir, cached);
         }
-        dir.sortChildren(context, musicService.getInstance(context));
+        dir.sortChildren(context);
 
         return dir;
     }
@@ -187,7 +178,7 @@ public class CachedMusicService implements MusicService {
     public MusicDirectory getArtist(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
         MusicDirectory dir = null;
         final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
-        if(!refresh && cached != null) {
+        if (!refresh && cached != null) {
             dir = cached;
 
             new SilentBackgroundTask<Void>(context) {
@@ -205,8 +196,8 @@ public class CachedMusicService implements MusicService {
                 // Update which entries exist
                 @Override
                 public void done(Void result) {
-                    if(progressListener != null) {
-                        if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+                    if (progressListener != null) {
+                        if (cached.updateEntriesList(context, refreshed)) {
                             progressListener.updateCache(CACHE_UPDATE_LIST);
                         }
                     }
@@ -219,14 +210,14 @@ public class CachedMusicService implements MusicService {
             }.execute();
         }
 
-        if(dir == null) {
+        if (dir == null) {
             dir = musicService.getArtist(id, name, refresh, context, progressListener);
             FileUtil.serialize(context, dir, getCacheName(context, "artist", id));
 
             // If a cached copy exists to check against, look for removes
             deleteRemovedEntries(context, dir, cached);
         }
-        dir.sortChildren(context, musicService.getInstance(context));
+        dir.sortChildren(context);
 
         return dir;
     }
@@ -235,7 +226,7 @@ public class CachedMusicService implements MusicService {
     public MusicDirectory getAlbum(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
         MusicDirectory dir = null;
         final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
-        if(!refresh && cached != null) {
+        if (!refresh && cached != null) {
             dir = cached;
 
             new SilentBackgroundTask<Void>(context) {
@@ -255,11 +246,11 @@ public class CachedMusicService implements MusicService {
                 // Update which entries exist
                 @Override
                 public void done(Void result) {
-                    if(progressListener != null) {
-                        if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+                    if (progressListener != null) {
+                        if (cached.updateEntriesList(context, refreshed)) {
                             progressListener.updateCache(CACHE_UPDATE_LIST);
                         }
-                        if(metadataUpdated) {
+                        if (metadataUpdated) {
                             progressListener.updateCache(CACHE_UPDATE_METADATA);
                         }
                     }
@@ -272,7 +263,7 @@ public class CachedMusicService implements MusicService {
             }.execute();
         }
 
-        if(dir == null) {
+        if (dir == null) {
             dir = musicService.getAlbum(id, name, refresh, context, progressListener);
             updateAllSongs(context, dir);
             FileUtil.serialize(context, dir, getCacheName(context, "album", id));
@@ -280,7 +271,7 @@ public class CachedMusicService implements MusicService {
             // If a cached copy exists to check against, look for removes
             deleteRemovedEntries(context, dir, cached);
         }
-        dir.sortChildren(context, musicService.getInstance(context));
+        dir.sortChildren(context);
 
         return dir;
     }
@@ -294,16 +285,16 @@ public class CachedMusicService implements MusicService {
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
         MusicDirectory dir = null;
         MusicDirectory cachedPlaylist = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
-        if(!refresh) {
+        if (!refresh) {
             dir = cachedPlaylist;
         }
-        if(dir == null) {
+        if (dir == null) {
             dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
             updateAllSongs(context, dir);
             FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
             File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
-            if(cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
+            if (cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
                 FileUtil.writePlaylistFile(context, playlistFile, dir);
             }
         }
@@ -315,13 +306,13 @@ public class CachedMusicService implements MusicService {
         checkSettingsChanged(context);
         List<Playlist> result = refresh ? null : cachedPlaylists.get();
         if (result == null) {
-            if(!refresh) {
+            if (!refresh) {
                 result = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
             }
 
-            if(result == null) {
+            if (result == null) {
                 result = musicService.getPlaylists(refresh, context, progressListener);
-                FileUtil.serialize(context, new ArrayList<Playlist>(result), getCacheName(context, "playlist"));
+                FileUtil.serialize(context, new ArrayList<>(result), getCacheName(context, "playlist"));
             }
             cachedPlaylists.set(result);
         }
@@ -381,9 +372,9 @@ public class CachedMusicService implements MusicService {
                 boolean supposedToUnpin = false;
 
                 // Remove in reverse order so indexes are still correct as we iterate through
-                for(ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
+                for (ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
                     int index = iterator.previous();
-                    if(supposedToUnpin) {
+                    if (supposedToUnpin) {
                         Entry entry = objects.get(index);
                         DownloadFile file = new DownloadFile(context, entry, true);
                         file.unpin();
@@ -439,24 +430,17 @@ public class CachedMusicService implements MusicService {
                 String recentlyAddedFile = getCacheName(context, type);
                 ArrayList<String> recents = FileUtil.deserialize(context, recentlyAddedFile, ArrayList.class);
                 if (recents == null) {
-                    recents = new ArrayList<String>();
+                    recents = new ArrayList<>();
                 }
 
                 // Add any new items
-                final int instance = musicService.getInstance(context);
-                isTagBrowsing = Util.isTagBrowsing(context, instance);
                 for (final Entry album : dir.getChildren()) {
                     if (!recents.contains(album.getId())) {
                         recents.add(album.getId());
 
                         String cacheName, parent;
-                        if (isTagBrowsing) {
-                            cacheName = "artist";
-                            parent = album.getArtistId();
-                        } else {
-                            cacheName = "directory";
-                            parent = album.getParent();
-                        }
+                        cacheName = "artist";
+                        parent = album.getArtistId();
 
                         // Add album to artist
                         if (parent != null) {
@@ -492,7 +476,7 @@ public class CachedMusicService implements MusicService {
                             artist.setId(album.getId());
                             artist.setName(album.getTitle());
 
-                            new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
+                            new IndexesUpdater(context) {
                                 private boolean changed = false;
 
                                 @Override
@@ -530,17 +514,17 @@ public class CachedMusicService implements MusicService {
 
             FileUtil.serialize(context, dir, getCacheName(context, type, Integer.toString(offset)));
             return dir;
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.w(TAG, "Failed to refresh album list: ", e);
-            if(refresh) {
+            if (refresh) {
                 throw e;
             }
 
             MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type, Integer.toString(offset)), MusicDirectory.class);
 
-            if(dir == null) {
+            if (dir == null) {
                 // If we are at start and no cache, throw error higher
-                if(offset == 0) {
+                if (offset == 0) {
                     throw e;
                 } else {
                     // Otherwise just pretend we are at the end of the list
@@ -558,17 +542,17 @@ public class CachedMusicService implements MusicService {
             MusicDirectory dir = musicService.getAlbumList(type, extra, size, offset, refresh, context, progressListener);
             FileUtil.serialize(context, dir, getCacheName(context, type + extra, Integer.toString(offset)));
             return dir;
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.w(TAG, "Failed to refresh album list: ", e);
-            if(refresh) {
+            if (refresh) {
                 throw e;
             }
 
             MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type + extra, Integer.toString(offset)), MusicDirectory.class);
 
-            if(dir == null) {
+            if (dir == null) {
                 // If we are at start and no cache, throw error higher
-                if(offset == 0) {
+                if (offset == 0) {
                     throw e;
                 } else {
                     // Otherwise just pretend we are at the end of the list
@@ -583,11 +567,6 @@ public class CachedMusicService implements MusicService {
     @Override
     public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
         return musicService.getSongList(type, size, offset, context, progressListener);
-    }
-
-    @Override
-    public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getRandomSongs(size, artistId, context, progressListener);
     }
 
     @Override
@@ -609,13 +588,13 @@ public class CachedMusicService implements MusicService {
     public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         List<Genre> result = null;
 
-        if(!refresh) {
+        if (!refresh) {
             result = FileUtil.deserialize(context, getCacheName(context, "genre"), ArrayList.class);
         }
 
-        if(result == null) {
+        if (result == null) {
             result = musicService.getGenres(refresh, context, progressListener);
-            FileUtil.serialize(context, new ArrayList<Genre>(result), getCacheName(context, "genre"));
+            FileUtil.serialize(context, new ArrayList<>(result), getCacheName(context, "genre"));
         }
 
         return result;
@@ -628,12 +607,12 @@ public class CachedMusicService implements MusicService {
             FileUtil.serialize(context, dir, getCacheName(context, "genreSongs", Integer.toString(offset)));
 
             return dir;
-        } catch(IOException e) {
+        } catch (IOException e) {
             MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, "genreSongs", Integer.toString(offset)), MusicDirectory.class);
 
-            if(dir == null) {
+            if (dir == null) {
                 // If we are at start and no cache, throw error higher
-                if(offset == 0) {
+                if (offset == 0) {
                     throw e;
                 } else {
                     // Otherwise just pretend we are at the end of the list
@@ -652,30 +631,15 @@ public class CachedMusicService implements MusicService {
         try {
             result = musicService.getUser(refresh, username, context, progressListener);
             FileUtil.serialize(context, result, getCacheName(context, "user-" + username));
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Don't care
         }
 
-        if(result == null && !refresh) {
+        if (result == null && !refresh) {
             result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
         }
 
         return result;
-    }
-
-    @Override
-    public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-        return musicService.getBitmap(url, size, context, progressListener, task);
-    }
-
-@Override
-    public void savePlayQueue(List<Entry> songs, Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
-        musicService.savePlayQueue(songs, currentPlaying, position, context, progressListener);
-    }
-
-    @Override
-    public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getPlayQueue(context, progressListener);
     }
 
     @Override
@@ -687,27 +651,48 @@ public class CachedMusicService implements MusicService {
         String s = musicService.getRestUrl(context, null, false) + id;
         return name + "-" + s.hashCode() + ".ser";
     }
+
     private String getCacheName(Context context, String name) {
         String s = musicService.getRestUrl(context, null, false);
         return name + "-" + s.hashCode() + ".ser";
     }
 
     private void deleteRemovedEntries(Context context, MusicDirectory dir, MusicDirectory cached) {
-        if(cached != null) {
-            List<Entry> oldList = new ArrayList<Entry>();
+        if (cached != null) {
+            List<Entry> oldList = new ArrayList<>();
             oldList.addAll(cached.getChildren());
-
-            // Remove all current items from old list
-            for(Entry entry: dir.getChildren()) {
-                oldList.remove(entry);
-            }
+            oldList.removeAll(dir.getChildren());
 
             // Anything remaining has been removed from server
             MediaStoreService store = new MediaStoreService(context);
-            for(Entry entry: oldList) {
+            for (Entry entry : oldList) {
                 File file = FileUtil.getEntryFile(context, entry);
                 FileUtil.recursiveDelete(file, store);
             }
+        }
+    }
+
+    private void updateAllSongs(Context context, MusicDirectory dir) {
+        List<Entry> songs = dir.getSongs();
+        if (!songs.isEmpty()) {
+            SongDBHandler.getHandler(context).addSongs(musicService.getInstance(context), songs);
+        }
+    }
+
+    private void checkSettingsChanged(Context context) {
+        int instance = musicService.getInstance(context);
+        String newUrl = musicService.getRestUrl(context, null, false);
+        if (!Util.equals(newUrl, restUrl)) {
+            cachedMusicFolders.clear();
+            cachedIndexes.clear();
+            cachedPlaylists.clear();
+            restUrl = newUrl;
+        }
+
+        String newMusicFolderId = Util.getSelectedMusicFolderId(context, instance);
+        if (!Util.equals(newMusicFolderId, musicFolderId)) {
+            cachedIndexes.clear();
+            musicFolderId = newMusicFolderId;
         }
     }
 
@@ -716,28 +701,26 @@ public class CachedMusicService implements MusicService {
         final String cacheName;
         final boolean singleUpdate;
 
-        public SerializeUpdater(Context context, String cacheName) {
-            this(context, cacheName, true);
-        }
-        public SerializeUpdater(Context context, String cacheName, boolean singleUpdate) {
+        public SerializeUpdater(Context context) {
             this.context = context;
-            this.cacheName = getCacheName(context, cacheName);
-            this.singleUpdate = singleUpdate;
+            this.cacheName = getCacheName(context, "playlist");
+            this.singleUpdate = true;
         }
+
         public SerializeUpdater(Context context, String cacheName, String id) {
-            this(context, cacheName, id, true);
-        }
-        public SerializeUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
             this.context = context;
             this.cacheName = getCacheName(context, cacheName, id);
-            this.singleUpdate = singleUpdate;
+            this.singleUpdate = true;
         }
 
         public ArrayList<T> getArrayList() {
             return FileUtil.deserialize(context, cacheName, ArrayList.class);
         }
+
         public abstract boolean checkResult(T check);
+
         public abstract void updateResult(List<T> objects, T result);
+
         public void save(ArrayList<T> objects) {
             FileUtil.serialize(context, objects, cacheName);
         }
@@ -746,47 +729,35 @@ public class CachedMusicService implements MusicService {
             ArrayList<T> objects = getArrayList();
 
             // Only execute if something to check against
-            if(objects != null) {
-                List<T> results = new ArrayList<T>();
-                for(T check: objects) {
-                    if(checkResult(check)) {
+            if (objects != null) {
+                List<T> results = new ArrayList<>();
+                for (T check : objects) {
+                    if (checkResult(check)) {
                         results.add(check);
-                        if(singleUpdate) {
+                        if (singleUpdate) {
                             break;
                         }
                     }
                 }
 
                 // Iterate through and update each object matched
-                for(T result: results) {
+                for (T result : results) {
                     updateResult(objects, result);
                 }
 
                 // Only reserialize if at least one match was found
-                if(results.size() > 0) {
+                if (results.size() > 0) {
                     save(objects);
                 }
             }
         }
     }
-    private abstract class UserUpdater extends SerializeUpdater<User> {
-        String username;
 
-        public UserUpdater(Context context, String username) {
-            super(context, "users");
-            this.username = username;
-        }
-
-        @Override
-        public boolean checkResult(User check) {
-            return username.equals(check.getUsername());
-        }
-    }
     private abstract class PlaylistUpdater extends SerializeUpdater<Playlist> {
-        String id;
+        final String id;
 
         public PlaylistUpdater(Context context, String id) {
-            super(context, "playlist");
+            super(context);
             this.id = id;
         }
 
@@ -795,199 +766,45 @@ public class CachedMusicService implements MusicService {
             return id.equals(check.getId());
         }
     }
+
     private abstract class MusicDirectoryUpdater extends SerializeUpdater<Entry> {
-        protected MusicDirectory musicDirectory;
+        MusicDirectory musicDirectory;
 
         public MusicDirectoryUpdater(Context context, String cacheName, String id) {
-            super(context, cacheName, id, true);
-        }
-        public MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
-            super(context, cacheName, id, singleUpdate);
+            super(context, cacheName, id);
         }
 
         @Override
         public ArrayList<Entry> getArrayList() {
             musicDirectory = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
-            if(musicDirectory != null) {
+            if (musicDirectory != null) {
                 return new ArrayList<>(musicDirectory.getChildren());
             } else {
                 return null;
             }
         }
+
         public void save(ArrayList<Entry> objects) {
             musicDirectory.replaceChildren(objects);
             FileUtil.serialize(context, musicDirectory, cacheName);
         }
     }
-    private abstract class PlaylistDirectoryUpdater {
-        Context context;
 
-        public PlaylistDirectoryUpdater(Context context) {
-            this.context = context;
-        }
-
-        public abstract boolean checkResult(Entry check);
-        public abstract void updateResult(Entry result);
-
-        public void execute() {
-            List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
-            if(playlists == null) {
-                // No playlist list cache, nothing to update!
-                return;
-            }
-
-            for(Playlist playlist: playlists) {
-                new MusicDirectoryUpdater(context, "playlist", playlist.getId(), false) {
-                    @Override
-                    public boolean checkResult(Entry check) {
-                        return PlaylistDirectoryUpdater.this.checkResult(check);
-                    }
-
-                    @Override
-                    public void updateResult(List<Entry> objects, Entry result) {
-                        PlaylistDirectoryUpdater.this.updateResult(result);
-                    }
-                }.execute();
-            }
-        }
-    }
-    private abstract class GenericEntryUpdater {
-        Context context;
-        List<Entry> entries;
-
-        public GenericEntryUpdater(Context context, Entry entry) {
-            this.context = context;
-            this.entries = Arrays.asList(entry);
-        }
-        public GenericEntryUpdater(Context context, List<Entry> entries) {
-            this.context = context;
-            this.entries = entries;
-        }
-
-        public boolean checkResult(Entry entry, Entry check) {
-            return entry.getId().equals(check.getId());
-        }
-        public abstract void updateResult(Entry result);
-
-        public void execute() {
-            String cacheName, parent;
-            // Make sure it is up to date
-            isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
-
-            // Run through each entry, trying to update the directory it is in
-            final List<Entry> songs = new ArrayList<Entry>();
-            for(final Entry entry: entries) {
-                if(isTagBrowsing) {
-                    // If starring album, needs to reference artist instead
-                    if(entry.isDirectory()) {
-                        if(entry.isAlbum()) {
-                            cacheName = "artist";
-                            parent = entry.getArtistId();
-                        } else {
-                            cacheName = "artists";
-                            parent = null;
-                        }
-                    } else {
-                        cacheName = "album";
-                        parent = entry.getAlbumId();
-                    }
-                } else {
-                    if(entry.isDirectory() && !entry.isAlbum()) {
-                        cacheName = "indexes";
-                        parent = null;
-                    } else {
-                        cacheName = "directory";
-                        parent = entry.getParent();
-                    }
-                }
-
-                // Parent is only null when it is an artist
-                if(parent == null) {
-                    new IndexesUpdater(context, cacheName) {
-                        @Override
-                        public boolean checkResult(Artist check) {
-                            return GenericEntryUpdater.this.checkResult(entry, new Entry(check));
-                        }
-
-                        @Override
-                        public void updateResult(List<Artist> objects, Artist result) {
-                            // Don't try to put anything here, as the Entry update method will not be called since it's a artist!
-                        }
-                    }.execute();
-                } else {
-                    new MusicDirectoryUpdater(context, cacheName, parent) {
-                        @Override
-                        public boolean checkResult(Entry check) {
-                            return GenericEntryUpdater.this.checkResult(entry, check);
-                        }
-
-                        @Override
-                        public void updateResult(List<Entry> objects, Entry result) {
-                            GenericEntryUpdater.this.updateResult(result);
-                        }
-                    }.execute();
-                }
-
-                songs.add(entry);
-            }
-
-            // Only run through playlists once and check each song against it
-            if(songs.size() > 0) {
-                new PlaylistDirectoryUpdater(context) {
-                    @Override
-                    public boolean checkResult(Entry check) {
-                        for(Entry entry: songs) {
-                            if(GenericEntryUpdater.this.checkResult(entry, check)) {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    }
-
-                    @Override
-                    public void updateResult(Entry result) {
-                        GenericEntryUpdater.this.updateResult(result);
-                    }
-                }.execute();
-            }
-        }
-    }
-
-    private class StarUpdater extends GenericEntryUpdater {
-        public StarUpdater(Context context, List<Entry> entries) {
-            super(context, entries);
-        }
-
-        @Override
-        public boolean checkResult(Entry entry, Entry check) {
-            if (!entry.getId().equals(check.getId())) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        public void updateResult(Entry result) {
-
-        }
-    };
     private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
         Indexes indexes;
 
-        IndexesUpdater(Context context, String name) {
-            super(context, name, Util.getSelectedMusicFolderId(context, musicService.getInstance(context)));
+        IndexesUpdater(Context context) {
+            super(context, "artists", Util.getSelectedMusicFolderId(context, musicService.getInstance(context)));
         }
 
         @Override
         public ArrayList<Artist> getArrayList() {
             indexes = FileUtil.deserialize(context, cacheName, Indexes.class);
-            if(indexes == null) {
+            if (indexes == null) {
                 return null;
             }
 
-            ArrayList<Artist> artists = new ArrayList<Artist>();
+            ArrayList<Artist> artists = new ArrayList<>();
             artists.addAll(indexes.getArtists());
             artists.addAll(indexes.getShortcuts());
             return artists;
@@ -998,35 +815,5 @@ public class CachedMusicService implements MusicService {
             FileUtil.serialize(context, indexes, cacheName);
             cachedIndexes.set(indexes);
         }
-    }
-
-    protected void updateAllSongs(Context context, MusicDirectory dir) {
-        List<Entry> songs = dir.getSongs();
-        if(!songs.isEmpty()) {
-            SongDBHandler.getHandler(context).addSongs(musicService.getInstance(context), songs);
-        }
-    }
-
-    private void checkSettingsChanged(Context context) {
-        int instance = musicService.getInstance(context);
-        String newUrl = musicService.getRestUrl(context, null, false);
-        boolean newIsTagBrowsing = Util.isTagBrowsing(context, instance);
-        if (!Util.equals(newUrl, restUrl) || isTagBrowsing != newIsTagBrowsing) {
-            cachedMusicFolders.clear();
-            cachedIndexes.clear();
-            cachedPlaylists.clear();
-            restUrl = newUrl;
-            isTagBrowsing = newIsTagBrowsing;
-        }
-
-        String newMusicFolderId = Util.getSelectedMusicFolderId(context, instance);
-        if(!Util.equals(newMusicFolderId, musicFolderId)) {
-            cachedIndexes.clear();
-            musicFolderId = newMusicFolderId;
-        }
-    }
-
-    public RESTMusicService getMusicService() {
-        return musicService;
     }
 }

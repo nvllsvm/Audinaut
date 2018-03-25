@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Audinaut.Light" parent="Theme.Audinaut.Light.Base">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
@@ -7,6 +8,7 @@
     <style name="Theme.Audinaut.Dark" parent="Theme.Audinaut.Dark.Base">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
     <style name="Theme.Audinaut.Black" parent="Theme.Audinaut.Black.Base">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
@@ -15,10 +17,12 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:statusBarColor">@android:color/black</item>
     </style>
+
     <style name="Theme.Audinaut.Black.No_Color" parent="Theme.Audinaut.Black.No_Color.Base">
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:statusBarColor">@android:color/black</item>
     </style>
+
     <style name="Theme.Audinaut.Dark.No_Color" parent="Theme.Audinaut.Dark.No_Color.Base">
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:statusBarColor">@android:color/black</item>

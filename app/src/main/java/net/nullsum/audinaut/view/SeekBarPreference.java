@@ -26,49 +26,38 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.util.Constants;
 
 /**
  * SeekBar preference to set the shake force threshold.
  */
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
-    private static final String TAG = SeekBarPreference.class.getSimpleName();
+    private final int mMin;
+    private final int mMax;
+    private final float mStepSize;
     /**
      * The current value.
      */
     private String mValue;
-    private int mMin;
-    private int mMax;
-    private float mStepSize;
     private String mDisplay;
-
-    /**
-     * Our context (needed for getResources())
-     */
-    private Context mContext;
 
     /**
      * TextView to display current threshold.
      */
     private TextView mValueText;
 
-    public SeekBarPreference(Context context, AttributeSet attrs)
-    {
+    public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
         mMin = a.getInteger(R.styleable.SeekBarPreference_min, 0);
         mMax = a.getInteger(R.styleable.SeekBarPreference_max, 100);
         mStepSize = a.getFloat(R.styleable.SeekBarPreference_stepSize, 1f);
         mDisplay = a.getString(R.styleable.SeekBarPreference_display);
-        if(mDisplay == null) {
+        if (mDisplay == null) {
             mDisplay = "%.0f";
         }
 
@@ -76,21 +65,18 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     }
 
     @Override
-    public CharSequence getSummary()
-    {
+    public CharSequence getSummary() {
         return getSummary(mValue);
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index)
-    {
+    protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getString(index);
     }
 
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
-    {
-        mValue = restoreValue ? getPersistedString((String) defaultValue) : (String)defaultValue;
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        mValue = restoreValue ? getPersistedString((String) defaultValue) : (String) defaultValue;
     }
 
     /**
@@ -109,18 +95,17 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     }
 
     @Override
-    protected View onCreateDialogView()
-    {
+    protected View onCreateDialogView() {
         View view = super.onCreateDialogView();
 
-        mValueText = (TextView)view.findViewById(R.id.value);
+        mValueText = view.findViewById(R.id.value);
         mValueText.setText(getSummary(mValue));
 
-        SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
+        SeekBar seekBar = view.findViewById(R.id.seek_bar);
         seekBar.setMax(mMax - mMin);
         try {
             seekBar.setProgress(Integer.parseInt(mValue));
-        } catch(Exception e) {
+        } catch (Exception e) {
             seekBar.setProgress(0);
         }
         seekBar.setOnSeekBarChangeListener(this);
@@ -129,17 +114,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult)
-    {
-        if(positiveResult) {
+    protected void onDialogClosed(boolean positiveResult) {
+        if (positiveResult) {
             persistString(mValue);
             notifyChanged();
         }
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-    {
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
             mValue = String.valueOf(progress);
             mValueText.setText(getSummary(mValue));
@@ -147,12 +130,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar)
-    {
+    public void onStartTrackingTouch(SeekBar seekBar) {
     }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar)
-    {
+    public void onStopTrackingTouch(SeekBar seekBar) {
     }
 }

@@ -19,25 +19,24 @@
 package net.nullsum.audinaut.domain;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.util.Log;
-
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.io.File;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Locale;
 
 import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.UpdateHelper;
 import net.nullsum.audinaut.util.Util;
+
+import java.io.File;
+import java.io.Serializable;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @author Sindre Mehus
@@ -51,8 +50,9 @@ public class MusicDirectory implements Serializable {
     private List<Entry> children;
 
     public MusicDirectory() {
-        children = new ArrayList<Entry>();
+        children = new ArrayList<>();
     }
+
     public MusicDirectory(List<Entry> children) {
         this.children = children;
     }
@@ -65,7 +65,7 @@ public class MusicDirectory implements Serializable {
         this.name = name;
     }
 
-     public String getId() {
+    public String getId() {
         return id;
     }
 
@@ -82,10 +82,11 @@ public class MusicDirectory implements Serializable {
     }
 
     public void addChild(Entry child) {
-        if(child != null) {
+        if (child != null) {
             children.add(child);
         }
     }
+
     public void addChildren(List<Entry> children) {
         this.children.addAll(children);
     }
@@ -103,7 +104,7 @@ public class MusicDirectory implements Serializable {
             return children;
         }
 
-        List<Entry> result = new ArrayList<Entry>(children.size());
+        List<Entry> result = new ArrayList<>(children.size());
         for (Entry child : children) {
             if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
                 result.add(child);
@@ -111,8 +112,9 @@ public class MusicDirectory implements Serializable {
         }
         return result;
     }
+
     public synchronized List<Entry> getSongs() {
-        List<Entry> result = new ArrayList<Entry>();
+        List<Entry> result = new ArrayList<>();
         for (Entry child : children) {
             if (child != null && !child.isDirectory()) {
                 result.add(child);
@@ -125,24 +127,19 @@ public class MusicDirectory implements Serializable {
         return children.size();
     }
 
-    public void shuffleChildren() {
-        Collections.shuffle(this.children);
-    }
-
-    public void sortChildren(Context context, int instance) {
+    public void sortChildren(Context context) {
         sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
     }
+
     public void sortChildren(boolean byYear) {
         EntryComparator.sort(children, byYear);
     }
 
     public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
         boolean metadataUpdated = false;
-        Iterator<Entry> it = children.iterator();
-        while(it.hasNext()) {
-            Entry entry = it.next();
+        for (Entry entry : children) {
             int index = refreshedDirectory.children.indexOf(entry);
-            if(index != -1) {
+            if (index != -1) {
                 final Entry refreshed = refreshedDirectory.children.get(index);
 
                 entry.setTitle(refreshed.getTitle());
@@ -155,7 +152,7 @@ public class MusicDirectory implements Serializable {
                 entry.setTranscodedSuffix(refreshed.getTranscodedSuffix());
                 entry.setDiscNumber(refreshed.getDiscNumber());
                 entry.setType(refreshed.getType());
-                if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
+                if (!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
                     metadataUpdated = true;
                     entry.setCoverArt(refreshed.getCoverArt());
                 }
@@ -173,7 +170,7 @@ public class MusicDirectory implements Serializable {
                         found.setTranscodedSuffix(refreshed.getTranscodedSuffix());
                         found.setDiscNumber(refreshed.getDiscNumber());
                         found.setType(refreshed.getType());
-                        if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
+                        if (!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
                             found.setCoverArt(refreshed.getCoverArt());
                             metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
                         }
@@ -184,13 +181,14 @@ public class MusicDirectory implements Serializable {
 
         return metadataUpdated;
     }
-    public synchronized boolean updateEntriesList(Context context, int instance, MusicDirectory refreshedDirectory) {
+
+    public synchronized boolean updateEntriesList(Context context, MusicDirectory refreshedDirectory) {
         boolean changed = false;
         Iterator<Entry> it = children.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Entry entry = it.next();
             // No longer exists in here
-            if(refreshedDirectory.children.indexOf(entry) == -1) {
+            if (refreshedDirectory.children.indexOf(entry) == -1) {
                 it.remove();
                 changed = true;
             }
@@ -198,16 +196,16 @@ public class MusicDirectory implements Serializable {
 
         // Make sure we contain all children from refreshed set
         boolean resort = false;
-        for(Entry refreshed: refreshedDirectory.children) {
-            if(!this.children.contains(refreshed)) {
+        for (Entry refreshed : refreshedDirectory.children) {
+            if (!this.children.contains(refreshed)) {
                 this.children.add(refreshed);
                 resort = true;
                 changed = true;
             }
         }
 
-        if(resort) {
-            this.sortChildren(context, instance);
+        if (resort) {
+            this.sortChildren(context);
         }
 
         return changed;
@@ -218,7 +216,6 @@ public class MusicDirectory implements Serializable {
 
         private String id;
         private String parent;
-        private String grandParent;
         private String albumId;
         private String artistId;
         private boolean directory;
@@ -233,26 +230,25 @@ public class MusicDirectory implements Serializable {
         private String transcodedContentType;
         private String transcodedSuffix;
         private String coverArt;
-        private Long size;
         private Integer duration;
         private Integer bitRate;
         private String path;
         private Integer discNumber;
         private int type = 0;
         private int closeness;
-        private transient Artist linkedArtist;
 
         public Entry() {
 
         }
+
         public Entry(String id) {
             this.id = id;
         }
+
         public Entry(Artist artist) {
             this.id = artist.getId();
             this.title = artist.getName();
             this.directory = true;
-            this.linkedArtist = artist;
         }
 
         public void loadMetadata(File file) {
@@ -260,16 +256,16 @@ public class MusicDirectory implements Serializable {
                 MediaMetadataRetriever metadata = new MediaMetadataRetriever();
                 metadata.setDataSource(file.getAbsolutePath());
                 String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
-                if(discNumber == null) {
+                if (discNumber == null) {
                     discNumber = "1/1";
                 }
                 int slashIndex = discNumber.indexOf("/");
-                if(slashIndex > 0) {
+                if (slashIndex > 0) {
                     discNumber = discNumber.substring(0, slashIndex);
                 }
                 try {
                     setDiscNumber(Integer.parseInt(discNumber));
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Log.w(TAG, "Non numbers in disc field!");
                 }
                 String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
@@ -277,22 +273,23 @@ public class MusicDirectory implements Serializable {
                 String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 setDuration(Integer.parseInt(length) / 1000);
                 String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-                if(artist != null) {
+                if (artist != null) {
                     setArtist(artist);
                 }
                 String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-                if(album != null) {
+                if (album != null) {
                     setAlbum(album);
                 }
                 metadata.release();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver", e);
             }
         }
+
         public void rebaseTitleOffPath() {
             try {
                 String filename = getPath();
-                if(filename == null) {
+                if (filename == null) {
                     return;
                 }
 
@@ -304,13 +301,13 @@ public class MusicDirectory implements Serializable {
                     }
 
                     index = filename.lastIndexOf('.');
-                    if(index != -1) {
+                    if (index != -1) {
                         filename = filename.substring(0, index);
                     }
 
                     setTitle(filename);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to update title based off of path", e);
             }
         }
@@ -329,14 +326,6 @@ public class MusicDirectory implements Serializable {
 
         public void setParent(String parent) {
             this.parent = parent;
-        }
-
-        public String getGrandParent() {
-            return grandParent;
-        }
-
-        public void setGrandParent(String grandParent) {
-            this.grandParent = grandParent;
         }
 
         public String getAlbumId() {
@@ -379,16 +368,16 @@ public class MusicDirectory implements Serializable {
             return getParent() != null || getArtist() != null;
         }
 
+        public void setAlbum(String album) {
+            this.album = album;
+        }
+
         public String getAlbumDisplay() {
-            if(album != null && title.startsWith("Disc ")) {
+            if (album != null && title.startsWith("Disc ")) {
                 return album;
             } else {
                 return title;
             }
-        }
-
-        public void setAlbum(String album) {
-            this.album = album;
         }
 
         public String getArtist() {
@@ -455,14 +444,6 @@ public class MusicDirectory implements Serializable {
             this.transcodedSuffix = transcodedSuffix;
         }
 
-        public Long getSize() {
-            return size;
-        }
-
-        public void setSize(Long size) {
-            this.size = size;
-        }
-
         public Integer getDuration() {
             return duration;
         }
@@ -506,9 +487,11 @@ public class MusicDirectory implements Serializable {
         public int getType() {
             return type;
         }
+
         public void setType(int type) {
             this.type = type;
         }
+
         public boolean isSong() {
             return type == TYPE_SONG;
         }
@@ -519,18 +502,6 @@ public class MusicDirectory implements Serializable {
 
         public void setCloseness(int closeness) {
             this.closeness = closeness;
-        }
-
-        public boolean isOnlineId(Context context) {
-            try {
-                String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-                return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
-            } catch(Exception e) {
-                Log.w(TAG, "Failed to check online id validity");
-
-                // Err on the side of default functionality
-                return true;
-            }
         }
 
         @Override
@@ -558,8 +529,8 @@ public class MusicDirectory implements Serializable {
     }
 
     public static class EntryComparator implements Comparator<Entry> {
-        private boolean byYear;
-        private Collator collator;
+        private final boolean byYear;
+        private final Collator collator;
 
         public EntryComparator(boolean byYear) {
             this.byYear = byYear;
@@ -567,20 +538,28 @@ public class MusicDirectory implements Serializable {
             this.collator.setStrength(Collator.PRIMARY);
         }
 
+        public static void sort(List<Entry> entries, boolean byYear) {
+            try {
+                Collections.sort(entries, new EntryComparator(byYear));
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to sort MusicDirectory");
+            }
+        }
+
         public int compare(Entry lhs, Entry rhs) {
-            if(lhs.isDirectory() && !rhs.isDirectory()) {
+            if (lhs.isDirectory() && !rhs.isDirectory()) {
                 return -1;
-            } else if(!lhs.isDirectory() && rhs.isDirectory()) {
+            } else if (!lhs.isDirectory() && rhs.isDirectory()) {
                 return 1;
-            } else if(lhs.isDirectory() && rhs.isDirectory()) {
-                if(byYear) {
+            } else if (lhs.isDirectory() && rhs.isDirectory()) {
+                if (byYear) {
                     Integer lhsYear = lhs.getYear();
                     Integer rhsYear = rhs.getYear();
-                    if(lhsYear != null && rhsYear != null) {
+                    if (lhsYear != null && rhsYear != null) {
                         return lhsYear.compareTo(rhsYear);
-                    } else if(lhsYear != null) {
+                    } else if (lhsYear != null) {
                         return -1;
-                    } else if(rhsYear != null) {
+                    } else if (rhsYear != null) {
                         return 1;
                     }
                 }
@@ -591,36 +570,25 @@ public class MusicDirectory implements Serializable {
             Integer lhsDisc = lhs.getDiscNumber();
             Integer rhsDisc = rhs.getDiscNumber();
 
-            if(lhsDisc != null && rhsDisc != null) {
-                if(lhsDisc < rhsDisc) {
+            if (lhsDisc != null && rhsDisc != null) {
+                if (lhsDisc < rhsDisc) {
                     return -1;
-                } else if(lhsDisc > rhsDisc) {
+                } else if (lhsDisc > rhsDisc) {
                     return 1;
                 }
             }
 
             Integer lhsTrack = lhs.getTrack();
             Integer rhsTrack = rhs.getTrack();
-            if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
+            if (lhsTrack != null && rhsTrack != null && !Objects.equals(lhsTrack, rhsTrack)) {
                 return lhsTrack.compareTo(rhsTrack);
-            } else if(lhsTrack != null) {
+            } else if (lhsTrack != null) {
                 return -1;
-            } else if(rhsTrack != null) {
+            } else if (rhsTrack != null) {
                 return 1;
             }
 
             return collator.compare(lhs.getTitle(), rhs.getTitle());
-        }
-
-        public static void sort(List<Entry> entries) {
-            sort(entries, true);
-        }
-        public static void sort(List<Entry> entries, boolean byYear) {
-            try {
-                Collections.sort(entries, new EntryComparator(byYear));
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to sort MusicDirectory");
-            }
         }
     }
 }

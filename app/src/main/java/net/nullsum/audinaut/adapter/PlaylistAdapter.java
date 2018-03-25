@@ -16,20 +16,19 @@ package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 
-import java.util.List;
-
-import android.view.ViewGroup;
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.util.ImageLoader;
 import net.nullsum.audinaut.view.FastScroller;
 import net.nullsum.audinaut.view.PlaylistView;
 import net.nullsum.audinaut.view.UpdateView;
 
-public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
-    public static int VIEW_TYPE_PLAYLIST = 1;
+import java.util.List;
 
-    private ImageLoader imageLoader;
-    private boolean largeCell;
+public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
+    private static final int VIEW_TYPE_PLAYLIST = 1;
+
+    private final ImageLoader imageLoader;
+    private final boolean largeCell;
 
     public PlaylistAdapter(Context context, List<Playlist> playlists, ImageLoader imageLoader, boolean largeCell, OnItemClickedListener listener) {
         super(context, playlists);
@@ -37,15 +36,9 @@ public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScr
         this.largeCell = largeCell;
         this.onItemClickedListener = listener;
     }
-    public PlaylistAdapter(Context context, List<String> headers, List<List<Playlist>> sections, ImageLoader imageLoader, boolean largeCell, OnItemClickedListener listener) {
-        super(context, headers, sections);
-        this.imageLoader = imageLoader;
-        this.largeCell = largeCell;
-        this.onItemClickedListener = listener;
-    }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         return new UpdateView.UpdateViewHolder(new PlaylistView(context, imageLoader, largeCell));
     }
 
@@ -63,7 +56,7 @@ public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScr
     @Override
     public String getTextToShowInBubble(int position) {
         Object item = getItemForPosition(position);
-        if(item instanceof Playlist) {
+        if (item instanceof Playlist) {
             return getNameIndex(((Playlist) item).getName());
         } else {
             return null;

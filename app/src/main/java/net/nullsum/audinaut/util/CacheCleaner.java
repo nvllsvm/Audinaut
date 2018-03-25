@@ -1,22 +1,21 @@
 package net.nullsum.audinaut.util;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import android.content.Context;
-import android.util.Log;
 import android.os.StatFs;
+import android.util.Log;
+
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.service.DownloadFile;
 import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.service.MediaStoreService;
 
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Sindre Mehus
@@ -41,9 +40,11 @@ public class CacheCleaner {
     public void clean() {
         new BackgroundCleanup(context).execute();
     }
+
     public void cleanSpace() {
         new BackgroundSpaceCleanup(context).execute();
     }
+
     public void cleanPlaylists(List<Playlist> playlists) {
         new BackgroundPlaylistsCleanup(context, playlists).execute();
     }
@@ -59,7 +60,7 @@ public class CacheCleaner {
     }
 
     private long getMinimumDelete(List<File> files, List<File> pinned) {
-        if(files.size() == 0) {
+        if (files.size() == 0) {
             return 0L;
         }
 
@@ -75,8 +76,8 @@ public class CacheCleaner {
 
         // Ensure that file system is not more than 95% full.
         StatFs stat = new StatFs(files.get(0).getPath());
-        long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
-        long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+        long bytesTotalFs = stat.getBlockCountLong() * stat.getBlockSizeLong();
+        long bytesAvailableFs = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
         long bytesUsedFs = bytesTotalFs - bytesAvailableFs;
         long minFsAvailability = bytesTotalFs - MIN_FREE_SPACE;
 
@@ -99,7 +100,7 @@ public class CacheCleaner {
 
         long bytesDeleted = 0L;
         for (File file : files) {
-            if(!deletePartials && bytesDeleted > bytesToDelete) break;
+            if (!deletePartials && bytesDeleted > bytesToDelete) break;
 
             if (bytesToDelete > bytesDeleted || (deletePartials && (file.getName().endsWith(".partial") || file.getName().contains(".partial.")))) {
                 if (!undeletable.contains(file) && !file.getName().equals(Constants.ALBUM_ART_FILE)) {
@@ -134,22 +135,19 @@ public class CacheCleaner {
     }
 
     private void sortByAscendingModificationTime(List<File> files) {
-        Collections.sort(files, new Comparator<File>() {
-            @Override
-            public int compare(File a, File b) {
-                if (a.lastModified() < b.lastModified()) {
-                    return -1;
-                }
-                if (a.lastModified() > b.lastModified()) {
-                    return 1;
-                }
-                return 0;
+        Collections.sort(files, (a, b) -> {
+            if (a.lastModified() < b.lastModified()) {
+                return -1;
             }
+            if (a.lastModified() > b.lastModified()) {
+                return 1;
+            }
+            return 0;
         });
     }
 
     private Set<File> findUndeletableFiles() {
-        Set<File> undeletable = new HashSet<File>(5);
+        Set<File> undeletable = new HashSet<>(5);
 
         for (DownloadFile downloadFile : downloadService.getDownloads()) {
             undeletable.add(downloadFile.getPartialFile());
@@ -163,30 +161,30 @@ public class CacheCleaner {
     private void cleanupCoverArt(Context context) {
         File dir = FileUtil.getAlbumArtDirectory(context);
 
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         long bytesUsed = 0L;
-        for(File file: dir.listFiles()) {
-            if(file.isFile()) {
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
                 files.add(file);
                 bytesUsed += file.length();
             }
         }
 
         // Don't waste time sorting if under limit already
-        if(bytesUsed < MAX_COVER_ART_SPACE) {
+        if (bytesUsed < MAX_COVER_ART_SPACE) {
             return;
         }
 
         sortByAscendingModificationTime(files);
         long bytesDeleted = 0L;
-        for(File file: files) {
+        for (File file : files) {
             // End as soon as the space used is below the threshold
-            if(bytesUsed < MAX_COVER_ART_SPACE) {
+            if (bytesUsed < MAX_COVER_ART_SPACE) {
                 break;
             }
 
             long bytes = file.length();
-            if(file.delete()) {
+            if (file.delete()) {
                 bytesUsed -= bytes;
                 bytesDeleted += bytes;
             }
@@ -208,9 +206,9 @@ public class CacheCleaner {
             }
 
             try {
-                List<File> files = new ArrayList<File>();
-                List<File> pinned = new ArrayList<File>();
-                List<File> dirs = new ArrayList<File>();
+                List<File> files = new ArrayList<>();
+                List<File> pinned = new ArrayList<>();
+                List<File> dirs = new ArrayList<>();
 
                 findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
                 sortByAscendingModificationTime(files);
@@ -243,13 +241,13 @@ public class CacheCleaner {
             }
 
             try {
-                List<File> files = new ArrayList<File>();
-                List<File> pinned = new ArrayList<File>();
-                List<File> dirs = new ArrayList<File>();
+                List<File> files = new ArrayList<>();
+                List<File> pinned = new ArrayList<>();
+                List<File> dirs = new ArrayList<>();
                 findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 
                 long bytesToDelete = getMinimumDelete(files, pinned);
-                if(bytesToDelete > 0L) {
+                if (bytesToDelete > 0L) {
                     sortByAscendingModificationTime(files);
                     Set<File> undeletable = findUndeletableFiles();
                     deleteFiles(files, undeletable, bytesToDelete, false);
@@ -279,7 +277,7 @@ public class CacheCleaner {
                     playlistFiles.remove(FileUtil.getPlaylistFile(context, server, playlist.getName()));
                 }
 
-                for(File playlist : playlistFiles) {
+                for (File playlist : playlistFiles) {
                     playlist.delete();
                 }
             } catch (RuntimeException x) {

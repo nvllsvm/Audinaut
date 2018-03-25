@@ -16,7 +16,12 @@
 package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
-import android.util.Log;
+
+import net.nullsum.audinaut.domain.MusicFolder;
+import net.nullsum.audinaut.domain.User;
+import net.nullsum.audinaut.domain.User.Setting;
+import net.nullsum.audinaut.service.MusicService;
+import net.nullsum.audinaut.service.MusicServiceFactory;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -24,24 +29,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.nullsum.audinaut.domain.MusicFolder;
-import net.nullsum.audinaut.domain.User;
-import net.nullsum.audinaut.domain.User.MusicFolderSetting;
-import net.nullsum.audinaut.domain.User.Setting;
-import net.nullsum.audinaut.service.MusicService;
-import net.nullsum.audinaut.service.MusicServiceFactory;
-import net.nullsum.audinaut.util.ProgressListener;
-
 public class UserParser extends AbstractParser {
-    private static final String TAG = UserParser.class.getSimpleName();
 
     public UserParser(Context context, int instance) {
         super(context, instance);
     }
 
-    public List<User> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public List<User> parse(InputStream inputStream) throws Exception {
         init(inputStream);
-        List<User> result = new ArrayList<User>();
+        List<User> result = new ArrayList<>();
         List<MusicFolder> musicFolders = null;
         User user = null;
         int eventType;
@@ -54,9 +50,7 @@ public class UserParser extends AbstractParser {
                 if ("user".equals(tagName)) {
                     user = new User();
 
-                    user.setUsername(get("username"));
-                    user.setEmail(get("email"));
-                    for(String role: User.ROLES) {
+                    for (String role : User.ROLES) {
                         parseSetting(user, role);
                     }
 
@@ -64,22 +58,22 @@ public class UserParser extends AbstractParser {
                 } else if ("error".equals(tagName)) {
                     handleError();
                 }
-            } else if(eventType == XmlPullParser.TEXT) {
-                if("folder".equals(tagName)) {
+            } else if (eventType == XmlPullParser.TEXT) {
+                if ("folder".equals(tagName)) {
                     String id = getText();
-                    if(musicFolders == null) {
+                    if (musicFolders == null) {
                         musicFolders = getMusicFolders();
                     }
 
-                    if(user != null) {
-                        if(user.getMusicFolderSettings() == null) {
+                    if (user != null) {
+                        if (user.getMusicFolderSettings() == null) {
                             for (MusicFolder musicFolder : musicFolders) {
                                 user.addMusicFolder(musicFolder);
                             }
                         }
 
-                        for(Setting musicFolder: user.getMusicFolderSettings()) {
-                            if(musicFolder.getName().equals(id)) {
+                        for (Setting musicFolder : user.getMusicFolderSettings()) {
+                            if (musicFolder.getName().equals(id)) {
                                 musicFolder.setValue(true);
                                 break;
                             }
@@ -94,14 +88,14 @@ public class UserParser extends AbstractParser {
         return result;
     }
 
-    private List<MusicFolder> getMusicFolders() throws Exception{
+    private List<MusicFolder> getMusicFolders() throws Exception {
         MusicService musicService = MusicServiceFactory.getMusicService(context);
         return musicService.getMusicFolders(false, context, null);
     }
 
     private void parseSetting(User user, String name) {
         String value = get(name);
-        if(value != null) {
+        if (value != null) {
             user.addSetting(name, "true".equals(value));
         }
     }

@@ -23,13 +23,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
-import net.nullsum.audinaut.fragments.SubsonicFragment;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.Util;
-import net.nullsum.audinaut.provider.AudinautSearchProvider;
 
 /**
  * Receives search queries and forwards to the SearchFragment.
@@ -38,8 +34,6 @@ import net.nullsum.audinaut.provider.AudinautSearchProvider;
  */
 public class QueryReceiverActivity extends Activity {
 
-    private static final String TAG = QueryReceiverActivity.class.getSimpleName();
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +41,10 @@ public class QueryReceiverActivity extends Activity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             doSearch();
-        } else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             showResult(intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
         }
         finish();
-        Util.disablePendingTransition(this);
     }
 
     private void doSearch() {
@@ -63,15 +56,16 @@ public class QueryReceiverActivity extends Activity {
             Util.startActivityWithoutTransition(QueryReceiverActivity.this, intent);
         }
     }
+
     private void showResult(String albumId, String name) {
         if (albumId != null) {
             Intent intent = new Intent(this, SubsonicFragmentActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
-            if(albumId.indexOf("ar-") == 0) {
+            if (albumId.indexOf("ar-") == 0) {
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
                 albumId = albumId.replace("ar-", "");
-            } else if(albumId.indexOf("so-") == 0) {
+            } else if (albumId.indexOf("so-") == 0) {
                 intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
                 albumId = albumId.replace("so-", "");
             }

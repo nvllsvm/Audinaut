@@ -2,7 +2,6 @@ package net.nullsum.audinaut.util;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 
 import net.nullsum.audinaut.activity.SubsonicActivity;
 
@@ -13,14 +12,15 @@ import net.nullsum.audinaut.activity.SubsonicActivity;
 public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
     private final Activity tabActivity;
-    private ProgressDialog loading;
     private final boolean cancellable;
+    private ProgressDialog loading;
 
     public LoadingTask(Activity activity) {
         super(activity);
         tabActivity = activity;
         this.cancellable = true;
     }
+
     public LoadingTask(Activity activity, final boolean cancellable) {
         super(activity);
         tabActivity = activity;
@@ -29,16 +29,12 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
     @Override
     public void execute() {
-        loading = ProgressDialog.show(tabActivity, "", "Loading. Please Wait...", true, cancellable, new DialogInterface.OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-                cancel();
-            }
-        });
+        loading = ProgressDialog.show(tabActivity, "", "Loading. Please Wait...", true, cancellable, dialog -> cancel());
 
         queue.offer(task = new Task() {
             @Override
             public void onDone(T result) {
-                if(loading.isShowing()) {
+                if (loading.isShowing()) {
                     loading.dismiss();
                 }
                 done(result);
@@ -46,7 +42,7 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
             @Override
             public void onError(Throwable t) {
-                if(loading.isShowing()) {
+                if (loading.isShowing()) {
                     loading.dismiss();
                 }
                 error(t);
@@ -61,13 +57,8 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
     @Override
     public void updateProgress(final String message) {
-        if(!cancelled.get()) {
-            getHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                        loading.setMessage(message);
-                }
-            });
+        if (!cancelled.get()) {
+            getHandler().post(() -> loading.setMessage(message));
         }
     }
 }

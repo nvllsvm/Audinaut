@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:drawSelectorOnTop="false"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:paddingTop="6dp"
     android:paddingLeft="12dp"
-    android:paddingRight="12dp"/>
+    android:paddingRight="12dp"
+    android:paddingTop="6dp"
+    android:scrollbarAlwaysDrawVerticalTrack="true" />

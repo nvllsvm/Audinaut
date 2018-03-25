@@ -21,24 +21,25 @@ package net.nullsum.audinaut.updates;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Scott
  */
 public class Updater {
-    protected String TAG = Updater.class.getSimpleName();
-    protected int version;
-    protected Context context;
+    private final int version;
+    String TAG = Updater.class.getSimpleName();
+    private Context context;
 
     public Updater(int version) {
         // 5.2 should show as 520 instead of 52
-        if(version < 100) {
+        if (version < 100) {
             version *= 10;
         }
         this.version = version;
@@ -46,32 +47,39 @@ public class Updater {
 
     public void checkUpdates(Context context) {
         this.context = context;
-        List<Updater> updaters = new ArrayList<Updater>();
+        List<Updater> updaters = new ArrayList<>();
         updaters.add(new UpdaterSongPress());
 
         SharedPreferences prefs = Util.getPreferences(context);
         int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
-        if(lastVersion == 0) {
+        if (lastVersion == 0) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(Constants.LAST_VERSION, version);
             editor.apply();
-        }
-        else if(version > lastVersion) {
+        } else if (version > lastVersion) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(Constants.LAST_VERSION, version);
             editor.apply();
 
             Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
-            for(Updater updater: updaters) {
-                if(updater.shouldUpdate(lastVersion)) {
+            for (Updater updater : updaters) {
+                if (updater.shouldUpdate(lastVersion)) {
                     new BackgroundUpdate(context, updater).execute();
                 }
             }
         }
     }
 
-    public String getName() {
+    private String getName() {
         return this.TAG;
+    }
+
+    private boolean shouldUpdate(int version) {
+        return this.version > version;
+    }
+
+    void update(Context context) {
+
     }
 
     private class BackgroundUpdate extends SilentBackgroundTask<Void> {
@@ -86,17 +94,10 @@ public class Updater {
         protected Void doInBackground() {
             try {
                 updater.update(context);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to run update for " + updater.getName());
             }
             return null;
         }
-    }
-
-    public boolean shouldUpdate(int version) {
-        return this.version > version;
-    }
-    public void update(Context context) {
-
     }
 }

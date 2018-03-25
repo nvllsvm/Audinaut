@@ -3,7 +3,7 @@
     android:id="@+id/statusbar"
     android:layout_width="fill_parent"
     android:layout_height="128dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/notification_image"
@@ -16,7 +16,7 @@
         android:layout_height="fill_parent"
         android:layout_weight="0.0"
         android:orientation="vertical"
-        android:paddingLeft="11.0dip" >
+        android:paddingLeft="11.0dip">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -28,20 +28,20 @@
                 style="@style/NotificationText.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="left|center_vertical"
+                android:layout_weight="1"
                 android:ellipsize="marquee"
                 android:focusable="true"
-                android:maxLines="1" />
+                android:singleLine="true" />
 
             <ImageButton
                 android:id="@+id/notification_close"
+                style="@style/NotificationButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/notification_close"
-                style="@style/NotificationButton"
                 android:layout_gravity="right"
-                android:visibility="invisible"/>
+                android:src="@drawable/notification_close"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <TextView
@@ -51,8 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:ellipsize="end"
-            android:scrollHorizontally="true"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:scrollHorizontally="true" />
 
         <TextView
             android:id="@+id/notification_album"
@@ -61,22 +61,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:ellipsize="end"
-            android:scrollHorizontally="true"
             android:maxLines="1"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp"
+            android:scrollHorizontally="true" />
 
         <ImageView
             style="@style/NotificationDivider"
             android:layout_width="fill_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="1dp" />
 
         <LinearLayout
+            style="@style/NotificationLayoutDivider"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:showDividers="middle"
-            style="@style/NotificationLayoutDivider">
+            android:showDividers="middle">
 
             <ImageButton
                 android:id="@+id/control_previous"

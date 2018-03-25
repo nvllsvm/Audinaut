@@ -18,21 +18,19 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.nullsum.audinaut.R;
 
 public class BasicListView extends UpdateView<String> {
-    private TextView titleView;
+    private final TextView titleView;
 
     public BasicListView(Context context) {
         super(context, false);
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.item_name);
-        moreButton = (ImageView) findViewById(R.id.item_more);
+        titleView = findViewById(R.id.item_name);
+        moreButton = findViewById(R.id.item_more);
         moreButton.setVisibility(View.GONE);
     }
 

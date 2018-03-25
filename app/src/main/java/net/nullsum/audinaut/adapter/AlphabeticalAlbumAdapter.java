@@ -17,11 +17,11 @@ package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
 
-import java.util.List;
-
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.util.ImageLoader;
 import net.nullsum.audinaut.view.FastScroller;
+
+import java.util.List;
 
 public class AlphabeticalAlbumAdapter extends EntryInfiniteGridAdapter implements FastScroller.BubbleTextGetter {
     public AlphabeticalAlbumAdapter(Context context, List<MusicDirectory.Entry> entries, ImageLoader imageLoader, boolean largeCell) {
@@ -31,8 +31,8 @@ public class AlphabeticalAlbumAdapter extends EntryInfiniteGridAdapter implement
     @Override
     public String getTextToShowInBubble(int position) {
         // Make sure that we are not trying to get an item for the loading placeholder
-        if(position >= sections.get(0).size()) {
-            if(sections.get(0).size() > 0) {
+        if (position >= sections.get(0).size()) {
+            if (sections.get(0).size() > 0) {
                 return getTextToShowInBubble(position - 1);
             } else {
                 return "*";

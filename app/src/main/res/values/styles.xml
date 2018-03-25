@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BasicButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
+
     <style name="NotificationButtonBase">
         <item name="android:background">?android:selectableItemBackground</item>
         <item name="android:layout_width">46dip</item>
@@ -11,8 +13,8 @@
         <item name="android:scaleType">fitCenter</item>
         <item name="android:padding">2dip</item>
     </style>
-    <style name="NotificationButton" parent="NotificationButtonBase">
-    </style>
+
+    <style name="NotificationButton" parent="NotificationButtonBase" />
 
     <style name="NotificationButton.ExpandedBase">
         <item name="android:background">?android:selectableItemBackground</item>
@@ -27,12 +29,14 @@
         <item name="android:padding">10dip</item>
     </style>
 
-    <style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"></style>
-    <style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent"></style>
+    <style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title" />
+
+    <style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent" />
 
     <style name="NotificationLayoutDivider">
         <item name="android:divider">?android:listDivider</item>
     </style>
+
     <style name="NotificationDivider">
         <item name="android:background">?android:dividerHorizontal</item>
     </style>
@@ -73,23 +77,4 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="DownloadActionButton" parent="@style/BasicButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
-        <item name="android:paddingTop">4dip</item>
-        <item name="android:paddingBottom">4dip</item>
-        <item name="android:paddingRight">4dip</item>
-        <item name="android:paddingLeft">4dip</item>
-    </style>
-
-    <style name="DownloadActionImageButton" parent="@style/BasicButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">8dip</item>
-        <item name="android:paddingBottom">8dip</item>
-        <item name="android:paddingRight">16dip</item>
-        <item name="android:paddingLeft">16dip</item>
-    </style>
 </resources>

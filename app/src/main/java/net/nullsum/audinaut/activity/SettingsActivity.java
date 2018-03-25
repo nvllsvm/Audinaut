@@ -18,7 +18,6 @@
  */
 package net.nullsum.audinaut.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
@@ -28,8 +27,6 @@ import net.nullsum.audinaut.fragments.SettingsFragment;
 import net.nullsum.audinaut.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
-    private static final String TAG = SettingsActivity.class.getSimpleName();
-    private PreferenceCompatFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +35,7 @@ public class SettingsActivity extends SubsonicActivity {
         setContentView(R.layout.settings_activity);
 
         if (savedInstanceState == null) {
-            fragment = new SettingsFragment();
+            PreferenceCompatFragment fragment = new SettingsFragment();
             Bundle args = new Bundle();
             args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
 
@@ -50,7 +47,7 @@ public class SettingsActivity extends SubsonicActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
         }
 
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
     }
 }

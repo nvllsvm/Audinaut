@@ -18,22 +18,16 @@
 */
 package net.nullsum.audinaut.audiofx;
 
-import android.content.Context;
 import android.media.audiofx.LoudnessEnhancer;
 import android.util.Log;
 
 public class LoudnessEnhancerController {
     private static final String TAG = LoudnessEnhancerController.class.getSimpleName();
 
-    private final Context context;
     private LoudnessEnhancer enhancer;
-    private boolean released = false;
-    private int audioSessionId = 0;
 
-    public LoudnessEnhancerController(Context context, int audioSessionId) {
-        this.context = context;
+    public LoudnessEnhancerController(int audioSessionId) {
         try {
-            this.audioSessionId = audioSessionId;
             enhancer = new LoudnessEnhancer(audioSessionId);
         } catch (Throwable x) {
             Log.w(TAG, "Failed to create enhancer", x);
@@ -47,7 +41,7 @@ public class LoudnessEnhancerController {
     public boolean isEnabled() {
         try {
             return isAvailable() && enhancer.getEnabled();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -55,6 +49,7 @@ public class LoudnessEnhancerController {
     public void enable() {
         enhancer.setEnabled(true);
     }
+
     public void disable() {
         enhancer.setEnabled(false);
     }
@@ -62,6 +57,7 @@ public class LoudnessEnhancerController {
     public float getGain() {
         return enhancer.getTargetGain();
     }
+
     public void setGain(int gain) {
         enhancer.setTargetGain(gain);
     }
@@ -69,7 +65,6 @@ public class LoudnessEnhancerController {
     public void release() {
         if (isAvailable()) {
             enhancer.release();
-            released = true;
         }
     }
 

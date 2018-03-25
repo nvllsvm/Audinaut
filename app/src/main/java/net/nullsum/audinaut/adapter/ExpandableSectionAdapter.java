@@ -16,51 +16,34 @@
 package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.util.DrawableTint;
 import net.nullsum.audinaut.view.BasicHeaderView;
 import net.nullsum.audinaut.view.UpdateView;
 
-public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
-    private static final String TAG = ExpandableSectionAdapter.class.getSimpleName();
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
     private static final int DEFAULT_VISIBLE = 4;
     private static final int EXPAND_TOGGLE = R.attr.select_server;
     private static final int COLLAPSE_TOGGLE = R.attr.select_tabs;
 
-    protected List<Integer> sectionsDefaultVisible;
-    protected List<List<T>> sectionsExtras;
-    protected int expandToggleRes;
-    protected int collapseToggleRes;
+    private List<List<T>> sectionsExtras;
 
-    protected ExpandableSectionAdapter() {}
-    public ExpandableSectionAdapter(Context context, List<T> section) {
-        List<List<T>> sections = new ArrayList<>();
-        sections.add(section);
+    ExpandableSectionAdapter() {
+    }
 
-        init(context, Arrays.asList("Section"), sections, Arrays.asList((Integer) null));
-    }
-    public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
-        init(context, headers, sections, null);
-    }
-    public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections, List<Integer> sectionsDefaultVisible) {
-        init(context, headers, sections, sectionsDefaultVisible);
-    }
-    protected void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
+    void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
         this.context = context;
         this.headers = headers;
-        this.sectionsDefaultVisible = sectionsDefaultVisible;
-        if(sectionsDefaultVisible == null) {
+        if (sectionsDefaultVisible == null) {
             sectionsDefaultVisible = new ArrayList<>(fullSections.size());
-            for(int i = 0; i < fullSections.size(); i++) {
+            for (int i = 0; i < fullSections.size(); i++) {
                 sectionsDefaultVisible.add(DEFAULT_VISIBLE);
             }
         }
@@ -68,11 +51,11 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
         this.sections = new ArrayList<>();
         this.sectionsExtras = new ArrayList<>();
         int i = 0;
-        for(List<T> fullSection: fullSections) {
+        for (List<T> fullSection : fullSections) {
             List<T> visibleSection = new ArrayList<>();
 
             Integer defaultVisible = sectionsDefaultVisible.get(i);
-            if(defaultVisible == null || defaultVisible >= fullSection.size()) {
+            if (defaultVisible == null || defaultVisible >= fullSection.size()) {
                 visibleSection.addAll(fullSection);
                 this.sectionsExtras.add(null);
             } else {
@@ -83,9 +66,6 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 
             i++;
         }
-
-        expandToggleRes = DrawableTint.getDrawableRes(context, EXPAND_TOGGLE);
-        collapseToggleRes = DrawableTint.getDrawableRes(context, COLLAPSE_TOGGLE);
     }
 
     @Override
@@ -96,39 +76,36 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
     @Override
     public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, final int sectionIndex) {
         UpdateView view = holder.getUpdateView();
-        ImageView toggleSelectionView = (ImageView) view.findViewById(R.id.item_select);
+        ImageView toggleSelectionView = view.findViewById(R.id.item_select);
 
         List<T> visibleSelection = sections.get(sectionIndex);
         List<T> sectionExtras = sectionsExtras.get(sectionIndex);
 
-        if(sectionExtras != null && !sectionExtras.isEmpty()) {
+        if (sectionExtras != null && !sectionExtras.isEmpty()) {
             toggleSelectionView.setVisibility(View.VISIBLE);
-            toggleSelectionView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    List<T> visibleSelection = sections.get(sectionIndex);
-                    List<T> sectionExtras = sectionsExtras.get(sectionIndex);
+            toggleSelectionView.setOnClickListener(v -> {
+                List<T> visibleSelection1 = sections.get(sectionIndex);
+                List<T> sectionExtras1 = sectionsExtras.get(sectionIndex);
 
-                    // Update icon
-                    int selectToggleAttr;
-                    if (!visibleSelection.contains(sectionExtras.get(0))) {
-                        selectToggleAttr = COLLAPSE_TOGGLE;
+                // Update icon
+                int selectToggleAttr;
+                if (!visibleSelection1.contains(sectionExtras1.get(0))) {
+                    selectToggleAttr = COLLAPSE_TOGGLE;
 
-                        // Update how many are displayed
-                        int lastIndex = getItemPosition(visibleSelection.get(visibleSelection.size() - 1));
-                        visibleSelection.addAll(sectionExtras);
-                        notifyItemRangeInserted(lastIndex, sectionExtras.size());
-                    } else {
-                        selectToggleAttr = EXPAND_TOGGLE;
+                    // Update how many are displayed
+                    int lastIndex = getItemPosition(visibleSelection1.get(visibleSelection1.size() - 1));
+                    visibleSelection1.addAll(sectionExtras1);
+                    notifyItemRangeInserted(lastIndex, sectionExtras1.size());
+                } else {
+                    selectToggleAttr = EXPAND_TOGGLE;
 
-                        // Update how many are displayed
-                        visibleSelection.removeAll(sectionExtras);
-                        int lastIndex = getItemPosition(visibleSelection.get(visibleSelection.size() - 1));
-                        notifyItemRangeRemoved(lastIndex, sectionExtras.size());
-                    }
-
-                    ((ImageView) v).setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
+                    // Update how many are displayed
+                    visibleSelection1.removeAll(sectionExtras1);
+                    int lastIndex = getItemPosition(visibleSelection1.get(visibleSelection1.size() - 1));
+                    notifyItemRangeRemoved(lastIndex, sectionExtras1.size());
                 }
+
+                ((ImageView) v).setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
             });
 
             int selectToggleAttr;
@@ -143,7 +120,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
             toggleSelectionView.setVisibility(View.GONE);
         }
 
-        if(view != null) {
+        if (view != null) {
             view.setObject(header);
         }
     }

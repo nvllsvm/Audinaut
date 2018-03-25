@@ -21,18 +21,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import net.nullsum.audinaut.R;
+import net.nullsum.audinaut.adapter.GenreAdapter;
 import net.nullsum.audinaut.adapter.SectionAdapter;
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.service.MusicService;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.ProgressListener;
-import net.nullsum.audinaut.adapter.GenreAdapter;
 import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.List;
 
 public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
-    private static final String TAG = SelectGenreFragment.class.getSimpleName();
 
     @Override
     public int getOptionsMenu() {
@@ -68,7 +67,8 @@ public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
     }
 
     @Override
-    public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Genre> updateView, Genre item) {}
+    public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Genre> updateView, Genre item) {
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Genre> updateView, Genre item) {

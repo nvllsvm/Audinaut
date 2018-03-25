@@ -24,23 +24,18 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
-import net.nullsum.audinaut.fragments.SubsonicFragment;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.Util;
-import net.nullsum.audinaut.provider.AudinautSearchProvider;
 
 /**
  * Receives voice search queries and forwards to the SearchFragment.
- *
+ * <p>
  * http://android-developers.blogspot.com/2010/09/supporting-new-music-voice-action.html
  *
  * @author Sindre Mehus
  */
 public class VoiceQueryReceiverActivity extends Activity {
-    private static final String TAG = VoiceQueryReceiverActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +52,5 @@ public class VoiceQueryReceiverActivity extends Activity {
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
         }
         finish();
-        Util.disablePendingTransition(this);
     }
 }

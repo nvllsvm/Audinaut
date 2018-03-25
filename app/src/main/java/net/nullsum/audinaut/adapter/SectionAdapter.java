@@ -32,10 +32,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupMenu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
 import net.nullsum.audinaut.util.Constants;
@@ -45,129 +41,103 @@ import net.nullsum.audinaut.view.BasicHeaderView;
 import net.nullsum.audinaut.view.UpdateView;
 import net.nullsum.audinaut.view.UpdateView.UpdateViewHolder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewHolder<T>> {
-    private static String TAG = SectionAdapter.class.getSimpleName();
-    public static int VIEW_TYPE_HEADER = 0;
-    public static String[] ignoredArticles;
+    public static final int VIEW_TYPE_HEADER = 0;
+    private static final String TAG = SectionAdapter.class.getSimpleName();
+    private static String[] ignoredArticles;
+    private final List<T> selected = new ArrayList<>();
+    private final List<UpdateView> selectedViews = new ArrayList<>();
+    Context context;
+    List<String> headers;
+    List<List<T>> sections;
+    boolean singleSectionHeader;
+    OnItemClickedListener<T> onItemClickedListener;
+    boolean checkable = false;
+    private ActionMode currentActionMode;
 
-    protected Context context;
-    protected List<String> headers;
-    protected List<List<T>> sections;
-    protected boolean singleSectionHeader;
-    protected OnItemClickedListener<T> onItemClickedListener;
-    protected List<T> selected = new ArrayList<>();
-    protected List<UpdateView> selectedViews = new ArrayList<>();
-    protected ActionMode currentActionMode;
-    protected boolean checkable = false;
-
-    protected SectionAdapter() {}
-    public SectionAdapter(Context context, List<T> section) {
-        this(context, section, false);
+    SectionAdapter() {
     }
-    public SectionAdapter(Context context, List<T> section, boolean singleSectionHeader) {
+
+    SectionAdapter(Context context, List<T> section) {
         this.context = context;
-        this.headers = Arrays.asList("Section");
+        this.headers = Collections.singletonList("Section");
         this.sections = new ArrayList<>();
         this.sections.add(section);
-        this.singleSectionHeader = singleSectionHeader;
+        this.singleSectionHeader = false;
     }
-    public SectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
-        this(context, headers, sections, true);
-    }
-    public SectionAdapter(Context context, List<String> headers, List<List<T>> sections, boolean singleSectionHeader){
+
+    SectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
         this.context = context;
         this.headers = headers;
         this.sections = sections;
-        this.singleSectionHeader = singleSectionHeader;
-    }
-
-    public void replaceExistingData(List<T> section) {
-        this.sections = new ArrayList<>();
-        this.sections.add(section);
-        notifyDataSetChanged();
-    }
-    public void replaceExistingData(List<String> headers, List<List<T>> sections) {
-        this.headers = headers;
-        this.sections = sections;
-        notifyDataSetChanged();
+        this.singleSectionHeader = true;
     }
 
     @Override
     public UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_HEADER) {
+        if (viewType == VIEW_TYPE_HEADER) {
             return onCreateHeaderHolder(parent);
         } else {
-            final UpdateViewHolder<T> holder = onCreateSectionViewHolder(parent, viewType);
+            final UpdateViewHolder<T> holder = onCreateSectionViewHolder(viewType);
             final UpdateView updateView = holder.getUpdateView();
 
-            if(updateView != null) {
-                updateView.getChildAt(0).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        T item = holder.getItem();
-                        updateView.onClick();
-                        if (currentActionMode != null) {
-                            if(updateView.isCheckable()) {
-                                if (selected.contains(item)) {
-                                    selected.remove(item);
-                                    selectedViews.remove(updateView);
-                                    setChecked(updateView, false);
-                                } else {
-                                    selected.add(item);
-                                    selectedViews.add(updateView);
-                                    setChecked(updateView, true);
-                                }
-
-                                if (selected.isEmpty()) {
-                                    currentActionMode.finish();
-                                } else {
-                                    currentActionMode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
-                                }
+            if (updateView != null) {
+                updateView.getChildAt(0).setOnClickListener(v -> {
+                    T item = holder.getItem();
+                    if (currentActionMode != null) {
+                        if (updateView.isCheckable()) {
+                            if (selected.contains(item)) {
+                                selected.remove(item);
+                                selectedViews.remove(updateView);
+                                setChecked(updateView, false);
+                            } else {
+                                selected.add(item);
+                                selectedViews.add(updateView);
+                                setChecked(updateView, true);
                             }
-                        } else if (onItemClickedListener != null) {
-                            onItemClickedListener.onItemClicked(updateView, item);
+
+                            if (selected.isEmpty()) {
+                                currentActionMode.finish();
+                            } else {
+                                currentActionMode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
+                            }
                         }
+                    } else if (onItemClickedListener != null) {
+                        onItemClickedListener.onItemClicked(updateView, item);
                     }
                 });
 
                 View moreButton = updateView.findViewById(R.id.item_more);
                 if (moreButton != null) {
-                    moreButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            try {
-                                final T item = holder.getItem();
-                                if (onItemClickedListener != null) {
-                                    PopupMenu popup = new PopupMenu(context, v);
-                                    onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
+                    moreButton.setOnClickListener(v -> {
+                        try {
+                            final T item = holder.getItem();
+                            if (onItemClickedListener != null) {
+                                PopupMenu popup = new PopupMenu(context, v);
+                                onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
 
-                                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(MenuItem menuItem) {
-                                            return onItemClickedListener.onContextItemSelected(menuItem, updateView, item);
-                                        }
-                                    });
-                                    popup.show();
-                                }
-                            } catch(Exception e) {
-                                Log.w(TAG, "Failed to show popup", e);
+                                popup.setOnMenuItemClickListener(menuItem -> onItemClickedListener.onContextItemSelected(menuItem, updateView, item));
+                                popup.show();
                             }
+                        } catch (Exception e) {
+                            Log.w(TAG, "Failed to show popup", e);
                         }
                     });
 
-                    if(checkable) {
-                        updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View v) {
-                                if(updateView.isCheckable()) {
-                                    if (currentActionMode == null) {
-                                        startActionMode(holder);
-                                    } else {
-                                        updateView.getChildAt(0).performClick();
-                                    }
+                    if (checkable) {
+                        updateView.getChildAt(0).setOnLongClickListener(v -> {
+                            if (updateView.isCheckable()) {
+                                if (currentActionMode == null) {
+                                    startActionMode(holder);
+                                } else {
+                                    updateView.getChildAt(0).performClick();
                                 }
-                                return true;
                             }
+                            return true;
                         });
                     }
                 }
@@ -181,7 +151,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     public void onBindViewHolder(UpdateViewHolder holder, int position) {
         UpdateView updateView = holder.getUpdateView();
 
-        if(sections.size() == 1 && !singleSectionHeader) {
+        if (sections.size() == 1 && !singleSectionHeader) {
             T item = sections.get(0).get(position);
             onBindViewHolder(holder, item, getItemViewType(position));
             postBindView(updateView, item);
@@ -191,15 +161,15 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
         int subPosition = 0;
         int subHeader = 0;
-        for(List<T> section: sections) {
+        for (List<T> section : sections) {
             boolean validHeader = headers.get(subHeader) != null;
-            if(position == subPosition && validHeader) {
+            if (position == subPosition && validHeader) {
                 onBindHeaderHolder(holder, headers.get(subHeader), subHeader);
                 return;
             }
 
             int headerOffset = validHeader ? 1 : 0;
-            if(position < (subPosition + section.size() + headerOffset)) {
+            if (position < (subPosition + section.size() + headerOffset)) {
                 T item = section.get(position - subPosition - headerOffset);
                 onBindViewHolder(holder, item, getItemViewType(item));
 
@@ -209,7 +179,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
             }
 
             subPosition += section.size();
-            if(validHeader) {
+            if (validHeader) {
                 subPosition += 1;
             }
             subHeader++;
@@ -217,13 +187,13 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     }
 
     private void postBindView(UpdateView updateView, T item) {
-        if(updateView.isCheckable()) {
+        if (updateView.isCheckable()) {
             setChecked(updateView, selected.contains(item));
         }
 
         View moreButton = updateView.findViewById(R.id.item_more);
-        if(moreButton != null) {
-            if(onItemClickedListener != null) {
+        if (moreButton != null) {
+            if (onItemClickedListener != null) {
                 PopupMenu popup = new PopupMenu(context, moreButton);
                 Menu menu = popup.getMenu();
                 onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
@@ -240,17 +210,17 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
     @Override
     public int getItemCount() {
-        if(sections.size() == 1 && !singleSectionHeader) {
+        if (sections.size() == 1 && !singleSectionHeader) {
             return sections.get(0).size();
         }
 
         int count = 0;
-        for(String header: headers) {
-            if(header != null) {
+        for (String header : headers) {
+            if (header != null) {
                 count++;
             }
         }
-        for(List<T> section: sections) {
+        for (List<T> section : sections) {
             count += section.size();
         }
 
@@ -259,25 +229,25 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
     @Override
     public int getItemViewType(int position) {
-        if(sections.size() == 1 && !singleSectionHeader) {
+        if (sections.size() == 1 && !singleSectionHeader) {
             return getItemViewType(sections.get(0).get(position));
         }
 
         int subPosition = 0;
         int subHeader = 0;
-        for(List<T> section: sections) {
+        for (List<T> section : sections) {
             boolean validHeader = headers.get(subHeader) != null;
-            if(position == subPosition && validHeader) {
+            if (position == subPosition && validHeader) {
                 return VIEW_TYPE_HEADER;
             }
 
             int headerOffset = validHeader ? 1 : 0;
-            if(position < (subPosition + section.size() + headerOffset)) {
+            if (position < (subPosition + section.size() + headerOffset)) {
                 return getItemViewType(section.get(position - subPosition - headerOffset));
             }
 
             subPosition += section.size();
-            if(validHeader) {
+            if (validHeader) {
                 subPosition += 1;
             }
             subHeader++;
@@ -286,28 +256,29 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
         return -1;
     }
 
-    public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
+    UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
         return new UpdateViewHolder(new BasicHeaderView(context));
     }
-    public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
+
+    void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
         UpdateView view = holder.getUpdateView();
-        if(view != null) {
+        if (view != null) {
             view.setObject(header);
         }
     }
 
-    public T getItemForPosition(int position) {
-        if(sections.size() == 1 && !singleSectionHeader) {
+    T getItemForPosition(int position) {
+        if (sections.size() == 1 && !singleSectionHeader) {
             return sections.get(0).get(position);
         }
 
         int subPosition = 0;
-        for(List<T> section: sections) {
-            if(position == subPosition) {
+        for (List<T> section : sections) {
+            if (position == subPosition) {
                 return null;
             }
 
-            if(position <= (subPosition + section.size())) {
+            if (position <= (subPosition + section.size())) {
                 return section.get(position - subPosition - 1);
             }
 
@@ -316,17 +287,18 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
         return null;
     }
+
     public int getItemPosition(T item) {
-        if(sections.size() == 1 && !singleSectionHeader) {
+        if (sections.size() == 1 && !singleSectionHeader) {
             return sections.get(0).indexOf(item);
         }
 
         int subPosition = 0;
-        for(List<T> section: sections) {
+        for (List<T> section : sections) {
             subPosition += section.size() + 1;
 
             int position = section.indexOf(item);
-            if(position != -1) {
+            if (position != -1) {
                 return position + subPosition;
             }
         }
@@ -341,6 +313,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     public void addSelected(T item) {
         selected.add(item);
     }
+
     public List<T> getSelected() {
         List<T> selected = new ArrayList<>();
         selected.addAll(this.selected);
@@ -348,17 +321,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     }
 
     public void clearSelected() {
-        // TODO: This needs to work with multiple sections
-        for(T item: selected) {
-            int index = sections.get(0).indexOf(item);
-
-            if(singleSectionHeader) {
-                index++;
-            }
-        }
         selected.clear();
 
-        for(UpdateView updateView: selectedViews) {
+        for (UpdateView updateView : selectedViews) {
             updateView.setChecked(false);
         }
     }
@@ -366,9 +331,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     public void moveItem(int from, int to) {
         List<T> section = sections.get(0);
         int max = section.size();
-        if(to >= max) {
+        if (to >= max) {
             to = max - 1;
-        } else if(to < 0) {
+        } else if (to < 0) {
             to = 0;
         }
 
@@ -377,10 +342,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
         notifyItemMoved(from, to);
     }
+
     public void removeItem(T item) {
         int subPosition = 0;
-        for(List<T> section: sections) {
-            if(sections.size() > 1 || singleSectionHeader) {
+        for (List<T> section : sections) {
+            if (sections.size() > 1 || singleSectionHeader) {
                 subPosition++;
             }
 
@@ -395,16 +361,18 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
         }
     }
 
-    public abstract UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType);
-    public abstract void onBindViewHolder(UpdateViewHolder holder, T item, int viewType);
-    public abstract int getItemViewType(T item);
-    public void setCheckable(boolean checkable) {
-        this.checkable = checkable;
-    }
-    public void setChecked(UpdateView updateView, boolean checked) {
+    protected abstract UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType);
+
+    protected abstract void onBindViewHolder(UpdateViewHolder holder, T item, int viewType);
+
+    protected abstract int getItemViewType(T item);
+
+    private void setChecked(UpdateView updateView, boolean checked) {
         updateView.setChecked(checked);
     }
-    public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {}
+
+    void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+    }
 
     private void startActionMode(final UpdateView.UpdateViewHolder<T> holder) {
         final UpdateView<T> updateView = holder.getUpdateView();
@@ -470,21 +438,23 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
             });
         }
     }
+
     public void stopActionMode() {
-        if(currentActionMode != null) {
+        if (currentActionMode != null) {
             currentActionMode.finish();
         }
     }
 
-    public String getNameIndex(String name) {
+    String getNameIndex(String name) {
         return getNameIndex(name, false);
     }
-    public String getNameIndex(String name, boolean removeIgnoredArticles) {
-        if(name == null) {
+
+    String getNameIndex(String name, boolean removeIgnoredArticles) {
+        if (name == null) {
             return "*";
         }
 
-        if(removeIgnoredArticles) {
+        if (removeIgnoredArticles) {
             if (ignoredArticles == null) {
                 SharedPreferences prefs = Util.getPreferences(context);
                 String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
@@ -510,7 +480,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
     public interface OnItemClickedListener<T> {
         void onItemClicked(UpdateView<T> updateView, T item);
+
         void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<T> updateView, T item);
+
         boolean onContextItemSelected(MenuItem menuItem, UpdateView<T> updateView, T item);
     }
 }

@@ -21,10 +21,8 @@ package net.nullsum.audinaut.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.util.FileUtil;
@@ -34,28 +32,27 @@ import net.nullsum.audinaut.util.Util;
 import java.io.File;
 
 public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
-    private static final String TAG = AlbumView.class.getSimpleName();
 
+    private final TextView titleView;
+    private final TextView artistView;
     private File file;
-    private TextView titleView;
-    private TextView artistView;
     private boolean showArtist = true;
     private String coverArtId;
 
     public AlbumView(Context context, boolean cell) {
-        super(context);
+        super(context, true);
 
-        if(cell) {
+        if (cell) {
             LayoutInflater.from(context).inflate(R.layout.album_cell_item, this, true);
         } else {
             LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
         }
 
         coverArtView = findViewById(R.id.album_coverart);
-        titleView = (TextView) findViewById(R.id.album_title);
-        artistView = (TextView) findViewById(R.id.album_artist);
+        titleView = findViewById(R.id.album_title);
+        artistView = findViewById(R.id.album_artist);
 
-        moreButton = (ImageView) findViewById(R.id.item_more);
+        moreButton = findViewById(R.id.item_more);
 
         checkable = true;
     }
@@ -67,7 +64,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
     protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
         titleView.setText(album.getAlbumDisplay());
         String artist = "";
-        if(showArtist) {
+        if (showArtist) {
             artist = album.getArtist();
             if (artist == null) {
                 artist = "";
@@ -75,7 +72,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
             if (album.getYear() != null) {
                 artist += " - " + album.getYear();
             }
-        } else if(album.getYear() != null) {
+        } else if (album.getYear() != null) {
             artist += album.getYear();
         }
         artistView.setText(album.getArtist() == null ? "" : artist);
@@ -83,14 +80,14 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
         file = null;
     }
 
-    public void onUpdateImageView() {
+    void onUpdateImageView() {
         imageTask = item2.loadImage(coverArtView, item, false, true);
         coverArtId = item.getCoverArt();
     }
 
     @Override
     protected void updateBackground() {
-        if(file == null) {
+        if (file == null) {
             file = FileUtil.getAlbumDirectory(context, item);
         }
 
@@ -101,7 +98,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
     public void update() {
         super.update();
 
-        if(!Util.equals(item.getCoverArt(), coverArtId)) {
+        if (!Util.equals(item.getCoverArt(), coverArtId)) {
             onUpdateImageView();
         }
     }

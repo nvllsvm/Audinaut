@@ -26,32 +26,33 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.util.Constants;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
 public abstract class PreferenceCompatFragment extends SubsonicFragment {
-    private static final String TAG = PreferenceCompatFragment.class.getSimpleName();
     private static final int FIRST_REQUEST_CODE = 100;
     private static final int MSG_BIND_PREFERENCES = 1;
     private static final String PREFERENCES_TAG = "android:preferences";
     private boolean mHavePrefs;
     private boolean mInitDone;
     private ListView mList;
+    final private Runnable mRequestFocus = new Runnable() {
+        public void run() {
+            mList.focusableViewAvailable(mList);
+        }
+    };
     private PreferenceManager mPreferenceManager;
-
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -60,12 +61,6 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
                     bindPreferences();
                     break;
             }
-        }
-    };
-
-    final private Runnable mRequestFocus = new Runnable() {
-        public void run() {
-            mList.focusableViewAvailable(mList);
         }
     };
 
@@ -89,7 +84,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
                 throw new RuntimeException("Content has view with id attribute 'android.R.id.list' that is not a ListView class");
             }
 
-            mList = (ListView)listView;
+            mList = (ListView) listView;
             if (mList == null) {
                 throw new RuntimeException("Your content must have a ListView whose id attribute is 'android.R.id.list'");
             }
@@ -110,26 +105,17 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         }
     }
 
-    public void addPreferencesFromIntent(Intent intent) {
-        requirePreferenceManager();
-        PreferenceScreen screen = inflateFromIntent(intent, getPreferenceScreen());
-        setPreferenceScreen(screen);
-    }
-
-    public PreferenceScreen addPreferencesFromResource(int resId) {
+    private PreferenceScreen addPreferencesFromResource(int resId) {
         requirePreferenceManager();
         PreferenceScreen screen = inflateFromResource(getActivity(), resId, getPreferenceScreen());
         setPreferenceScreen(screen);
 
-        for(int i = 0; i < screen.getPreferenceCount(); i++) {
+        for (int i = 0; i < screen.getPreferenceCount(); i++) {
             Preference preference = screen.getPreference(i);
-            if(preference instanceof PreferenceScreen && preference.getKey() != null) {
-                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        onStartNewFragment(preference.getKey());
-                        return false;
-                    }
+            if (preference instanceof PreferenceScreen && preference.getKey() != null) {
+                preference.setOnPreferenceClickListener(preference1 -> {
+                    onStartNewFragment(preference1.getKey());
+                    return false;
                 });
             }
         }
@@ -137,19 +123,19 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         return screen;
     }
 
-    public Preference findPreference(CharSequence key) {
+    Preference findPreference(CharSequence key) {
         if (mPreferenceManager == null) {
             return null;
         }
         return mPreferenceManager.findPreference(key);
     }
 
-    public ListView getListView() {
+    private ListView getListView() {
         ensureList();
         return mList;
     }
 
-    public PreferenceManager getPreferenceManager() {
+    PreferenceManager getPreferenceManager() {
         return mPreferenceManager;
     }
 
@@ -184,7 +170,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         mPreferenceManager = createPreferenceManager();
 
         int res = this.getArguments().getInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, 0);
-        if(res != 0) {
+        if (res != 0) {
             PreferenceScreen preferenceScreen = addPreferencesFromResource(res);
             onInitPreferences(preferenceScreen);
         }
@@ -226,7 +212,9 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         dispatchActivityStop();
     }
 
-    /** Access methods with visibility private **/
+    /**
+     * Access methods with visibility private
+     **/
 
     private PreferenceManager createPreferenceManager() {
         try {
@@ -248,7 +236,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         }
     }
 
-    protected void setPreferenceScreen(PreferenceScreen preferenceScreen) {
+    void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         try {
             Method m = PreferenceManager.class.getDeclaredMethod("setPreferences", PreferenceScreen.class);
             m.setAccessible(true);
@@ -294,19 +282,8 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         }
     }
 
-
-    private void setFragment(PreferenceFragment preferenceFragment) {
-        try {
-            Method m = PreferenceManager.class.getDeclaredMethod("setFragment", PreferenceFragment.class);
-            m.setAccessible(true);
-            m.invoke(mPreferenceManager, preferenceFragment);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public PreferenceScreen inflateFromResource(Context context, int resId, PreferenceScreen rootPreferences) {
-        PreferenceScreen preferenceScreen ;
+    private PreferenceScreen inflateFromResource(Context context, int resId, PreferenceScreen rootPreferences) {
+        PreferenceScreen preferenceScreen;
         try {
             Method m = PreferenceManager.class.getDeclaredMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class);
             m.setAccessible(true);
@@ -317,18 +294,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
         return preferenceScreen;
     }
 
-    public PreferenceScreen inflateFromIntent(Intent queryIntent, PreferenceScreen rootPreferences) {
-        PreferenceScreen preferenceScreen ;
-        try {
-            Method m = PreferenceManager.class.getDeclaredMethod("inflateFromIntent", Intent.class, PreferenceScreen.class);
-            m.setAccessible(true);
-            preferenceScreen = (PreferenceScreen) m.invoke(mPreferenceManager, queryIntent, rootPreferences);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return preferenceScreen;
-    }
-
     protected abstract void onInitPreferences(PreferenceScreen preferenceScreen);
+
     protected abstract void onStartNewFragment(String name);
 }

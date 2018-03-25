@@ -27,12 +27,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimeLimitedCache<T> {
 
-    private SoftReference<T> value;
     private final long ttlMillis;
+    private SoftReference<T> value;
     private long expires;
 
-    public TimeLimitedCache(long ttl, TimeUnit timeUnit) {
-        this.ttlMillis = TimeUnit.MILLISECONDS.convert(ttl, timeUnit);
+    public TimeLimitedCache(long ttl) {
+        this.ttlMillis = TimeUnit.MILLISECONDS.convert(ttl, TimeUnit.SECONDS);
     }
 
     public T get() {
@@ -40,12 +40,12 @@ public class TimeLimitedCache<T> {
     }
 
     public void set(T value) {
-        set(value, ttlMillis, TimeUnit.MILLISECONDS);
+        set(value, ttlMillis);
     }
 
-    public void set(T value, long ttl, TimeUnit timeUnit) {
-        this.value = new SoftReference<T>(value);
-        expires = System.currentTimeMillis() + timeUnit.toMillis(ttl);
+    private void set(T value, long ttl) {
+        this.value = new SoftReference<>(value);
+        expires = System.currentTimeMillis() + TimeUnit.MILLISECONDS.toMillis(ttl);
     }
 
     public void clear() {

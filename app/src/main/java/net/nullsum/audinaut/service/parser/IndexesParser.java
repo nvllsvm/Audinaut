@@ -18,24 +18,25 @@
  */
 package net.nullsum.audinaut.service.parser;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.domain.Indexes;
 import net.nullsum.audinaut.domain.MusicDirectory;
-import net.nullsum.audinaut.util.ProgressListener;
-import android.util.Log;
 import net.nullsum.audinaut.util.Constants;
+import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.Util;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Sindre Mehus
@@ -51,15 +52,14 @@ public class IndexesParser extends MusicDirectoryEntryParser {
         long t0 = System.currentTimeMillis();
         init(inputStream);
 
-        List<Artist> artists = new ArrayList<Artist>();
-        List<Artist> shortcuts = new ArrayList<Artist>();
-        List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
-        Long lastModified = null;
+        List<Artist> artists = new ArrayList<>();
+        List<Artist> shortcuts = new ArrayList<>();
+        List<MusicDirectory.Entry> entries = new ArrayList<>();
         int eventType;
         String index = "#";
         String ignoredArticles = null;
         boolean changed = false;
-        Map<String, Artist> artistList = new HashMap<String, Artist>();
+        Map<String, Artist> artistList = new HashMap<>();
 
         do {
             eventType = nextParseEvent();
@@ -67,7 +67,6 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                 String name = getElementName();
                 if ("indexes".equals(name) || "artists".equals(name)) {
                     changed = true;
-                    lastModified = getLong("lastModified");
                     ignoredArticles = get("ignoredArticles");
                 } else if ("index".equals(name)) {
                     index = get("name");
@@ -79,7 +78,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     artist.setIndex(index);
 
                     // Combine the id's for the two artists
-                    if(artistList.containsKey(artist.getName())) {
+                    if (artistList.containsKey(artist.getName())) {
                         Artist originalArtist = artistList.get(artist.getName());
                         originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
                     } else {
@@ -97,7 +96,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     shortcut.setName(get("name"));
                     shortcut.setIndex("*");
                     shortcuts.add(shortcut);
-                } else if("child".equals(name)) {
+                } else if ("child".equals(name)) {
                     MusicDirectory.Entry entry = parseEntry("");
                     entries.add(entry);
                 } else if ("error".equals(name)) {
@@ -108,7 +107,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
 
         validate();
 
-        if(ignoredArticles != null) {
+        if (ignoredArticles != null) {
             SharedPreferences.Editor prefs = Util.getPreferences(context).edit();
             prefs.putString(Constants.CACHE_KEY_IGNORE, ignoredArticles);
             prefs.apply();
@@ -124,6 +123,6 @@ public class IndexesParser extends MusicDirectoryEntryParser {
         String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());
         updateProgress(progressListener, msg);
 
-        return new Indexes(lastModified == null ? 0L : lastModified, shortcuts, artists, entries);
+        return new Indexes(shortcuts, artists, entries);
     }
 }

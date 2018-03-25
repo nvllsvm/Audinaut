@@ -32,6 +32,24 @@ public class FadeOutAnimation extends AlphaAnimation {
 
     private boolean cancelled;
 
+    private FadeOutAnimation(final View view, long durationMillis) {
+        super(1.0F, 0.0F);
+        setDuration(durationMillis);
+        setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                if (!cancelled) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
     /**
      * Creates and starts the fade out animation.
      *
@@ -51,24 +69,6 @@ public class FadeOutAnimation extends AlphaAnimation {
             view.clearAnimation();
             view.setVisibility(View.VISIBLE);
         }
-    }
-
-    FadeOutAnimation(final View view, long durationMillis) {
-        super(1.0F, 0.0F);
-        setDuration(durationMillis);
-        setAnimationListener(new AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-                if (!cancelled) {
-                    view.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
     private void cancelFadeOut() {

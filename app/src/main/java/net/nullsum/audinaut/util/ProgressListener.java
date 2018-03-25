@@ -23,6 +23,6 @@ package net.nullsum.audinaut.util;
  */
 public interface ProgressListener {
     void updateProgress(String message);
-    void updateProgress(int messageId);
+
     void updateCache(int changeCode);
 }

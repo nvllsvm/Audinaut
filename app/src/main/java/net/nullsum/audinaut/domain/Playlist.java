@@ -45,10 +45,12 @@ public class Playlist implements Serializable {
     public Playlist() {
 
     }
+
     public Playlist(String id, String name) {
         this.id = id;
         this.name = name;
     }
+
     public Playlist(String id, String name, String owner, String comment, String songCount, String pub, String created, String changed, Integer duration) {
         this.id = id;
         this.name = name;
@@ -65,10 +67,6 @@ public class Playlist implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -79,10 +77,6 @@ public class Playlist implements Serializable {
 
     public String getOwner() {
         return this.owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getComment() {
@@ -104,6 +98,7 @@ public class Playlist implements Serializable {
     public Boolean getPublic() {
         return this.pub;
     }
+
     public void setPublic(Boolean pub) {
         this.pub = pub;
     }
@@ -112,7 +107,7 @@ public class Playlist implements Serializable {
         return created;
     }
 
-    public void setCreated(String created) {
+    private void setCreated(String created) {
         if (created != null) {
             try {
                 this.created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(created);
@@ -123,14 +118,12 @@ public class Playlist implements Serializable {
             this.created = null;
         }
     }
-    public void setCreated(Date created) {
-        this.created = created;
-    }
 
     public Date getChanged() {
         return changed;
     }
-    public void setChanged(String changed) {
+
+    private void setChanged(String changed) {
         if (changed != null) {
             try {
                 this.changed = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(changed);
@@ -141,15 +134,9 @@ public class Playlist implements Serializable {
             this.changed = null;
         }
     }
-    public void setChanged(Date changed) {
-        this.changed = changed;
-    }
 
     public Integer getDuration() {
         return duration;
-    }
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     @Override
@@ -159,13 +146,13 @@ public class Playlist implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if(o == this) {
+        if (o == this) {
             return true;
-        } else if(o == null) {
+        } else if (o == null) {
             return false;
-        } else if(o instanceof String) {
+        } else if (o instanceof String) {
             return o.equals(this.id);
-        } else if(o.getClass() != getClass()) {
+        } else if (o.getClass() != getClass()) {
             return false;
         }
 
@@ -174,14 +161,14 @@ public class Playlist implements Serializable {
     }
 
     public static class PlaylistComparator implements Comparator<Playlist> {
-        @Override
-        public int compare(Playlist playlist1, Playlist playlist2) {
-            return playlist1.getName().compareToIgnoreCase(playlist2.getName());
-        }
-
         public static List<Playlist> sort(List<Playlist> playlists) {
             Collections.sort(playlists, new PlaylistComparator());
             return playlists;
+        }
+
+        @Override
+        public int compare(Playlist playlist1, Playlist playlist2) {
+            return playlist1.getName().compareToIgnoreCase(playlist2.getName());
         }
     }
 }

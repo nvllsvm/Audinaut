@@ -21,11 +21,7 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
@@ -33,11 +29,12 @@ import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.Util;
 
-public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
-    private static final String TAG = PlaylistSongView.class.getSimpleName();
+import java.util.List;
 
-    private TextView titleView;
-    private TextView countView;
+public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
+
+    private final TextView titleView;
+    private final TextView countView;
     private int count = 0;
 
     public PlaylistSongView(Context context) {
@@ -45,8 +42,8 @@ public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.basic_count_name);
-        countView = (TextView) findViewById(R.id.basic_count_count);
+        titleView = findViewById(R.id.basic_count_name);
+        countView = findViewById(R.id.basic_count_count);
     }
 
     protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {
@@ -62,12 +59,12 @@ public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.
         count = 0;
 
         // Don't try to lookup playlist for Create New
-        if(!"-1".equals(item.getId())) {
+        if (!"-1".equals(item.getId())) {
             MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", item.getId()), MusicDirectory.class);
-            if(cache != null) {
+            if (cache != null) {
                 // Try to find song instances in the given playlists
-                for(MusicDirectory.Entry song: item2) {
-                    if(cache.getChildren().contains(song)) {
+                for (MusicDirectory.Entry song : item2) {
+                    if (cache.getChildren().contains(song)) {
                         count++;
                     }
                 }
@@ -78,11 +75,11 @@ public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.
     @Override
     protected void update() {
         // Update count display with appropriate information
-        if(count <= 0) {
+        if (count <= 0) {
             countView.setVisibility(View.GONE);
         } else {
             String displayName;
-            if(count < 10) {
+            if (count < 10) {
                 displayName = "0" + count;
             } else {
                 displayName = "" + count;

@@ -3,22 +3,18 @@
     android:title="@string/settings.title">
 
     <PreferenceScreen
-        android:title="@string/settings.servers_title"
-        android:key="servers">
-    </PreferenceScreen>
+        android:key="servers"
+        android:title="@string/settings.servers_title" />
 
     <PreferenceScreen
-        android:title="@string/settings.appearance_title"
-        android:key="appearance">
-    </PreferenceScreen>
+        android:key="appearance"
+        android:title="@string/settings.appearance_title" />
 
     <PreferenceScreen
-        android:title="@string/settings.cache_screen_title"
-        android:key="cache">
-    </PreferenceScreen>
+        android:key="cache"
+        android:title="@string/settings.cache_screen_title" />
 
     <PreferenceScreen
-        android:title="@string/settings.playback_title"
-        android:key="playback">
-    </PreferenceScreen>
+        android:key="playback"
+        android:title="@string/settings.playback_title" />
 </PreferenceScreen>

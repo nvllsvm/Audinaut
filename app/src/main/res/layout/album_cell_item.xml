@@ -5,10 +5,10 @@
     android:layout_margin="2dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,16 +18,16 @@
             <net.nullsum.audinaut.view.SquareImageView
                 android:id="@+id/album_coverart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:paddingLeft="2dp">
+            android:paddingLeft="2dp"
+            android:paddingTop="4dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,12 +40,12 @@
                     android:id="@+id/album_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:maxLines="1"
                     android:ellipsize="marquee"
+                    android:paddingLeft="@dimen/Card.TextLeftPadding"
+                    android:singleLine="true"
                     android:text="@string/search.albums"
-                    android:textColor="?android:textColorPrimary"
-                    android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:textColorPrimary" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -54,23 +54,23 @@
                     <TextView
                         android:id="@+id/album_artist"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:textColor="?android:textColorSecondary"
+                        android:layout_weight="1"
                         android:maxLines="1"
+                        android:paddingLeft="@dimen/Card.TextLeftPadding"
                         android:text="@string/search.artists"
-                        android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/item_more"
-                android:src="?attr/download_none"
+                style="@style/MoreButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                style="@style/MoreButton"/>
+                android:src="?attr/download_none" />
         </LinearLayout>
 
     </LinearLayout>

@@ -5,10 +5,9 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
-        android:id="@+id/fragment_list_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -19,16 +18,16 @@
                 android:id="@+id/fragment_recycler"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:scrollbars="vertical"
-                android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
                 android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"
-                android:scrollbarStyle="outsideOverlay"/>
+                android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical" />
 
             <net.nullsum.audinaut.view.FastScroller
                 android:id="@+id/fragment_fast_scroller"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
         <include layout="@layout/tab_progress" />

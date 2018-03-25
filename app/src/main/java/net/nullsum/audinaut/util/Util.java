@@ -18,18 +18,13 @@
 package net.nullsum.audinaut.util;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
-import android.content.ClipboardManager;
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -41,23 +36,19 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import android.text.Html;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.activity.SettingsActivity;
-import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
 import net.nullsum.audinaut.adapter.DetailsAdapter;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.PlayerState;
@@ -65,65 +56,48 @@ import net.nullsum.audinaut.domain.RepeatMode;
 import net.nullsum.audinaut.receiver.MediaButtonIntentReceiver;
 import net.nullsum.audinaut.service.DownloadService;
 
-import okhttp3.HttpUrl;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
-import java.util.TimeZone;
+
+import okhttp3.HttpUrl;
 
 /**
  * @author Sindre Mehus
  * @version $Id$
  */
 public final class Util {
+    private static final String EVENT_META_CHANGED = "net.nullsum.audinaut.EVENT_META_CHANGED";
+    private static final String EVENT_PLAYSTATE_CHANGED = "net.nullsum.audinaut.EVENT_PLAYSTATE_CHANGED";
+    private static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+    private static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
     private static final String TAG = Util.class.getSimpleName();
-
     private static final DecimalFormat GIGA_BYTE_FORMAT = new DecimalFormat("0.00 GB");
     private static final DecimalFormat MEGA_BYTE_FORMAT = new DecimalFormat("0.00 MB");
     private static final DecimalFormat KILO_BYTE_FORMAT = new DecimalFormat("0 KB");
-
+    // Used by hexEncode()
+    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    // private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
+    private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
     private static DecimalFormat GIGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
-
-    public static final String EVENT_META_CHANGED = "net.nullsum.audinaut.EVENT_META_CHANGED";
-    public static final String EVENT_PLAYSTATE_CHANGED = "net.nullsum.audinaut.EVENT_PLAYSTATE_CHANGED";
-
-    public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
-    public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
-
     private static OnAudioFocusChangeListener focusListener;
     private static boolean pauseFocus = false;
     private static boolean lowerFocus = false;
-
-    // Used by hexEncode()
-    private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
     private static Toast toast;
-    // private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
-    private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
     private static Random random;
 
     private Util() {
@@ -170,7 +144,8 @@ public final class Util {
         // Don't allow the SERVER_INSTANCE to ever be 0
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
-    public static int getMostRecentActiveServer(Context context) {
+
+    private static int getMostRecentActiveServer(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
@@ -213,7 +188,7 @@ public final class Util {
         editor.apply();
 
         if (instance == activeInstance) {
-            if(instance != 1) {
+            if (instance != 1) {
                 Util.setActiveServer(context, 1);
             } else {
                 Util.setOffline(context, true);
@@ -228,6 +203,7 @@ public final class Util {
         int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
     }
+
     public static String getServerName(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
@@ -244,24 +220,15 @@ public final class Util {
     public static String getSelectedMusicFolderId(Context context) {
         return getSelectedMusicFolderId(context, getActiveServer(context));
     }
+
     public static String getSelectedMusicFolderId(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
     }
 
-    public static boolean getAlbumListsPerFolder(Context context) {
-        return getAlbumListsPerFolder(context, getActiveServer(context));
-    }
     public static boolean getAlbumListsPerFolder(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, false);
-    }
-    public static void setAlbumListsPerFolder(Context context, boolean perFolder) {
-        int instance = getActiveServer(context);
-        SharedPreferences prefs = getPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, perFolder);
-        editor.apply();
     }
 
     public static boolean getDisplayTrack(Context context) {
@@ -299,41 +266,39 @@ public final class Util {
         int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
         return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
     }
+
     public static boolean isBatchMode(Context context) {
         return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
     }
+
     public static void setBatchMode(Context context, boolean batchMode) {
         Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).apply();
     }
 
-    public static String getRestUrl(Context context, String method) {
-        return getRestUrl(context, method, true);
+    public static String getRestUrl(Context context) {
+        return getRestUrl(context, null, true);
     }
+
     public static String getRestUrl(Context context, String method, boolean allowAltAddress) {
         SharedPreferences prefs = getPreferences(context);
         int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
         return getRestUrl(context, method, prefs, instance, allowAltAddress);
     }
-    public static String getRestUrl(Context context, String method, int instance) {
-        return getRestUrl(context, method, instance, true);
-    }
+
     public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
         SharedPreferences prefs = getPreferences(context);
         return getRestUrl(context, method, prefs, instance, allowAltAddress);
     }
-    public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
-        return getRestUrl(context, method, prefs, instance, true);
-    }
 
-    public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+    private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
         String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 
         HttpUrl.Builder builder;
         builder = HttpUrl.parse(serverUrl).newBuilder();
 
-        if(allowAltAddress && Util.isWifiConnected(context)) {
+        if (allowAltAddress && Util.isWifiConnected(context)) {
             String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-            if(!SSID.isEmpty()) {
+            if (!SSID.isEmpty()) {
                 String currentSSID = Util.getSSID(context);
 
                 String[] ssidParts = SSID.split(",");
@@ -355,7 +320,7 @@ public final class Util {
 
         int hash = (username + password).hashCode();
         Pair<String, String> values = tokens.get(hash);
-        if(values == null) {
+        if (values == null) {
             String salt = new BigInteger(130, getRandom()).toString(32);
             String token = md5Hex(password + salt);
             values = new Pair<>(salt, token);
@@ -374,6 +339,7 @@ public final class Util {
     public static int getRestUrlHash(Context context) {
         return getRestUrlHash(context, Util.getMostRecentActiveServer(context));
     }
+
     public static int getRestUrlHash(Context context, int instance) {
         StringBuilder builder = new StringBuilder();
 
@@ -384,90 +350,39 @@ public final class Util {
         return builder.toString().hashCode();
     }
 
-    public static String getBlockTokenUsePref(Context context, int instance) {
+    private static String getBlockTokenUsePref(Context context, int instance) {
         return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
     }
-    public static boolean getBlockTokenUse(Context context, int instance) {
-        return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
-    }
-    public static void setBlockTokenUse(Context context, int instance, boolean block) {
+
+    public static void setBlockTokenUse(Context context, int instance) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
-        editor.putBoolean(getBlockTokenUsePref(context, instance), block);
+        editor.putBoolean(getBlockTokenUsePref(context, instance), true);
         editor.apply();
-    }
-
-    public static boolean isTagBrowsing(Context context) {
-        return isTagBrowsing(context, Util.getActiveServer(context));
-    }
-    public static boolean isTagBrowsing(Context context, int instance) {
-        return true;
-    }
-
-    public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
-        if(Util.isTagBrowsing(context)) {
-            if(!entry.isDirectory()) {
-                return entry.getAlbumId();
-            } else if(entry.isAlbum()) {
-                return entry.getArtistId();
-            } else {
-                return null;
-            }
-        } else {
-            return entry.getParent();
-        }
-    }
-
-    public static String openToTab(Context context) {
-        return "Library";
     }
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
     }
-    public static SharedPreferences getOfflineSync(Context context) {
-        return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
-    }
-
-    public static String getSyncDefault(Context context) {
-        SharedPreferences prefs = Util.getOfflineSync(context);
-        return prefs.getString(Constants.OFFLINE_SYNC_DEFAULT, null);
-    }
-    public static void setSyncDefault(Context context, String defaultValue) {
-        SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
-        editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
-        editor.apply();
-    }
 
     public static String getCacheName(Context context, String name, String id) {
-        return getCacheName(context, getActiveServer(context), name, id);
-    }
-    public static String getCacheName(Context context, int instance, String name, String id) {
-        String s = getRestUrl(context, null, instance, false) + id;
-        return name + "-" + s.hashCode() + ".ser";
-    }
-    public static String getCacheName(Context context, String name) {
-        return getCacheName(context, getActiveServer(context), name);
-    }
-    public static String getCacheName(Context context, int instance, String name) {
-        String s = getRestUrl(context, null, instance, false);
+        String s = getRestUrl(context, null, getActiveServer(context), false) + id;
         return name + "-" + s.hashCode() + ".ser";
     }
 
-    public static int offlineStarsCount(Context context) {
-        SharedPreferences offline = getOfflineSync(context);
-        return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
+    public static String getCacheName(Context context) {
+        return getCacheName(context, "entryLookup", "");
     }
 
-    public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
+    public static String parseOfflineIDSearch(String id, String cacheLocation) {
         // Try to get this info based off of tags first
         String name = parseOfflineIDSearch(id);
-        if(name != null) {
+        if (name != null) {
             return name;
         }
 
         // Otherwise go nuts trying to parse from file structure
         name = id.replace(cacheLocation, "");
-        if(name.startsWith("/")) {
+        if (name.startsWith("/")) {
             name = name.substring(1);
         }
         name = name.replace(".complete", "").replace(".partial", "");
@@ -476,12 +391,12 @@ public final class Util {
         String[] details = name.split("/");
 
         String title = details[details.length - 1];
-        if(index == -1) {
-            if(details.length > 1) {
+        if (index == -1) {
+            if (details.length > 1) {
                 String artist = "artist:\"" + details[details.length - 2] + "\"";
                 String simpleArtist = "artist:\"" + title + "\"";
                 title = "album:\"" + title + "\"";
-                if(details[details.length - 1].equals(details[details.length - 2])) {
+                if (details[details.length - 1].equals(details[details.length - 2])) {
                     name = title;
                 } else {
                     name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
@@ -491,7 +406,7 @@ public final class Util {
             }
         } else {
             String artist;
-            if(details.length > 2) {
+            if (details.length > 2) {
                 artist = "artist:\"" + details[details.length - 3] + "\"";
             } else {
                 artist = "(artist:\"" + details[0] + "\" OR album:\"" + details[0] + "\")";
@@ -503,24 +418,22 @@ public final class Util {
         return name;
     }
 
-    public static String parseOfflineIDSearch(String id) {
+    private static String parseOfflineIDSearch(String id) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         File file = new File(id);
 
-        if(file.exists()) {
+        if (file.exists()) {
             entry.loadMetadata(file);
 
-            if(entry.getArtist() != null) {
+            if (entry.getArtist() != null) {
                 String title = file.getName();
                 title = title.replace(".complete", "").replace(".partial", "");
                 int index = title.lastIndexOf(".");
                 title = index == -1 ? title : title.substring(0, index);
                 title = title.substring(title.indexOf('-') + 1);
 
-                String query = "artist:\"" + entry.getArtist() + "\"" +
-                    " AND title:\"" + title + "\"";
-
-                return query;
+                return "artist:\"" + entry.getArtist() + "\"" +
+                        " AND title:\"" + title + "\"";
             } else {
                 return null;
             }
@@ -533,11 +446,12 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
     }
+
     public static void toggleFirstLevelArtist(Context context) {
         SharedPreferences prefs = Util.getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
-        if(prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true)) {
+        if (prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true)) {
             editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), false);
         } else {
             editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
@@ -572,7 +486,7 @@ public final class Util {
         return output.toByteArray();
     }
 
-    public static long copy(InputStream input, OutputStream output)
+    private static void copy(InputStream input, OutputStream output)
             throws IOException {
         byte[] buffer = new byte[1024 * 4];
         long count = 0;
@@ -581,11 +495,10 @@ public final class Util {
             output.write(buffer, 0, n);
             count += n;
         }
-        return count;
     }
 
-    public static void renameFile(File from, File to) throws IOException {
-        if(!from.renameTo(to)) {
+    public static void renameFile(File from, File to) {
+        if (!from.renameTo(to)) {
             Log.i(TAG, "Failed to rename " + from + " to " + to);
         }
     }
@@ -634,26 +547,22 @@ public final class Util {
         toast.show();
     }
 
-    public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
-        Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
+    public static void confirmDialog(Context context, DialogInterface.OnClickListener onClick) {
+        Util.confirmDialog(context, context.getResources().getString(R.string.common_delete).toLowerCase(), context.getResources().getString(R.string.common_confirm_message_cache), onClick);
     }
-    public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-        Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, onCancel);
-    }
+
     public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
-        Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
+        Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick);
     }
-    public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-        Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
-    }
-    public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+
+    private static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick) {
         new AlertDialog.Builder(context)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle(R.string.common_confirm)
-            .setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
-            .setPositiveButton(R.string.common_ok, onClick)
-            .setNegativeButton(R.string.common_cancel, onCancel)
-            .show();
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.common_confirm)
+                .setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
+                .setPositiveButton(R.string.common_ok, onClick)
+                .setNegativeButton(R.string.common_cancel, null)
+                .show();
     }
 
     /**
@@ -674,20 +583,17 @@ public final class Util {
 
         // More than 1 GB?
         if (byteCount >= 1024 * 1024 * 1024) {
-            NumberFormat gigaByteFormat = GIGA_BYTE_FORMAT;
-            return gigaByteFormat.format((double) byteCount / (1024 * 1024 * 1024));
+            return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
         }
 
         // More than 1 MB?
         if (byteCount >= 1024 * 1024) {
-            NumberFormat megaByteFormat = MEGA_BYTE_FORMAT;
-            return megaByteFormat.format((double) byteCount / (1024 * 1024));
+            return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
         }
 
         // More than 1 KB?
         if (byteCount >= 1024) {
-            NumberFormat kiloByteFormat = KILO_BYTE_FORMAT;
-            return kiloByteFormat.format((double) byteCount / 1024);
+            return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
         }
 
         return byteCount + " B";
@@ -753,9 +659,9 @@ public final class Util {
         int secs = seconds % 60;
 
         StringBuilder builder = new StringBuilder(7);
-        if(hours > 0) {
+        if (hours > 0) {
             builder.append(hours).append(":");
-            if(minutes < 10) {
+            if (minutes < 10) {
                 builder.append("0");
             }
         }
@@ -772,13 +678,7 @@ public final class Util {
     }
 
     public static boolean equals(Object object1, Object object2) {
-        if (object1 == object2) {
-            return true;
-        }
-        if (object1 == null || object2 == null) {
-            return false;
-        }
-        return object1.equals(object2);
+        return object1 == object2 || !(object1 == null || object2 == null) && object1.equals(object2);
 
     }
 
@@ -790,7 +690,7 @@ public final class Util {
      * @param data Bytes to convert to hexadecimal characters.
      * @return A string containing hexadecimal characters.
      */
-    public static String hexEncode(byte[] data) {
+    private static String hexEncode(byte[] data) {
         int length = data.length;
         char[] out = new char[length << 1];
         // two characters form the hex value.
@@ -818,10 +718,6 @@ public final class Util {
         } catch (Exception x) {
             throw new RuntimeException(x.getMessage(), x);
         }
-    }
-
-    public static boolean isNullOrWhiteSpace(String string) {
-        return string == null || "".equals(string) || "".equals(string.trim());
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -865,7 +761,7 @@ public final class Util {
             throw new IllegalArgumentException("Strings must not be null");
         }
 
-        if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+        if (t.toString().toLowerCase().contains(s.toString().toLowerCase())) {
             return 1;
         }
 
@@ -919,12 +815,13 @@ public final class Util {
     public static boolean isNetworkConnected(Context context) {
         return isNetworkConnected(context, false);
     }
-    public static boolean isNetworkConnected(Context context, boolean streaming) {
+
+    private static boolean isNetworkConnected(Context context, boolean streaming) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean connected = networkInfo != null && networkInfo.isConnected();
 
-        if(streaming) {
+        if (streaming) {
             boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
             boolean wifiRequired = isWifiRequiredForDownload(context);
 
@@ -933,12 +830,14 @@ public final class Util {
             return connected;
         }
     }
-    public static boolean isWifiConnected(Context context) {
+
+    private static boolean isWifiConnected(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean connected = networkInfo != null && networkInfo.isConnected();
         return connected && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI);
     }
+
     public static String getSSID(Context context) {
         if (isWifiConnected(context)) {
             WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -957,113 +856,74 @@ public final class Util {
     public static boolean isAllowedToDownload(Context context) {
         return isNetworkConnected(context, true) && !isOffline(context);
     }
+
     public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD, false);
     }
 
     public static void info(Context context, int titleId, int messageId) {
-        info(context, titleId, messageId, true);
-    }
-    public static void info(Context context, int titleId, String message) {
-        info(context, titleId, message, true);
-    }
-    public static void info(Context context, String title, String message) {
-        info(context, title, message, true);
-    }
-    public static void info(Context context, int titleId, int messageId, boolean linkify) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
-    }
-    public static void info(Context context, int titleId, String message, boolean linkify) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
-    }
-    public static void info(Context context, String title, String message, boolean linkify) {
-        showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
+        showDialog(context, titleId, messageId);
     }
 
-    public static void showDialog(Context context, int icon, int titleId, int messageId) {
-        showDialog(context, icon, titleId, messageId, true);
+    private static void showDialog(Context context, int titleId, int messageId) {
+        showDialog(context, context.getResources().getString(titleId), context.getResources().getString(messageId));
     }
-    public static void showDialog(Context context, int icon, int titleId, String message) {
-        showDialog(context, icon, titleId, message, true);
-    }
-    public static void showDialog(Context context, int icon, String title, String message) {
-        showDialog(context, icon, title, message, true);
-    }
-    public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
-        showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
-    }
-    public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
-        showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
-    }
-    public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
+
+    private static void showDialog(Context context, String title, String message) {
         SpannableString ss = new SpannableString(message);
-        if(linkify) {
-            Linkify.addLinks(ss, Linkify.ALL);
-        }
+        Linkify.addLinks(ss, Linkify.ALL);
 
         AlertDialog dialog = new AlertDialog.Builder(context)
-            .setIcon(icon)
-            .setTitle(title)
-            .setMessage(ss)
-            .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.dismiss();
-                }
-            })
-            .show();
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(title)
+                .setMessage(ss)
+                .setPositiveButton(R.string.common_ok, (dialog1, i) -> dialog1.dismiss())
+                .show();
 
-        ((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
         List<String> headerStrings = new ArrayList<>();
-        for(@StringRes Integer res: headers) {
+        for (@StringRes Integer res : headers) {
             headerStrings.add(context.getResources().getString(res));
         }
         showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
     }
-    public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
+
+    private static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
         ListView listView = new ListView(context);
-        listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
+        listView.setAdapter(new DetailsAdapter(context, headers, details));
         listView.setDivider(null);
         listView.setScrollbarFadingEnabled(false);
 
         // Let the user long-click on a row to copy its value to the clipboard
         final Context contextRef = context;
-        listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
-                TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-                TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
-                if(nameView == null || detailsView == null) {
-                    return false;
-                }
-
-                CharSequence name = nameView.getText();
-                CharSequence value = detailsView.getText();
-
-                ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(name, value);
-                clipboard.setPrimaryClip(clip);
-
-                toast(contextRef, "Copied " + name + " to clipboard");
-
-                return true;
+        listView.setOnItemLongClickListener((parent, view, pos, id) -> {
+            TextView nameView = view.findViewById(R.id.detail_name);
+            TextView detailsView = view.findViewById(R.id.detail_value);
+            if (nameView == null || detailsView == null) {
+                return false;
             }
+
+            CharSequence name = nameView.getText();
+            CharSequence value = detailsView.getText();
+
+            ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(name, value);
+            clipboard.setPrimaryClip(clip);
+
+            toast(contextRef, "Copied " + name + " to clipboard");
+
+            return true;
         });
 
         new AlertDialog.Builder(context)
                 // .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(title)
                 .setView(listView)
-                .setPositiveButton(R.string.common_close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.common_close, (dialog, i) -> dialog.dismiss())
                 .show();
     }
 
@@ -1075,36 +935,12 @@ public final class Util {
         }
     }
 
-    public static void startActivityWithoutTransition(Activity currentActivity, Class<? extends Activity> newActivitiy) {
-        startActivityWithoutTransition(currentActivity, new Intent(currentActivity, newActivitiy));
-    }
-
     public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
         currentActivity.startActivity(intent);
-        disablePendingTransition(currentActivity);
-    }
-
-    public static void disablePendingTransition(Activity activity) {
-
-        // Activity.overridePendingTransition() was introduced in Android 2.0.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Method method = Activity.class.getMethod("overridePendingTransition", int.class, int.class);
-            method.invoke(activity, 0, 0);
-        } catch (Throwable x) {
-            // Ignored
-        }
     }
 
     public static Drawable createDrawableFromBitmap(Context context, Bitmap bitmap) {
-        // BitmapDrawable(Resources, Bitmap) was introduced in Android 1.6.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Constructor<BitmapDrawable> constructor = BitmapDrawable.class.getConstructor(Resources.class, Bitmap.class);
-            return constructor.newInstance(context.getResources(), bitmap);
-        } catch (Throwable x) {
-            return new BitmapDrawable(bitmap);
-        }
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
 
     public static void registerMediaButtonEventReceiver(Context context) {
@@ -1114,31 +950,16 @@ public final class Util {
         boolean enabled = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_BUTTONS, true);
 
         if (enabled) {
-
-            // AudioManager.registerMediaButtonEventReceiver() was introduced in Android 2.2.
-            // Use reflection to maintain compatibility with 1.5.
-            try {
-                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
-                Method method = AudioManager.class.getMethod("registerMediaButtonEventReceiver", ComponentName.class);
-                method.invoke(audioManager, componentName);
-            } catch (Throwable x) {
-                // Ignored.
-            }
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
+            audioManager.registerMediaButtonEventReceiver(componentName);
         }
     }
 
     public static void unregisterMediaButtonEventReceiver(Context context) {
-        // AudioManager.unregisterMediaButtonEventReceiver() was introduced in Android 2.2.
-        // Use reflection to maintain compatibility with 1.5.
-        try {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
-            Method method = AudioManager.class.getMethod("unregisterMediaButtonEventReceiver", ComponentName.class);
-            method.invoke(audioManager, componentName);
-        } catch (Throwable x) {
-            // Ignored.
-        }
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        ComponentName componentName = new ComponentName(context.getPackageName(), MediaButtonIntentReceiver.class.getName());
+        audioManager.unregisterMediaButtonEventReceiver(componentName);
     }
 
     public static void requestAudioFocus(final Context context) {
@@ -1146,30 +967,30 @@ public final class Util {
             final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             audioManager.requestAudioFocus(focusListener = new OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
-                    DownloadService downloadService = (DownloadService)context;
-                    if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
-                        if(downloadService.getPlayerState() == PlayerState.STARTED) {
+                    DownloadService downloadService = (DownloadService) context;
+                    if ((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+                        if (downloadService.getPlayerState() == PlayerState.STARTED) {
                             Log.i(TAG, "Temporary loss of focus");
                             SharedPreferences prefs = getPreferences(context);
                             int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
-                            if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+                            if (lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
                                 lowerFocus = true;
                                 downloadService.setVolume(0.1f);
-                            } else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
+                            } else if (lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
                                 pauseFocus = true;
                                 downloadService.pause(true);
                             }
                         }
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                        if(pauseFocus) {
+                        if (pauseFocus) {
                             pauseFocus = false;
                             downloadService.start();
                         }
-                        if(lowerFocus) {
+                        if (lowerFocus) {
                             lowerFocus = false;
                             downloadService.setVolume(1.0f);
                         }
-                    } else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                         Log.i(TAG, "Permanently lost focus");
                         focusListener = null;
                         downloadService.pause();
@@ -1177,14 +998,6 @@ public final class Util {
                     }
                 }
             }, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        }
-    }
-
-    public static void abandonAudioFocus(Context context) {
-        if(focusListener != null) {
-            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            audioManager.abandonAudioFocus(focusListener);
-            focusListener = null;
         }
     }
 
@@ -1215,7 +1028,7 @@ public final class Util {
 
             context.sendBroadcast(intent);
             context.sendBroadcast(avrcpIntent);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to broadcastNewTrackInfo", e);
         }
     }
@@ -1243,7 +1056,7 @@ public final class Util {
                     break;
                 case PREPARED:
                     // Only send quick pause event for samsung devices, causes issues for others
-                    if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+                    if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
                         avrcpIntent.putExtra("playing", false);
                     } else {
                         return; // Don't broadcast anything
@@ -1262,14 +1075,14 @@ public final class Util {
                 context.sendBroadcast(intent);
             }
             context.sendBroadcast(avrcpIntent);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
         }
     }
 
     private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {
         if (song != null) {
-            DownloadService downloadService = (DownloadService)context;
+            DownloadService downloadService = (DownloadService) context;
             File albumArtFile = FileUtil.getAlbumArtFile(context, song);
 
             intent.putExtra("track", song.getTitle());
@@ -1280,7 +1093,7 @@ public final class Util {
             intent.putExtra("duration", (long) downloadService.getPlayerDuration());
             intent.putExtra("position", (long) downloadService.getPlayerPosition());
             intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-            intent.putExtra("package","net.nullsum.audinaut");
+            intent.putExtra("package", "net.nullsum.audinaut");
         } else {
             intent.putExtra("track", "");
             intent.putExtra("artist", "");
@@ -1290,7 +1103,7 @@ public final class Util {
             intent.putExtra("duration", (long) 0);
             intent.putExtra("position", (long) 0);
             intent.putExtra("coverart", "");
-            intent.putExtra("package","net.nullsum.audinaut");
+            intent.putExtra("package", "net.nullsum.audinaut");
         }
     }
 
@@ -1299,8 +1112,8 @@ public final class Util {
         return wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, tag);
     }
 
-    public static Random getRandom() {
-        if(random == null) {
+    private static Random getRandom() {
+        if (random == null) {
             random = new SecureRandom();
         }
 

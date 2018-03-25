@@ -15,6 +15,8 @@
 
 package net.nullsum.audinaut.util;
 
+import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,17 +25,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
-import android.content.Context;
-import android.util.Log;
-
-import net.nullsum.audinaut.util.ServerProxy;
-
 public class FileProxy extends ServerProxy {
     private static final String TAG = FileProxy.class.getSimpleName();
-
-    public FileProxy(Context context) {
-        super(context);
-    }
 
     protected ProxyTask getTask(Socket client) {
         return new StreamFileTask(client);
@@ -48,7 +41,7 @@ public class FileProxy extends ServerProxy {
 
         @Override
         public boolean processRequest() {
-            if(!super.processRequest()) {
+            if (!super.processRequest()) {
                 return false;
             }
 
@@ -60,11 +53,7 @@ public class FileProxy extends ServerProxy {
             }
 
             // Make sure to not try to read past where the file is downloaded
-            if(cbSkip != 0 && cbSkip >= file.length()) {
-                return false;
-            }
-
-            return true;
+            return !(cbSkip != 0 && cbSkip >= file.length());
         }
 
         File getFile(String path) {
@@ -74,6 +63,7 @@ public class FileProxy extends ServerProxy {
         Long getContentLength() {
             return file.length();
         }
+
         long getFileSize() {
             return file.length();
         }
@@ -84,12 +74,12 @@ public class FileProxy extends ServerProxy {
 
             // Create HTTP header
             String headers;
-            if(cbSkip == 0) {
+            if (cbSkip == 0) {
                 headers = "HTTP/1.0 200 OK\r\n";
             } else {
                 headers = "HTTP/1.0 206 OK\r\n";
                 headers += "Content-Range: bytes " + cbSkip + "-" + (file.length() - 1) + "/";
-                if(contentLength == null) {
+                if (contentLength == null) {
                     headers += "*";
                 } else {
                     headers += contentLength;
@@ -102,21 +92,21 @@ public class FileProxy extends ServerProxy {
             String name = file.getPath();
             int index = name.lastIndexOf('.');
             String ext = "";
-            if(index != -1) {
+            if (index != -1) {
                 ext = name.substring(index + 1).toLowerCase();
             }
-            if("mp3".equals(ext)) {
+            if ("mp3".equals(ext)) {
                 headers += "Content-Type: audio/mpeg\r\n";
             } else {
                 headers += "Content-Type: " + "application/octet-stream" + "\r\n";
             }
 
             long fileSize;
-            if(contentLength == null) {
+            if (contentLength == null) {
                 fileSize = getFileSize();
             } else {
                 fileSize = contentLength;
-                if(cbSkip > 0) {
+                if (cbSkip > 0) {
                     headers += "Content-Length: " + (fileSize - cbSkip) + "\r\n";
                 } else {
                     headers += "Content-Length: " + fileSize + "\r\n";
@@ -132,7 +122,7 @@ public class FileProxy extends ServerProxy {
             OutputStream output = null;
             byte[] buff = new byte[64 * 1024];
             try {
-                output = new BufferedOutputStream(client.getOutputStream(), 32*1024);
+                output = new BufferedOutputStream(client.getOutputStream(), 32 * 1024);
                 output.write(headers.getBytes());
 
                 // Make sure to have file lock
@@ -165,7 +155,7 @@ public class FileProxy extends ServerProxy {
                     }
 
                     // Done regardless of whether or not it thinks it is
-                    if(isWorkDone()) {
+                    if (isWorkDone()) {
                         break;
                     }
 
@@ -178,14 +168,12 @@ public class FileProxy extends ServerProxy {
 
                 // Release file lock, use of stream proxy means nothing else is using it
                 onStop();
-            }
-            catch (SocketException socketException) {
+            } catch (SocketException socketException) {
                 Log.e(TAG, "SocketException() thrown, proxy client has probably closed. This can exit harmlessly");
 
                 // Release file lock, use of stream proxy means nothing else is using it
                 onStop();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Exception thrown from streaming task:");
                 Log.e(TAG, e.getClass().getName() + " : " + e.getLocalizedMessage());
             }
@@ -196,8 +184,7 @@ public class FileProxy extends ServerProxy {
                     output.close();
                 }
                 client.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 Log.e(TAG, "IOException while cleaning up streaming task:");
                 Log.e(TAG, e.getClass().getName() + " : " + e.getLocalizedMessage());
             }
@@ -206,12 +193,15 @@ public class FileProxy extends ServerProxy {
         public void onStart() {
 
         }
+
         public void onStop() {
 
         }
+
         public void onResume() {
 
         }
+
         public boolean isWorkDone() {
             return cbSkip >= file.length();
         }

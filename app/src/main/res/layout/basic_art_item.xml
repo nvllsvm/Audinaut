@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
 
     <net.nullsum.audinaut.view.RecyclingImageView
         android:id="@+id/item_art"
         android:layout_width="@dimen/AlbumArt.Small"
         android:layout_height="@dimen/AlbumArt.Small"
-        android:layout_gravity="left|center_vertical"/>
+        android:layout_gravity="left|center_vertical" />
 
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="left|center_vertical"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
         android:paddingLeft="10dip"
         android:paddingRight="3dip"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:maxLines="1"
-        android:ellipsize="marquee"
-        android:textColor="?android:textColorPrimary"/>
+        android:textColor="?android:textColorPrimary" />
 
     <ImageView
         android:id="@+id/item_more"
-        android:src="?attr/download_none"
+        style="@style/MoreButton"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        style="@style/MoreButton"/>
+        android:src="?attr/download_none" />
 </LinearLayout>

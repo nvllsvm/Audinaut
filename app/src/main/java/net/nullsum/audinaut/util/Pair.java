@@ -25,11 +25,8 @@ import java.io.Serializable;
  */
 public class Pair<S, T> implements Serializable {
 
-    private S first;
-    private T second;
-
-    public Pair() {
-    }
+    private final S first;
+    private final T second;
 
     public Pair(S first, T second) {
         this.first = first;
@@ -40,15 +37,8 @@ public class Pair<S, T> implements Serializable {
         return first;
     }
 
-    public void setFirst(S first) {
-        this.first = first;
-    }
-
     public T getSecond() {
         return second;
     }
 
-    public void setSecond(T second) {
-        this.second = second;
-    }
 }

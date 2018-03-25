@@ -18,11 +18,9 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.domain.User;
 import net.nullsum.audinaut.domain.User.MusicFolderSetting;
 
 import static net.nullsum.audinaut.domain.User.Setting;
@@ -36,14 +34,11 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.basic_choice_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.item_name);
-        checkBox = (CheckBox) findViewById(R.id.item_checkbox);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(item != null) {
-                    item.setValue(isChecked);
-                }
+        titleView = findViewById(R.id.item_name);
+        checkBox = findViewById(R.id.item_checkbox);
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (item != null) {
+                item.setValue(isChecked);
             }
         });
         checkBox.setClickable(false);
@@ -52,23 +47,23 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
     protected void setObjectImpl(Setting setting, Boolean isEditable) {
         // Can't edit non-role parts
         String name = setting.getName();
-        if(name.indexOf("Role") == -1 && !(setting instanceof MusicFolderSetting)) {
+        if (!name.contains("Role") && !(setting instanceof MusicFolderSetting)) {
             item2 = false;
         }
 
         int res = -1;
-        if(setting instanceof MusicFolderSetting) {
+        if (setting instanceof MusicFolderSetting) {
             titleView.setText(((MusicFolderSetting) setting).getLabel());
         } else {
             // Last resort to display the raw value
             titleView.setText(name);
         }
 
-        if(res != -1) {
+        if (res != -1) {
             titleView.setText(res);
         }
 
-        if(setting.getValue()) {
+        if (setting.getValue()) {
             checkBox.setChecked(setting.getValue());
         } else {
             checkBox.setChecked(false);

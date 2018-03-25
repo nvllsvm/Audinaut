@@ -4,11 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import net.nullsum.audinaut.service.DownloadService;
 
 public class A2dpIntentReceiver extends BroadcastReceiver {
     private static final String PLAYSTATUS_RESPONSE = "com.android.music.playstatusresponse";
-    private String TAG = A2dpIntentReceiver.class.getSimpleName();
+    private final String TAG = A2dpIntentReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -16,7 +17,7 @@ public class A2dpIntentReceiver extends BroadcastReceiver {
 
         DownloadService downloadService = DownloadService.getInstance();
 
-        if (downloadService != null){
+        if (downloadService != null) {
 
             Intent avrcpIntent = new Intent(PLAYSTATUS_RESPONSE);
 
@@ -24,7 +25,7 @@ public class A2dpIntentReceiver extends BroadcastReceiver {
             avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
             avrcpIntent.putExtra("ListSize", (long) downloadService.getSongs().size());
 
-            switch (downloadService.getPlayerState()){
+            switch (downloadService.getPlayerState()) {
                 case STARTED:
                     avrcpIntent.putExtra("playing", true);
                     break;

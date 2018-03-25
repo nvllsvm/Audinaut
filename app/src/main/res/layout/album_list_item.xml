@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@id/drag_handle"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:background="?attr/selectableItemBackground">
+    android:id="@id/drag_handle"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="@dimen/AlbumArt.Small"
@@ -14,15 +14,15 @@
             android:id="@+id/album_coverart"
             android:layout_width="@dimen/AlbumArt.Small"
             android:layout_height="@dimen/AlbumArt.Small"
-            android:layout_gravity="left|center_vertical"/>
+            android:layout_gravity="left|center_vertical" />
     </RelativeLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="left|center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical"
         android:paddingLeft="10dip"
         android:paddingRight="3dip">
 
@@ -30,27 +30,27 @@
             android:id="@+id/album_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:maxLines="1"
             android:ellipsize="marquee"
             android:paddingBottom="6dip"
-            android:textColor="?android:textColorPrimary"/>
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:textColorPrimary" />
 
         <TextView
             android:id="@+id/album_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:maxLines="1"
-            android:textColor="?android:textColorSecondary"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:textColorSecondary" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/item_more"
-        android:src="?attr/download_none"
+        style="@style/MoreButton"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        style="@style/MoreButton"/>
+        android:src="?attr/download_none" />
 </LinearLayout>

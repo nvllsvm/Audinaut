@@ -18,24 +18,23 @@
  */
 package net.nullsum.audinaut.service;
 
-import java.util.List;
-
-import okhttp3.Response;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;
-import net.nullsum.audinaut.domain.PlayerQueue;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.domain.SearchCritera;
 import net.nullsum.audinaut.domain.SearchResult;
 import net.nullsum.audinaut.domain.User;
-import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.ProgressListener;
+import net.nullsum.audinaut.util.SilentBackgroundTask;
+
+import java.util.List;
+
+import okhttp3.Response;
 
 /**
  * @author Sindre Mehus
@@ -78,7 +77,6 @@ public interface MusicService {
 
     MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception;
 
-    MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception;
     MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
@@ -90,12 +88,6 @@ public interface MusicService {
     MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 
     User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
-
-    Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
-
-    void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception;
-
-    PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception;
 
     void setInstance(Integer instance) throws Exception;
 }

@@ -18,13 +18,6 @@
  */
 package net.nullsum.audinaut.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
@@ -37,6 +30,13 @@ import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.Util;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import okhttp3.Response;
 
@@ -54,16 +54,15 @@ public class DownloadFile implements BufferFile {
     private final File saveFile;
 
     private final MediaStoreService mediaStoreService;
+    private final boolean save;
+    private final Long contentLength = null;
     private DownloadTask downloadTask;
-    private boolean save;
     private boolean failedDownload = false;
     private int failed = 0;
     private int bitRate;
     private boolean isPlaying = false;
     private boolean saveWhenDone = false;
     private boolean completeWhenDone = false;
-    private Long contentLength = null;
-    private long currentSpeed = 0;
     private boolean rateLimit = false;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
@@ -82,19 +81,16 @@ public class DownloadFile implements BufferFile {
     public MusicDirectory.Entry getSong() {
         return song;
     }
+
     public boolean isSong() {
         return song.isSong();
-    }
-
-    public Context getContext() {
-        return context;
     }
 
     /**
      * Returns the effective bit rate.
      */
     public int getBitRate() {
-        if(!partialFile.exists()) {
+        if (!partialFile.exists()) {
             bitRate = getActualBitrate();
         }
         if (bitRate > 0) {
@@ -102,17 +98,18 @@ public class DownloadFile implements BufferFile {
         }
         return song.getBitRate() == null ? 160 : song.getBitRate();
     }
+
     private int getActualBitrate() {
         int br = Util.getMaxBitrate(context);
-        if(br == 0 && song.getTranscodedSuffix() != null && "mp3".equals(song.getTranscodedSuffix().toLowerCase())) {
-            if(song.getBitRate() != null) {
+        if (br == 0 && song.getTranscodedSuffix() != null && "mp3".equals(song.getTranscodedSuffix().toLowerCase())) {
+            if (song.getBitRate() != null) {
                 br = Math.min(320, song.getBitRate());
             } else {
                 br = 320;
             }
-        } else if(song.getSuffix() != null && (song.getTranscodedSuffix() == null || song.getSuffix().equals(song.getTranscodedSuffix()))) {
+        } else if (song.getSuffix() != null && (song.getTranscodedSuffix() == null || song.getSuffix().equals(song.getTranscodedSuffix()))) {
             // If just downsampling, don't try to upsample (ie: 128 kpbs -> 192 kpbs)
-            if(song.getBitRate() != null && (br == 0 || br > song.getBitRate())) {
+            if (song.getBitRate() != null && (br == 0 || br > song.getBitRate())) {
                 br = song.getBitRate();
             }
         }
@@ -124,29 +121,16 @@ public class DownloadFile implements BufferFile {
         return contentLength;
     }
 
-    public long getCurrentSize() {
-        if(partialFile.exists()) {
-            return partialFile.length();
-        } else {
-            File file = getCompleteFile();
-            if(file.exists()) {
-                return file.length();
-            } else {
-                return 0L;
-            }
-        }
-    }
-
     @Override
     public long getEstimatedSize() {
-        if(contentLength != null) {
+        if (contentLength != null) {
             return contentLength;
         }
 
         File file = getCompleteFile();
-        if(file.exists()) {
+        if (file.exists()) {
             return file.length();
-        } else if(song.getDuration() == null) {
+        } else if (song.getDuration() == null) {
             return 0;
         } else {
             int br = (getBitRate() * 1000) / 8;
@@ -155,29 +139,16 @@ public class DownloadFile implements BufferFile {
         }
     }
 
-    public long getBytesPerSecond() {
-        return currentSpeed;
-    }
-
     public synchronized void download() {
         rateLimit = false;
         preDownload();
         downloadTask.execute();
     }
-    public synchronized void downloadNow(MusicService musicService) {
-        rateLimit = true;
-        preDownload();
-        downloadTask.setMusicService(musicService);
-        try {
-            downloadTask.doInBackground();
-        } catch(InterruptedException e) {
-            // This should never be reached
-        }
-    }
+
     private void preDownload() {
         FileUtil.createDirectoryForParent(saveFile);
         failedDownload = false;
-        if(!partialFile.exists()) {
+        if (!partialFile.exists()) {
             bitRate = getActualBitrate();
         }
         downloadTask = new DownloadTask(context);
@@ -211,9 +182,6 @@ public class DownloadFile implements BufferFile {
 
         return saveFile;
     }
-    public File getSaveFile() {
-        return saveFile;
-    }
 
     public File getPartialFile() {
         return partialFile;
@@ -244,7 +212,7 @@ public class DownloadFile implements BufferFile {
 
     @Override
     public synchronized void onResume() {
-        if(!isWorkDone() && !isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
+        if (!isWorkDone() && !isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
             download();
         }
     }
@@ -264,6 +232,7 @@ public class DownloadFile implements BufferFile {
     public boolean isFailed() {
         return failedDownload;
     }
+
     public boolean isFailedMax() {
         return failed > MAX_FAILURES;
     }
@@ -317,60 +286,52 @@ public class DownloadFile implements BufferFile {
         }
     }
 
+    public void renamePartial() {
+        Util.renameFile(partialFile, completeFile);
+        saveToStore();
+    }
+
     public void setPlaying(boolean isPlaying) {
-        try {
-            if(saveWhenDone && !isPlaying) {
-                Util.renameFile(completeFile, saveFile);
-                renameInStore(completeFile, saveFile);
-                saveWhenDone = false;
-            } else if(completeWhenDone && !isPlaying) {
-                if(save) {
-                    Util.renameFile(partialFile, saveFile);
-                    saveToStore();
-                } else {
-                    Util.renameFile(partialFile, completeFile);
-                    saveToStore();
-                }
-                completeWhenDone = false;
+        if (saveWhenDone && !isPlaying) {
+            Util.renameFile(completeFile, saveFile);
+            renameInStore(completeFile, saveFile);
+            saveWhenDone = false;
+        } else if (completeWhenDone && !isPlaying) {
+            if (save) {
+                Util.renameFile(partialFile, saveFile);
+                saveToStore();
+            } else {
+                Util.renameFile(partialFile, completeFile);
+                saveToStore();
             }
-        } catch(IOException ex) {
-            Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile, ex);
+            completeWhenDone = false;
         }
 
         this.isPlaying = isPlaying;
-    }
-    public void renamePartial() {
-        try {
-            Util.renameFile(partialFile, completeFile);
-            saveToStore();
-        } catch(IOException ex) {
-            Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
-        }
-    }
-    public boolean getPlaying() {
-        return isPlaying;
     }
 
     private void deleteFromStore() {
         try {
             mediaStoreService.deleteFromMediaStore(this);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.w(TAG, "Failed to remove from store", e);
         }
     }
+
     private void saveToStore() {
-        if(!Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HIDE_MEDIA, false)) {
+        if (!Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HIDE_MEDIA, false)) {
             try {
                 mediaStoreService.saveInMediaStore(this);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to save in media store", e);
             }
         }
     }
+
     private void renameInStore(File start, File end) {
         try {
             mediaStoreService.renameInMediaStore(start, end);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.w(TAG, "Failed to rename in store", e);
         }
     }
@@ -425,7 +386,7 @@ public class DownloadFile implements BufferFile {
                 }
                 if (completeFile.exists()) {
                     if (save) {
-                        if(isPlaying) {
+                        if (isPlaying) {
                             saveWhenDone = true;
                         } else {
                             Util.renameFile(completeFile, saveFile);
@@ -438,7 +399,7 @@ public class DownloadFile implements BufferFile {
                     return null;
                 }
 
-                if(musicService == null) {
+                if (musicService == null) {
                     musicService = MusicServiceFactory.getMusicService(context);
                 }
 
@@ -446,15 +407,14 @@ public class DownloadFile implements BufferFile {
                 boolean compare;
                 try {
                     compare = (bitRate == 0) || (song.getDuration() == 0) || (partialFile.length() == 0) || (bitRate * song.getDuration() * 1000 / 8) > partialFile.length();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     compare = true;
                 }
-                if(compare) {
+                if (compare) {
                     // Attempt partial HTTP GET, appending to the file if it exists.
                     Response response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
-                    if(response.header("Content-Length") != null) {
+                    if (response.header("Content-Length") != null) {
                         Log.i(TAG, "Content Length: " + contentLength);
-                        contentLength = contentLength;
                     }
 
                     boolean partial = response.code() == 206;
@@ -472,17 +432,17 @@ public class DownloadFile implements BufferFile {
 
                     if (isCancelled()) {
                         throw new Exception("Download of '" + song + "' was cancelled");
-                    } else if(partialFile.length() == 0) {
+                    } else if (partialFile.length() == 0) {
                         throw new Exception("Download of '" + song + "' failed.  File is 0 bytes long.");
                     }
 
                     downloadAndSaveCoverArt(musicService);
                 }
 
-                if(isPlaying) {
+                if (isPlaying) {
                     completeWhenDone = true;
                 } else {
-                    if(save) {
+                    if (save) {
                         Util.renameFile(partialFile, saveFile);
                     } else {
                         Util.renameFile(partialFile, completeFile);
@@ -490,20 +450,20 @@ public class DownloadFile implements BufferFile {
                     DownloadFile.this.saveToStore();
                 }
 
-            } catch(InterruptedException x) {
+            } catch (InterruptedException x) {
                 throw x;
-            } catch(FileNotFoundException x) {
+            } catch (FileNotFoundException x) {
                 Util.delete(completeFile);
                 Util.delete(saveFile);
-                if(!isCancelled()) {
+                if (!isCancelled()) {
                     failed = MAX_FAILURES + 1;
                     failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
-            } catch(IOException x) {
+            } catch (IOException x) {
                 Util.delete(completeFile);
                 Util.delete(saveFile);
-                if(!isCancelled()) {
+                if (!isCancelled()) {
                     failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
@@ -529,7 +489,7 @@ public class DownloadFile implements BufferFile {
 
             // Only run these if not interrupted, ie: cancelled
             DownloadService downloadService = DownloadService.getInstance();
-            if(downloadService != null && !isCancelled()) {
+            if (downloadService != null && !isCancelled()) {
                 new CacheCleaner(context, downloadService).cleanSpace();
                 checkDownloads();
             }
@@ -539,7 +499,7 @@ public class DownloadFile implements BufferFile {
 
         private void checkDownloads() {
             DownloadService downloadService = DownloadService.getInstance();
-            if(downloadService != null) {
+            if (downloadService != null) {
                 downloadService.checkDownloads();
             }
         }
@@ -549,16 +509,12 @@ public class DownloadFile implements BufferFile {
             return "DownloadTask (" + song + ")";
         }
 
-        public void setMusicService(MusicService musicService) {
-            this.musicService = musicService;
-        }
-
-        private void downloadAndSaveCoverArt(MusicService musicService) throws Exception {
+        private void downloadAndSaveCoverArt(MusicService musicService) {
             try {
                 if (song.getCoverArt() != null) {
                     // Check if album art already exists, don't want to needlessly load into memory
                     File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-                    if(!albumArtFile.exists()) {
+                    if (!albumArtFile.exists()) {
                         musicService.getCoverArt(context, song, 0, null, null);
                     }
                 }
@@ -602,23 +558,18 @@ public class DownloadFile implements BufferFile {
                 long now = System.currentTimeMillis();
                 if (now - lastLog > 3000L) {  // Only every so often.
                     Log.i(TAG, "Downloaded " + Util.formatBytes(count) + " of " + song);
-                    currentSpeed = lastCount / ((now - lastLog) / 1000L);
                     lastLog = now;
                     lastCount = 0;
 
                     // Re-establish every few seconds whether screen is on or not
-                    if(rateLimit) {
+                    if (rateLimit) {
                         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                        if(pm.isScreenOn()) {
-                            activeLimit = true;
-                        } else {
-                            activeLimit = false;
-                        }
+                        activeLimit = pm.isScreenOn();
                     }
                 }
 
                 // If screen is on and rateLimit is true, stop downloading from exhausting bandwidth
-                if(activeLimit) {
+                if (activeLimit) {
                     Thread.sleep(10L);
                 }
             }

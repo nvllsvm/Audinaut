@@ -1,78 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <ImageButton
-            style="@style/PlaybackControl"
-            android:id="@+id/download_repeat"
-            android:src="?attr/media_button_repeat_off"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
+        android:id="@+id/download_repeat"
+        style="@style/PlaybackControl"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="?attr/media_button_repeat_off" />
 
     <net.nullsum.audinaut.view.AutoRepeatButton
-            style="@style/PlaybackControl.Small"
-            android:id="@+id/download_previous"
-            android:src="?attr/media_button_backward"
-            android:layout_toLeftOf="@+id/download_pause"
-            android:layout_centerVertical="true"
-            />
-
-    <net.nullsum.audinaut.view.AutoRepeatButton
-        style="@style/PlaybackControl.Large"
-        android:id="@+id/download_rewind"
-        android:src="?attr/media_button_rewind"
+        android:id="@+id/download_previous"
+        style="@style/PlaybackControl.Small"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/download_pause"
-        android:layout_centerVertical="true"
-        android:visibility="invisible"/>
-
-    <ImageButton
-            style="@style/PlaybackControl.Large"
-            android:id="@+id/download_pause"
-            android:src="?attr/media_button_pause"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"
-            />
-
-    <ImageButton
-            style="@style/PlaybackControl.Large"
-            android:id="@+id/download_stop"
-            android:src="?attr/media_button_stop"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"
-            />
-
-    <ImageButton
-            style="@style/PlaybackControl.Large"
-            android:id="@+id/download_start"
-            android:src="?attr/media_button_start"
-            android:layout_centerInParent="true"
-            />
+        android:src="?attr/media_button_backward" />
 
     <net.nullsum.audinaut.view.AutoRepeatButton
+        android:id="@+id/download_rewind"
         style="@style/PlaybackControl.Large"
-        android:id="@+id/download_fastforward"
-        android:src="?attr/media_button_fastforward"
-        android:layout_toRightOf="@+id/download_start"
         android:layout_centerVertical="true"
-        android:visibility="invisible"/>
-
-    <net.nullsum.audinaut.view.AutoRepeatButton
-            style="@style/PlaybackControl.Small"
-            android:id="@+id/download_next"
-            android:src="?attr/media_button_forward"
-            android:layout_toRightOf="@+id/download_start"
-            android:layout_centerVertical="true"
-            />
+        android:layout_toLeftOf="@+id/download_pause"
+        android:src="?attr/media_button_rewind"
+        android:visibility="invisible" />
 
     <ImageButton
-            style="@style/PlaybackControl"
-            android:id="@+id/download_toggle_list"
-            android:src="?attr/toggle_list"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            />
+        android:id="@+id/download_pause"
+        style="@style/PlaybackControl.Large"
+        android:layout_centerInParent="true"
+        android:src="?attr/media_button_pause"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/download_stop"
+        style="@style/PlaybackControl.Large"
+        android:layout_centerInParent="true"
+        android:src="?attr/media_button_stop"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/download_start"
+        style="@style/PlaybackControl.Large"
+        android:layout_centerInParent="true"
+        android:src="?attr/media_button_start" />
+
+    <net.nullsum.audinaut.view.AutoRepeatButton
+        android:id="@+id/download_fastforward"
+        style="@style/PlaybackControl.Large"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/download_start"
+        android:src="?attr/media_button_fastforward"
+        android:visibility="invisible" />
+
+    <net.nullsum.audinaut.view.AutoRepeatButton
+        android:id="@+id/download_next"
+        style="@style/PlaybackControl.Small"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/download_start"
+        android:src="?attr/media_button_forward" />
+
+    <ImageButton
+        android:id="@+id/download_toggle_list"
+        style="@style/PlaybackControl"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="?attr/toggle_list" />
 </RelativeLayout>

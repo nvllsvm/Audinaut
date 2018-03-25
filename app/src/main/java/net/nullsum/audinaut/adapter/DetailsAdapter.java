@@ -16,8 +16,6 @@
 package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,32 +23,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import net.nullsum.audinaut.R;
 
-public class DetailsAdapter extends ArrayAdapter<String> {
-    private List<String> headers;
-    private List<String> details;
+import java.util.List;
 
-    public DetailsAdapter(Context context, int layout, List<String> headers, List<String> details) {
-        super(context, layout, headers);
+public class DetailsAdapter extends ArrayAdapter<String> {
+    private final List<String> headers;
+    private final List<String> details;
+
+    public DetailsAdapter(Context context, List<String> headers, List<String> details) {
+        super(context, R.layout.details_item, headers);
 
         this.headers = headers;
         this.details = details;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        if(convertView == null) {
+        if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.details_item, null);
         } else {
             view = convertView;
         }
 
-        TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-        TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+        TextView nameView = view.findViewById(R.id.detail_name);
+        TextView detailsView = view.findViewById(R.id.detail_value);
 
         nameView.setText(headers.get(position));
 

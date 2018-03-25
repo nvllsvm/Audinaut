@@ -18,13 +18,14 @@
  */
 package net.nullsum.audinaut.audiofx;
 
-import java.io.Serializable;
-
 import android.content.Context;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.util.Log;
+
 import net.nullsum.audinaut.util.FileUtil;
+
+import java.io.Serializable;
 
 /**
  * Backward-compatible wrapper for {@link Equalizer}, which is API Level 9.
@@ -54,7 +55,7 @@ public class EqualizerController {
         equalizer = new Equalizer(0, audioSessionId);
         bass = new BassBoost(0, audioSessionId);
         loudnessAvailable = true;
-        loudnessEnhancerController = new LoudnessEnhancerController(context, audioSessionId);
+        loudnessEnhancerController = new LoudnessEnhancerController(audioSessionId);
     }
 
     public void saveSettings() {
@@ -80,14 +81,14 @@ public class EqualizerController {
         }
     }
 
-    public boolean isAvailable() {
+    private boolean isAvailable() {
         return equalizer != null && bass != null;
     }
 
     public boolean isEnabled() {
         try {
             return isAvailable() && equalizer.getEnabled();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -97,14 +98,14 @@ public class EqualizerController {
             released = true;
             equalizer.release();
             bass.release();
-            if(loudnessEnhancerController != null && loudnessEnhancerController.isAvailable()) {
+            if (loudnessEnhancerController != null && loudnessEnhancerController.isAvailable()) {
                 loudnessEnhancerController.release();
             }
         }
     }
 
     public Equalizer getEqualizer() {
-        if(released) {
+        if (released) {
             released = false;
             try {
                 init();
@@ -116,8 +117,9 @@ public class EqualizerController {
         }
         return equalizer;
     }
+
     public BassBoost getBassBoost() {
-        if(released) {
+        if (released) {
             released = false;
             try {
                 init();
@@ -128,8 +130,9 @@ public class EqualizerController {
         }
         return bass;
     }
+
     public LoudnessEnhancerController getLoudnessEnhancerController() {
-        if(loudnessAvailable && released) {
+        if (loudnessAvailable && released) {
             released = false;
             try {
                 init();
@@ -144,7 +147,6 @@ public class EqualizerController {
     private static class EqualizerSettings implements Serializable {
 
         private short[] bandLevels;
-        private short preset;
         private boolean enabled;
         private short bass;
         private int loudness;
@@ -152,6 +154,7 @@ public class EqualizerController {
         public EqualizerSettings() {
 
         }
+
         public EqualizerSettings(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessEnhancerController) {
             enabled = equalizer.getEnabled();
             bandLevels = new short[equalizer.getNumberOfBands()];
@@ -159,19 +162,14 @@ public class EqualizerController {
                 bandLevels[i] = equalizer.getBandLevel(i);
             }
             try {
-                preset = equalizer.getCurrentPreset();
-            } catch (Exception x) {
-                preset = -1;
-            }
-            try {
                 bass = boost.getRoundedStrength();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 bass = 0;
             }
 
             try {
                 loudness = (int) loudnessEnhancerController.getGain();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 loudness = 0;
             }
         }
@@ -181,11 +179,11 @@ public class EqualizerController {
                 equalizer.setBandLevel(i, bandLevels[i]);
             }
             equalizer.setEnabled(enabled);
-            if(bass != 0) {
+            if (bass != 0) {
                 boost.setEnabled(true);
                 boost.setStrength(bass);
             }
-            if(loudness != 0) {
+            if (loudness != 0) {
                 loudnessController.enable();
                 loudnessController.setGain(loudness);
             }

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.util.Log;
 
 import net.nullsum.audinaut.domain.PlayerState;
 import net.nullsum.audinaut.service.DownloadService;
@@ -28,24 +27,23 @@ import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.Util;
 
 public class AudioNoisyReceiver extends BroadcastReceiver {
-    private static final String TAG = AudioNoisyReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         DownloadService downloadService = DownloadService.getInstance();
         // Don't do anything if downloadService is not started
-        if(downloadService == null) {
+        if (downloadService == null) {
             return;
         }
 
-        if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals (intent.getAction ())) {
-                if((downloadService.getPlayerState() == PlayerState.STARTED || downloadService.getPlayerState() == PlayerState.PAUSED_TEMP)) {
-                    SharedPreferences prefs = Util.getPreferences(downloadService);
-                    int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
-                    if(pausePref == 0) {
-                        downloadService.pause();
-                    }
+        if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+            if ((downloadService.getPlayerState() == PlayerState.STARTED || downloadService.getPlayerState() == PlayerState.PAUSED_TEMP)) {
+                SharedPreferences prefs = Util.getPreferences(downloadService);
+                int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+                if (pausePref == 0) {
+                    downloadService.pause();
                 }
+            }
         }
     }
 }

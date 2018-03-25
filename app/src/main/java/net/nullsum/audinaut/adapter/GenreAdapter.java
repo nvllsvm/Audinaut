@@ -16,7 +16,7 @@
 package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
-import android.view.ViewGroup;
+
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.view.FastScroller;
 import net.nullsum.audinaut.view.GenreView;
@@ -24,8 +24,8 @@ import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.List;
 
-public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.BubbleTextGetter{
-    public static int VIEW_TYPE_GENRE = 1;
+public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.BubbleTextGetter {
+    private static final int VIEW_TYPE_GENRE = 1;
 
     public GenreAdapter(Context context, List<Genre> genres, OnItemClickedListener listener) {
         super(context, genres);
@@ -33,7 +33,7 @@ public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.
     }
 
     @Override
-    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+    public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         return new UpdateView.UpdateViewHolder(new GenreView(context));
     }
 

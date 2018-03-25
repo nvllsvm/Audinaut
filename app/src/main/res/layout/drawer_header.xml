@@ -2,50 +2,50 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="178dp"
+    android:background="?attr/drawerHeaderBackground"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:background="?attr/drawerHeaderBackground">
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/header_server_name"
+                style="?attr/drawerTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                style="?attr/drawerTitleStyle"/>
+                android:layout_marginLeft="16dp" />
 
             <TextView
                 android:id="@+id/header_user_name"
+                style="?attr/drawerSubtitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                style="?attr/drawerSubtitleStyle"/>
+                android:layout_marginLeft="16dp" />
         </LinearLayout>
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/header_select_image"
-            android:src="@drawable/main_select_server_dark"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="20dp"/>
+            android:layout_gravity="center_vertical"
+            android:paddingRight="20dp"
+            android:src="@drawable/main_select_server_dark" />
     </LinearLayout>
 </RelativeLayout>

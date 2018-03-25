@@ -24,17 +24,13 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class ID3v2File extends Common {
-    private static int ID3_ENC_LATIN   = 0x00;
-    private static int ID3_ENC_UTF16LE = 0x01;
-    private static int ID3_ENC_UTF16BE = 0x02;
-    private static int ID3_ENC_UTF8    = 0x03;
+class ID3v2File extends Common {
 
     public ID3v2File() {
     }
 
     public HashMap getTags(RandomAccessFile s) throws IOException {
-        HashMap tags = new HashMap();
+        HashMap tags;
 
         final int v2hdr_len = 10;
         byte[] v2hdr = new byte[v2hdr_len];
@@ -43,12 +39,11 @@ public class ID3v2File extends Common {
         s.seek(0);
         s.read(v2hdr);
 
-        int id3v   = ((b2be32(v2hdr,0))) & 0xFF;   // swapped ID3\04 -> ver. ist the first byte
-        int v3len  = ((b2be32(v2hdr,6)));          // total size EXCLUDING the this 10 byte header
-        v3len      = ((v3len & 0x7f000000) >> 3) | // for some funky reason, this is encoded as 7*4 bits
-                     ((v3len & 0x007f0000) >> 2) |
-                     ((v3len & 0x00007f00) >> 1) |
-                     ((v3len & 0x0000007f) >> 0) ;
+        int v3len = ((b2be32(v2hdr, 6)));          // total size EXCLUDING the this 10 byte header
+        v3len = ((v3len & 0x7f000000) >> 3) | // for some funky reason, this is encoded as 7*4 bits
+                ((v3len & 0x007f0000) >> 2) |
+                ((v3len & 0x00007f00) >> 1) |
+                ((v3len & 0x0000007f));
 
         // debug(">> tag version ID3v2."+id3v);
         // debug(">> LEN= "+v3len+" // "+v3len);
@@ -56,34 +51,34 @@ public class ID3v2File extends Common {
         // we should already be at the first frame
         // so we can start the parsing right now
         tags = parse_v3_frames(s, v3len);
-        tags.put("_hdrlen", v3len+v2hdr_len);
+        tags.put("_hdrlen", v3len + v2hdr_len);
         return tags;
     }
 
     /* Parses all ID3v2 frames at the current position up until payload_len
     ** bytes were read
     */
-    public HashMap parse_v3_frames(RandomAccessFile s, long payload_len) throws IOException {
+    private HashMap parse_v3_frames(RandomAccessFile s, long payload_len) throws IOException {
         HashMap tags = new HashMap();
-        byte[] frame   = new byte[10]; // a frame header is always 10 bytes
-        long bread     = 0;            // total amount of read bytes
+        byte[] frame = new byte[10]; // a frame header is always 10 bytes
+        long bread = 0;            // total amount of read bytes
 
-        while(bread < payload_len) {
+        while (bread < payload_len) {
             bread += s.read(frame);
             String framename = new String(frame, 0, 4);
             int slen = b2be32(frame, 4);
 
             /* Abort on silly sizes */
-            if(slen < 1 || slen > 524288)
+            if (slen < 1 || slen > 524288)
                 break;
 
             byte[] xpl = new byte[slen];
             bread += s.read(xpl);
 
-            if(framename.substring(0,1).equals("T")) {
+            if (framename.substring(0, 1).equals("T")) {
                 String[] nmzInfo = normalizeTaginfo(framename, xpl);
 
-                for(int i = 0; i < nmzInfo.length; i += 2) {
+                for (int i = 0; i < nmzInfo.length; i += 2) {
                     String oggKey = nmzInfo[i];
                     String decPld = nmzInfo[i + 1];
 
@@ -92,46 +87,41 @@ public class ID3v2File extends Common {
                     }
                 }
             }
-            else if(framename.equals("RVA2")) {
-                //
-            }
-
         }
         return tags;
     }
 
     /* Converts ID3v2 sillyframes to OggNames */
     private String[] normalizeTaginfo(String k, byte[] v) {
-        String[] rv = new String[] {"",""};
+        String[] rv = new String[]{"", ""};
         HashMap lu = new HashMap<String, String>();
         lu.put("TIT2", "TITLE");
         lu.put("TALB", "ALBUM");
         lu.put("TPE1", "ARTIST");
 
-        if(lu.containsKey(k)) {
+        if (lu.containsKey(k)) {
             /* A normal, known key: translate into Ogg-Frame name */
-            rv[0] = (String)lu.get(k);
+            rv[0] = (String) lu.get(k);
             rv[1] = getDecodedString(v);
-        }
-        else if(k.equals("TXXX")) {
+        } else if (k.equals("TXXX")) {
             /* A freestyle field, ieks! */
             String txData[] = getDecodedString(v).split(Character.toString('\0'), 2);
             /* Check if we got replaygain info in key\0value style */
-            if(txData.length == 2) {
-                if(txData[0].matches("^(?i)REPLAYGAIN_(ALBUM|TRACK)_GAIN$")) {
+            if (txData.length == 2) {
+                if (txData[0].matches("^(?i)REPLAYGAIN_(ALBUM|TRACK)_GAIN$")) {
                     rv[0] = txData[0].toUpperCase(); /* some tagwriters use lowercase for this */
                     rv[1] = txData[1];
                 } else {
                     // Check for replaygain tags just thrown randomly in field
-                    int nextStartIndex = 1;
+                    int nextStartIndex;
                     int startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_");
-                    ArrayList<String> parts = new ArrayList<String>();
-                    while(startName != -1) {
+                    ArrayList<String> parts = new ArrayList<>();
+                    while (startName != -1) {
                         int endName = txData[1].indexOf((char) 0, startName);
-                        if(endName != -1) {
+                        if (endName != -1) {
                             parts.add(txData[1].substring(startName, endName).toUpperCase());
                             int endValue = txData[1].indexOf((char) 0, endName + 1);
-                            if(endValue != -1) {
+                            if (endValue != -1) {
                                 parts.add(txData[1].substring(endName + 1, endValue));
                                 nextStartIndex = endValue + 1;
                             } else {
@@ -144,7 +134,7 @@ public class ID3v2File extends Common {
                         startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_", nextStartIndex);
                     }
 
-                    if(parts.size() > 0) {
+                    if (parts.size() > 0) {
                         rv = new String[parts.size()];
                         rv = parts.toArray(rv);
                     }
@@ -158,22 +148,24 @@ public class ID3v2File extends Common {
     /* Converts a raw byte-stream text into a java String */
     private String getDecodedString(byte[] raw) {
         int encid = raw[0] & 0xFF;
-        int len   = raw.length;
-        String v  = "";
+        int len = raw.length;
+        String v = "";
         try {
-            if(encid == ID3_ENC_LATIN) {
-                v = new String(raw, 1, len-1, "ISO-8859-1");
+            int ID3_ENC_LATIN = 0x00;
+            int ID3_ENC_UTF8 = 0x03;
+            int ID3_ENC_UTF16BE = 0x02;
+            int ID3_ENC_UTF16LE = 0x01;
+            if (encid == ID3_ENC_LATIN) {
+                v = new String(raw, 1, len - 1, "ISO-8859-1");
+            } else if (encid == ID3_ENC_UTF8) {
+                v = new String(raw, 1, len - 1, "UTF-8");
+            } else if (encid == ID3_ENC_UTF16LE) {
+                v = new String(raw, 3, len - 3, "UTF-16LE");
+            } else if (encid == ID3_ENC_UTF16BE) {
+                v = new String(raw, 3, len - 3, "UTF-16BE");
             }
-            else if (encid == ID3_ENC_UTF8) {
-                v = new String(raw, 1, len-1, "UTF-8");
-            }
-            else if (encid == ID3_ENC_UTF16LE) {
-                v = new String(raw, 3, len-3, "UTF-16LE");
-            }
-            else if (encid == ID3_ENC_UTF16BE) {
-                v = new String(raw, 3, len-3, "UTF-16BE");
-            }
-        } catch(Exception e) {}
+        } catch (Exception ignored) {
+        }
         return v;
     }
 

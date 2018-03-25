@@ -24,12 +24,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Artist;
@@ -40,13 +34,16 @@ import net.nullsum.audinaut.service.MusicService;
 import net.nullsum.audinaut.service.MusicServiceFactory;
 import net.nullsum.audinaut.util.Util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Provides search suggestions based on recent searches.
  *
  * @author Sindre Mehus
  */
 public class AudinautSearchProvider extends ContentProvider {
-    private static final String TAG = AudinautSearchProvider.class.getSimpleName();
 
     private static final String RESOURCE_PREFIX = "android.resource://net.nullsum.audinaut/";
     private static final String[] COLUMNS = {"_id",
@@ -58,7 +55,7 @@ public class AudinautSearchProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if(selectionArgs[0].isEmpty()) {
+        if (selectionArgs[0].isEmpty()) {
             return null;
         }
 
@@ -87,14 +84,14 @@ public class AudinautSearchProvider extends ContentProvider {
         }
 
         // Add all results into one pot
-        List<Object> results = new ArrayList<Object>();
+        List<Object> results = new ArrayList<>();
         results.addAll(searchResult.getArtists());
         results.addAll(searchResult.getAlbums());
         results.addAll(searchResult.getSongs());
 
         // For each, calculate its string distance to the query
-        for(Object obj: results) {
-            if(obj instanceof Artist) {
+        for (Object obj : results) {
+            if (obj instanceof Artist) {
                 Artist artist = (Artist) obj;
                 artist.setCloseness(Util.getStringDistance(query, artist.getName()));
             } else {
@@ -104,71 +101,64 @@ public class AudinautSearchProvider extends ContentProvider {
         }
 
         // Sort based on the closeness paramater
-        Collections.sort(results, new Comparator<Object>() {
-            @Override
-            public int compare(Object lhs, Object rhs) {
-                // Get the closeness of the two objects
-                int left, right;
-                boolean leftArtist = lhs instanceof Artist;
-                boolean rightArtist = rhs instanceof Artist;
-                if (leftArtist) {
-                    left = ((Artist) lhs).getCloseness();
-                } else {
-                    left = ((MusicDirectory.Entry) lhs).getCloseness();
-                }
-                if (rightArtist) {
-                    right = ((Artist) rhs).getCloseness();
-                } else {
-                    right = ((MusicDirectory.Entry) rhs).getCloseness();
-                }
+        Collections.sort(results, (lhs, rhs) -> {
+            // Get the closeness of the two objects
+            int left, right;
+            boolean leftArtist = lhs instanceof Artist;
+            boolean rightArtist = rhs instanceof Artist;
+            if (leftArtist) {
+                left = ((Artist) lhs).getCloseness();
+            } else {
+                left = ((MusicDirectory.Entry) lhs).getCloseness();
+            }
+            if (rightArtist) {
+                right = ((Artist) rhs).getCloseness();
+            } else {
+                right = ((MusicDirectory.Entry) rhs).getCloseness();
+            }
 
-                if (left == right) {
-                    if(leftArtist && rightArtist) {
-                        return 0;
-                    } else if(leftArtist) {
-                        return -1;
-                    } else if(rightArtist) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                } else if (left > right) {
+            if (left == right) {
+                if (leftArtist && rightArtist) {
+                    return 0;
+                } else if (leftArtist) {
+                    return -1;
+                } else if (rightArtist) {
                     return 1;
                 } else {
-                    return -1;
+                    return 0;
                 }
+            } else if (left > right) {
+                return 1;
+            } else {
+                return -1;
             }
         });
 
         // Done sorting, add results to cursor
-        for(Object obj: results) {
-            if(obj instanceof Artist) {
+        for (Object obj : results) {
+            if (obj instanceof Artist) {
                 Artist artist = (Artist) obj;
                 String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
                 cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
             } else {
                 MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
 
-                if(entry.isDirectory()) {
+                if (entry.isDirectory()) {
                     String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
                     cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
                 } else {
                     String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
                     String id;
-                    if(Util.isTagBrowsing(getContext())) {
-                        id = entry.getAlbumId();
-                    } else {
-                        id = entry.getParent();
-                    }
+                    id = entry.getAlbumId();
 
                     String artistDisplay;
-                    if(entry.getArtist() == null) {
-                        if(entry.getAlbum() != null) {
+                    if (entry.getArtist() == null) {
+                        if (entry.getAlbum() != null) {
                             artistDisplay = entry.getAlbumDisplay();
                         } else {
                             artistDisplay = "";
                         }
-                    } else if(entry.getAlbum() != null) {
+                    } else if (entry.getAlbum() != null) {
                         artistDisplay = entry.getArtist() + " - " + entry.getAlbumDisplay();
                     } else {
                         artistDisplay = entry.getArtist();

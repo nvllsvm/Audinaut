@@ -26,7 +26,7 @@ package net.nullsum.audinaut.service;
  */
 public class OfflineException extends Exception {
 
-    public OfflineException(String message) {
-        super(message);
+    public OfflineException() {
+        super(OfflineMusicService.ERRORMSG);
     }
 }

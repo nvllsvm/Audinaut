@@ -21,7 +21,7 @@ import android.content.SharedPreferences;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.Util;
 
-public class UpdaterSongPress extends Updater {
+class UpdaterSongPress extends Updater {
     public UpdaterSongPress() {
         super(521);
         TAG = this.getClass().getSimpleName();
@@ -33,7 +33,7 @@ public class UpdaterSongPress extends Updater {
         boolean playNowAfter = prefs.getBoolean("playNowAfter", true);
 
         // Migrate the old preference so behavior stays the same
-        if(playNowAfter == false) {
+        if (!playNowAfter) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "single");
             editor.apply();

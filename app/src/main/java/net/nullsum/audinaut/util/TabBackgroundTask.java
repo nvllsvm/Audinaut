@@ -41,11 +41,6 @@ public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
 
     @Override
     public void updateProgress(final String message) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                tabFragment.updateProgress(message);
-            }
-        });
+        getHandler().post(() -> tabFragment.updateProgress(message));
     }
 }

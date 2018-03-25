@@ -21,36 +21,31 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.util.FileUtil;
 
 import java.io.File;
+
 /**
  * Used to display albums in a {@code ListView}.
  *
  * @author Sindre Mehus
  */
 public class ArtistEntryView extends UpdateView<MusicDirectory.Entry> {
-    private static final String TAG = ArtistEntryView.class.getSimpleName();
 
+    private final TextView titleView;
     private File file;
-    private TextView titleView;
 
     public ArtistEntryView(Context context) {
-        super(context);
+        super(context, true);
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.item_name);
-        moreButton = (ImageView) findViewById(R.id.item_more);
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                v.showContextMenu();
-            }
-        });
+        titleView = findViewById(R.id.item_name);
+        moreButton = findViewById(R.id.item_more);
+        moreButton.setOnClickListener(View::showContextMenu);
     }
 
     protected void setObjectImpl(MusicDirectory.Entry artist) {

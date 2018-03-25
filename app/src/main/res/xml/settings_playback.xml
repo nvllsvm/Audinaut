@@ -3,120 +3,117 @@
     xmlns:myns="http://schemas.android.com/apk/res-auto"
     android:title="@string/settings.playback_title">
 
-    <PreferenceCategory
-        android:title="@string/settings.playback_title">
+    <PreferenceCategory android:title="@string/settings.playback_title">
 
         <net.nullsum.audinaut.view.SeekBarPreference
-            android:title="@string/settings.playlist_random_size_title"
-            android:key="randomSize"
             android:defaultValue="20"
             android:dialogLayout="@layout/seekbar_preference"
-            myns:max="100"/>
+            android:key="randomSize"
+            android:title="@string/settings.playlist_random_size_title"
+            myns:max="100" />
 
         <ListPreference
-            android:title="@string/settings.keep_played_count_title"
-            android:key="keepPlayedCount"
             android:defaultValue="0"
+            android:entries="@array/keepPlayedCountNames"
             android:entryValues="@array/keepPlayedCountValues"
-            android:entries="@array/keepPlayedCountNames"/>
+            android:key="keepPlayedCount"
+            android:title="@string/settings.keep_played_count_title" />
 
         <ListPreference
-            android:title="@string/settings.temp_loss_title"
-            android:key="tempLoss"
             android:defaultValue="1"
+            android:entries="@array/tempLossNames"
             android:entryValues="@array/tempLossValues"
-            android:entries="@array/tempLossNames"/>
+            android:key="tempLoss"
+            android:title="@string/settings.temp_loss_title" />
 
         <ListPreference
-            android:title="@string/settings.disconnect_pause_title"
-            android:key="pauseOnDisconnect"
             android:defaultValue="0"
+            android:entries="@array/disconnectPauseNames"
             android:entryValues="@array/disconnectPauseValues"
-            android:entries="@array/disconnectPauseNames"/>
+            android:key="pauseOnDisconnect"
+            android:title="@string/settings.disconnect_pause_title" />
 
         <CheckBoxPreference
-            android:title="@string/settings.persistent_title"
-            android:summary="@string/settings.persistent_summary"
+            android:defaultValue="false"
             android:key="persistentNotification"
-            android:defaultValue="false"/>
+            android:summary="@string/settings.persistent_summary"
+            android:title="@string/settings.persistent_title" />
 
         <CheckBoxPreference
-            android:title="@string/settings.heads_up_notification"
-            android:summary="@string/settings.heads_up_notification_summary"
+            android:defaultValue="false"
             android:key="headsUpNotification"
-            android:defaultValue="false"/>
+            android:summary="@string/settings.heads_up_notification_summary"
+            android:title="@string/settings.heads_up_notification" />
 
         <ListPreference
-            android:title="@string/settings.song_press_action"
-            android:key="songPressAction"
             android:defaultValue="all"
+            android:entries="@array/songPressActionNames"
             android:entryValues="@array/songPressActionValues"
-            android:entries="@array/songPressActionNames"/>
+            android:key="songPressAction"
+            android:title="@string/settings.song_press_action" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/settings.replay_gain">
+    <PreferenceCategory android:title="@string/settings.replay_gain">
 
         <CheckBoxPreference
-            android:title="@string/settings.replay_gain"
-            android:summary="@string/settings.replay_gain_summary"
+            android:defaultValue="false"
             android:key="replayGain"
-            android:defaultValue="false"/>
+            android:summary="@string/settings.replay_gain_summary"
+            android:title="@string/settings.replay_gain" />
 
         <ListPreference
-            android:title="@string/settings.replay_gain_type"
-            android:key="replayGainType"
             android:defaultValue="1"
+            android:entries="@array/replayGainTypeNames"
             android:entryValues="@array/replayGainTypeValues"
-            android:entries="@array/replayGainTypeNames"/>
+            android:key="replayGainType"
+            android:title="@string/settings.replay_gain_type" />
 
         <net.nullsum.audinaut.view.SeekBarPreference
-            android:key="replayGainBump2"
-            android:dialogLayout="@layout/seekbar_preference"
-            android:title="@string/settings.replay_gain_bump"
             android:defaultValue="150"
+            android:dialogLayout="@layout/seekbar_preference"
+            android:key="replayGainBump2"
+            android:title="@string/settings.replay_gain_bump"
+            myns:display="%+.1f dB"
             myns:max="150"
             myns:min="-150"
-            myns:stepSize="10"
-            myns:display="%+.1f dB"/>
+            myns:stepSize="10" />
 
         <net.nullsum.audinaut.view.SeekBarPreference
-            android:key="replayGainUntagged2"
-            android:dialogLayout="@layout/seekbar_preference"
-            android:title="@string/settings.replay_gain_untagged"
             android:defaultValue="150"
+            android:dialogLayout="@layout/seekbar_preference"
+            android:key="replayGainUntagged2"
+            android:title="@string/settings.replay_gain_untagged"
+            myns:display="%+.1f dB"
             myns:max="0"
             myns:min="-150"
-            myns:stepSize="10"
-            myns:display="%+.1f dB"/>
+            myns:stepSize="10" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/settings.other_title">
+    <PreferenceCategory android:title="@string/settings.other_title">
 
         <CheckBoxPreference
-            android:title="@string/settings.shuffle_by_album"
-            android:key="shuffleByAlbum"
             android:defaultValue="false"
+            android:key="shuffleByAlbum"
+            android:summaryOff="@string/settings.shuffle_by_album.false"
             android:summaryOn="@string/settings.shuffle_by_album.true"
-            android:summaryOff="@string/settings.shuffle_by_album.false"/>
+            android:title="@string/settings.shuffle_by_album" />
 
         <CheckBoxPreference
-            android:title="@string/settings.media_button_title"
-            android:summary="@string/settings.media_button_summary"
+            android:defaultValue="true"
             android:key="mediaButtons"
-            android:defaultValue="true"/>
+            android:summary="@string/settings.media_button_summary"
+            android:title="@string/settings.media_button_title" />
 
         <CheckBoxPreference
-            android:title="@string/settings.gapless_playback"
-            android:summary="@string/settings.gapless_playback_summary"
+            android:defaultValue="true"
             android:key="gaplessPlayback"
-            android:defaultValue="true"/>
+            android:summary="@string/settings.gapless_playback_summary"
+            android:title="@string/settings.gapless_playback" />
 
         <CheckBoxPreference
-            android:title="@string/settings.start_on_headphones"
-            android:summary="@string/settings.start_on_headphones_summary"
+            android:defaultValue="false"
             android:key="startOnHeadphones"
-            android:defaultValue="false"/>
+            android:summary="@string/settings.start_on_headphones_summary"
+            android:title="@string/settings.start_on_headphones" />
     </PreferenceCategory>
 </PreferenceScreen>

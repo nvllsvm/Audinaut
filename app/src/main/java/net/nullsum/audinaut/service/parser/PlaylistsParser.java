@@ -21,7 +21,7 @@ package net.nullsum.audinaut.service.parser;
 import android.content.Context;
 
 import net.nullsum.audinaut.domain.Playlist;
-import net.nullsum.audinaut.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
@@ -37,10 +37,10 @@ public class PlaylistsParser extends AbstractParser {
         super(context, instance);
     }
 
-    public List<Playlist> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public List<Playlist> parse(InputStream inputStream) throws Exception {
         init(inputStream);
 
-        List<Playlist> result = new ArrayList<Playlist>();
+        List<Playlist> result = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

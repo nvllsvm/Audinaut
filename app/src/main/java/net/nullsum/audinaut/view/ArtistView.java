@@ -21,9 +21,8 @@ package net.nullsum.audinaut.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.util.FileUtil;
@@ -36,22 +35,17 @@ import java.io.File;
  * @author Sindre Mehus
  */
 public class ArtistView extends UpdateView<Artist> {
-    private static final String TAG = ArtistView.class.getSimpleName();
 
+    private final TextView titleView;
     private File file;
-    private TextView titleView;
 
     public ArtistView(Context context) {
-        super(context);
+        super(context, true);
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.item_name);
-        moreButton = (ImageView) findViewById(R.id.item_more);
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                v.showContextMenu();
-            }
-        });
+        titleView = findViewById(R.id.item_name);
+        moreButton = findViewById(R.id.item_more);
+        moreButton.setOnClickListener(View::showContextMenu);
     }
 
     protected void setObjectImpl(Artist artist) {

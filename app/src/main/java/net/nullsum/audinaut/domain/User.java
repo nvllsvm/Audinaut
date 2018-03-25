@@ -15,21 +15,19 @@
 
 package net.nullsum.audinaut.domain;
 
-import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
-    public static final String ADMIN = "adminRole";
-    public static final String SETTINGS = "settingsRole";
-    public static final String DOWNLOAD = "downloadRole";
-    public static final String UPLOAD = "uploadRole";
-    public static final String COVERART = "coverArtRole";
-    public static final String COMMENT = "commentRole";
-    public static final String STREAM = "streamRole";
     public static final List<String> ROLES = new ArrayList<>();
+    private static final String ADMIN = "adminRole";
+    private static final String SETTINGS = "settingsRole";
+    private static final String DOWNLOAD = "downloadRole";
+    private static final String UPLOAD = "uploadRole";
+    private static final String COVERART = "coverArtRole";
+    private static final String COMMENT = "commentRole";
+    private static final String STREAM = "streamRole";
 
     static {
         ROLES.add(ADMIN);
@@ -41,66 +39,25 @@ public class User implements Serializable {
         ROLES.add(COMMENT);
     }
 
-    private String username;
-    private String password;
-    private String email;
-
-    private List<Setting> settings = new ArrayList<Setting>();
+    private final List<Setting> settings = new ArrayList<>();
     private List<Setting> musicFolders;
 
     public User() {
 
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Setting> getSettings() {
-        return settings;
-    }
-    public void setSettings(List<Setting> settings) {
-        this.settings.clear();
-        this.settings.addAll(settings);
-    }
     public void addSetting(String name, Boolean value) {
         settings.add(new Setting(name, value));
     }
 
     public void addMusicFolder(MusicFolder musicFolder) {
-        if(musicFolders == null) {
+        if (musicFolders == null) {
             musicFolders = new ArrayList<>();
         }
 
-        musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
+        musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName()));
     }
-    public void addMusicFolder(MusicFolderSetting musicFolderSetting, boolean defaultValue) {
-        if(musicFolders == null) {
-            musicFolders = new ArrayList<>();
-        }
 
-        musicFolders.add(new MusicFolderSetting(musicFolderSetting.getName(), musicFolderSetting.getLabel(), defaultValue));
-    }
     public List<Setting> getMusicFolderSettings() {
         return musicFolders;
     }
@@ -112,6 +69,7 @@ public class User implements Serializable {
         public Setting() {
 
         }
+
         public Setting(String name, Boolean value) {
             this.name = name;
             this.value = value;
@@ -120,22 +78,21 @@ public class User implements Serializable {
         public String getName() {
             return name;
         }
+
         public Boolean getValue() {
             return value;
         }
+
         public void setValue(Boolean value) {
             this.value = value;
         }
     }
 
     public static class MusicFolderSetting extends Setting {
-        private String label;
+        private final String label;
 
-        public MusicFolderSetting() {
-
-        }
-        public MusicFolderSetting(String name, String label, Boolean value) {
-            super(name, value);
+        public MusicFolderSetting(String name, String label) {
+            super(name, false);
             this.label = label;
         }
 

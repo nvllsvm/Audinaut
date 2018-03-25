@@ -18,16 +18,15 @@
  */
 package net.nullsum.audinaut.service.parser;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+
+import net.nullsum.audinaut.domain.MusicFolder;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.content.Context;
-import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.domain.MusicFolder;
-import net.nullsum.audinaut.util.ProgressListener;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sindre Mehus
@@ -38,10 +37,10 @@ public class MusicFoldersParser extends AbstractParser {
         super(context, instance);
     }
 
-    public List<MusicFolder> parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public List<MusicFolder> parse(InputStream inputStream) throws Exception {
         init(inputStream);
 
-        List<MusicFolder> result = new ArrayList<MusicFolder>();
+        List<MusicFolder> result = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

@@ -1,73 +1,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/get_playlist_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:textSize="20sp"
-            android:text="@string/common.name" />
+            android:text="@string/common.name"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/get_playlist_name"
-            android:inputType="text"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="4dp"
+            android:layout_weight="1"
             android:hint="@string/common.name"
-            android:textColor="?android:textColorPrimary"/>
+            android:inputType="text"
+            android:textColor="?android:textColorPrimary" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/get_playlist_comment_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:textSize="20sp"
             android:text="@string/common.comment"
-            android:textColor="?android:textColorPrimary"/>
+            android:textColor="?android:textColorPrimary"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/get_playlist_comment"
-            android:inputType="text"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="4dp"
-            android:hint="@string/common.comment" />
+            android:layout_weight="1"
+            android:hint="@string/common.comment"
+            android:inputType="text" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/get_playlist_public_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:textSize="20sp"
             android:text="@string/common.public"
-            android:textColor="?android:textColorPrimary"/>
+            android:textColor="?android:textColorPrimary"
+            android:textSize="20sp" />
+
         <CheckBox
             android:id="@+id/get_playlist_public"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="4dp"
-            android:checked="false"/>
+            android:layout_weight="1"
+            android:checked="false" />
     </LinearLayout>
 </LinearLayout>

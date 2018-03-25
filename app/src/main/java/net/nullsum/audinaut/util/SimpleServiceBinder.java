@@ -25,13 +25,7 @@ import android.os.Binder;
  */
 public class SimpleServiceBinder<S> extends Binder {
 
-    private final S service;
-
-    public SimpleServiceBinder(S service) {
-        this.service = service;
+    public SimpleServiceBinder() {
     }
 
-    public S getService() {
-        return service;
-    }
 }

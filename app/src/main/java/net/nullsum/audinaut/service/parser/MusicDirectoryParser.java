@@ -19,48 +19,42 @@
 package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
-import android.util.Log;
-import net.nullsum.audinaut.R;
+
 import net.nullsum.audinaut.domain.MusicDirectory;
-import net.nullsum.audinaut.util.Constants;
-import net.nullsum.audinaut.util.ProgressListener;
-import net.nullsum.audinaut.util.Util;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.nullsum.audinaut.domain.MusicDirectory.*;
+import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
 
 /**
  * @author Sindre Mehus
  */
 public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
-    private static final String TAG = MusicDirectoryParser.class.getSimpleName();
-
     public MusicDirectoryParser(Context context, int instance) {
         super(context, instance);
     }
 
-    public MusicDirectory parse(String artist, InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(String artist, InputStream inputStream) throws Exception {
         init(inputStream);
 
         MusicDirectory dir = new MusicDirectory();
         int eventType;
         boolean isArtist = false;
-        Map<String, Entry> titleMap = new HashMap<String, Entry>();
+        Map<String, Entry> titleMap = new HashMap<>();
         do {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
                 if ("child".equals(name) || "song".equals(name)) {
                     Entry entry = parseEntry(artist);
-                    entry.setGrandParent(dir.getParent());
 
                     // Only check for songs
-                    if(!entry.isDirectory()) {
+                    if (!entry.isDirectory()) {
                         // Check if duplicates
                         String disc = (entry.getDiscNumber() != null) ? Integer.toString(entry.getDiscNumber()) : "";
                         String track = (entry.getTrack() != null) ? Integer.toString(entry.getTrack()) : "";
@@ -84,13 +78,9 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
                 } else if ("directory".equals(name) || "artist".equals(name) || ("album".equals(name) && !isArtist)) {
                     dir.setName(get("name"));
                     dir.setId(get("id"));
-                    if(Util.isTagBrowsing(context, instance)) {
-                        dir.setParent(get("artistId"));
-                    } else {
-                        dir.setParent(get("parent"));
-                    }
+                    dir.setParent(get("artistId"));
                     isArtist = true;
-                } else if("album".equals(name)) {
+                } else if ("album".equals(name)) {
                     Entry entry = parseEntry(artist);
                     entry.setDirectory(true);
                     dir.addChild(entry);

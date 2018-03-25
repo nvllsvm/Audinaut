@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Spinner xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/spinner"
+    style="?attr/android:spinnerItemStyle"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:prompt="@string/common.appname"
-    style="?attr/android:spinnerItemStyle"
-    android:overlapAnchor="false"/>
+    android:overlapAnchor="false"
+    android:prompt="@string/common.appname" />

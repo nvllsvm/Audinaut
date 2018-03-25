@@ -18,12 +18,6 @@
  */
 package net.nullsum.audinaut.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,16 +30,17 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.PlayerQueue;
 import net.nullsum.audinaut.domain.PlayerState;
 import net.nullsum.audinaut.util.CacheCleaner;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.FileUtil;
-import net.nullsum.audinaut.util.Pair;
-import net.nullsum.audinaut.util.SilentBackgroundTask;
-import net.nullsum.audinaut.util.SongDBHandler;
 import net.nullsum.audinaut.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static net.nullsum.audinaut.domain.PlayerState.PREPARING;
 
@@ -53,47 +48,42 @@ import static net.nullsum.audinaut.domain.PlayerState.PREPARING;
  * @author Sindre Mehus
  */
 public class DownloadServiceLifecycleSupport {
-    private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
     public static final String FILENAME_DOWNLOADS_SER = "downloadstate2.ser";
+    private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
     private static final int DEBOUNCE_TIME = 200;
 
     private final DownloadService downloadService;
+    private final AtomicBoolean setup = new AtomicBoolean(false);
+    private final ReentrantLock lock = new ReentrantLock();
     private Looper eventLooper;
     private Handler eventHandler;
     private BroadcastReceiver ejectEventReceiver;
     private PhoneStateListener phoneStateListener;
-    private boolean externalStorageAvailable= true;
-    private ReentrantLock lock = new ReentrantLock();
-    private final AtomicBoolean setup = new AtomicBoolean(false);
+    private boolean externalStorageAvailable = true;
     private long lastPressTime = 0;
-    private SilentBackgroundTask<Void> currentSavePlayQueueTask = null;
-    private Date lastChange = null;
 
     /**
      * This receiver manages the intent that could come from other applications.
      */
-    private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            eventHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    String action = intent.getAction();
-                    Log.i(TAG, "intentReceiver.onReceive: " + action);
-                    if (DownloadService.CMD_PLAY.equals(action)) {
-                        downloadService.play();
-                    } else if (DownloadService.CMD_NEXT.equals(action)) {
-                        downloadService.next();
-                    } else if (DownloadService.CMD_PREVIOUS.equals(action)) {
-                        downloadService.previous();
-                    } else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
-                        downloadService.togglePlayPause();
-                    } else if (DownloadService.CMD_PAUSE.equals(action)) {
-                        downloadService.pause();
-                    } else if (DownloadService.CMD_STOP.equals(action)) {
-                        downloadService.pause();
-                        downloadService.seekTo(0);
-                    }
+            eventHandler.post(() -> {
+                String action = intent.getAction();
+                Log.i(TAG, "intentReceiver.onReceive: " + action);
+                if (DownloadService.CMD_PLAY.equals(action)) {
+                    downloadService.play();
+                } else if (DownloadService.CMD_NEXT.equals(action)) {
+                    downloadService.next();
+                } else if (DownloadService.CMD_PREVIOUS.equals(action)) {
+                    downloadService.previous();
+                } else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
+                    downloadService.togglePlayPause();
+                } else if (DownloadService.CMD_PAUSE.equals(action)) {
+                    downloadService.pause();
+                } else if (DownloadService.CMD_STOP.equals(action)) {
+                    downloadService.pause();
+                    downloadService.seekTo(0);
                 }
             });
         }
@@ -105,30 +95,27 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void onCreate() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                eventLooper = Looper.myLooper();
-                eventHandler = new Handler(eventLooper);
+        new Thread(() -> {
+            Looper.prepare();
+            eventLooper = Looper.myLooper();
+            eventHandler = new Handler(eventLooper);
 
-                // Deserialize queue before starting looper
-                try {
-                    lock.lock();
-                    deserializeDownloadQueueNow();
+            // Deserialize queue before starting looper
+            try {
+                lock.lock();
+                deserializeDownloadQueueNow();
 
-                    // Wait until PREPARING is done to mark lifecycle as ready to receive events
-                    while(downloadService.getPlayerState() == PREPARING) {
-                        Util.sleepQuietly(50L);
-                    }
-
-                    setup.set(true);
-                } finally {
-                    lock.unlock();
+                // Wait until PREPARING is done to mark lifecycle as ready to receive events
+                while (downloadService.getPlayerState() == PREPARING) {
+                    Util.sleepQuietly(50L);
                 }
 
-                Looper.loop();
+                setup.set(true);
+            } finally {
+                lock.unlock();
             }
+
+            Looper.loop();
         }, "DownloadServiceLifecycleSupport").start();
 
         // Stop when SD card is ejected.
@@ -181,70 +168,67 @@ public class DownloadServiceLifecycleSupport {
         if (intent != null) {
             final String action = intent.getAction();
 
-            if(eventHandler == null) {
+            if (eventHandler == null) {
                 Util.sleepQuietly(100L);
             }
-            if(eventHandler == null) {
+            if (eventHandler == null) {
                 return;
             }
 
-            eventHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(!setup.get()) {
-                        lock.lock();
-                        lock.unlock();
+            eventHandler.post(() -> {
+                if (!setup.get()) {
+                    lock.lock();
+                    lock.unlock();
+                }
+
+                if (DownloadService.START_PLAY.equals(action)) {
+                    int offlinePref = intent.getIntExtra(Constants.PREFERENCES_KEY_OFFLINE, 0);
+                    if (offlinePref != 0) {
+                        boolean offline = (offlinePref == 2);
+                        Util.setOffline(downloadService, offline);
+                        if (offline) {
+                            downloadService.clearIncomplete();
+                        } else {
+                            downloadService.checkDownloads();
+                        }
                     }
 
-                    if(DownloadService.START_PLAY.equals(action)) {
-                        int offlinePref = intent.getIntExtra(Constants.PREFERENCES_KEY_OFFLINE, 0);
-                        if(offlinePref != 0) {
-                            boolean offline = (offlinePref == 2);
-                            Util.setOffline(downloadService, offline);
-                            if (offline) {
-                                downloadService.clearIncomplete();
-                            } else {
-                                downloadService.checkDownloads();
-                            }
+                    if (intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+                        // Add shuffle parameters
+                        SharedPreferences.Editor editor = Util.getPreferences(downloadService).edit();
+                        String startYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR);
+                        if (startYear != null) {
+                            editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
                         }
 
-                        if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
-                            // Add shuffle parameters
-                            SharedPreferences.Editor editor = Util.getPreferences(downloadService).edit();
-                            String startYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR);
-                            if(startYear != null) {
-                                editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
-                            }
-
-                            String endYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR);
-                            if(endYear != null) {
-                                editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
-                            }
-
-                            String genre = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE);
-                            if(genre != null) {
-                                editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
-                            }
-                            editor.apply();
-
-                            downloadService.clear();
-                            downloadService.setShufflePlayEnabled(true);
-                        } else {
-                            downloadService.start();
+                        String endYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR);
+                        if (endYear != null) {
+                            editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
                         }
-                    } else if(DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
-                        downloadService.togglePlayPause();
-                    } else if(DownloadService.CMD_NEXT.equals(action)) {
-                        downloadService.next();
-                    } else if(DownloadService.CMD_PREVIOUS.equals(action)) {
-                        downloadService.previous();
-                    } else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
-                        downloadService.clearBackground();
-                    } else if(intent.getExtras() != null) {
-                        final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-                        if (event != null) {
-                            handleKeyEvent(event);
+
+                        String genre = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE);
+                        if (genre != null) {
+                            editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
                         }
+                        editor.apply();
+
+                        downloadService.clear();
+                        downloadService.setShufflePlayEnabled(true);
+                    } else {
+                        downloadService.start();
+                    }
+                } else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
+                    downloadService.togglePlayPause();
+                } else if (DownloadService.CMD_NEXT.equals(action)) {
+                    downloadService.next();
+                } else if (DownloadService.CMD_PREVIOUS.equals(action)) {
+                    downloadService.previous();
+                } else if (DownloadService.CANCEL_DOWNLOADS.equals(action)) {
+                    downloadService.clearBackground();
+                } else if (intent.getExtras() != null) {
+                    final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+                    if (event != null) {
+                        handleKeyEvent(event);
                     }
                 }
             });
@@ -266,29 +250,23 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void serializeDownloadQueue() {
-        serializeDownloadQueue(true);
-    }
-    public void serializeDownloadQueue(final boolean serializeRemote) {
-        if(!setup.get()) {
+        if (!setup.get()) {
             return;
         }
 
-        final List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
-        eventHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if(lock.tryLock()) {
-                    try {
-                        serializeDownloadQueueNow(songs, serializeRemote);
-                    } finally {
-                        lock.unlock();
-                    }
+        final List<DownloadFile> songs = new ArrayList<>(downloadService.getSongs());
+        eventHandler.post(() -> {
+            if (lock.tryLock()) {
+                try {
+                    serializeDownloadQueueNow(songs);
+                } finally {
+                    lock.unlock();
                 }
             }
         });
     }
 
-    public void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
+    private void serializeDownloadQueueNow(List<DownloadFile> songs) {
         final PlayerQueue state = new PlayerQueue();
         for (DownloadFile downloadFile : songs) {
             state.songs.add(downloadFile.getSong());
@@ -300,11 +278,9 @@ public class DownloadServiceLifecycleSupport {
         state.currentPlayingPosition = downloadService.getPlayerPosition();
 
         DownloadFile currentPlaying = downloadService.getCurrentPlaying();
-        if(currentPlaying != null) {
+        if (currentPlaying != null) {
             state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
         }
-        state.changed = lastChange = new Date();
-
         Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
         FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
@@ -321,24 +297,16 @@ public class DownloadServiceLifecycleSupport {
         Log.i(TAG, "Deserialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
 
         // Rename first thing before anything else starts
-        if(state.renameCurrent && state.currentPlayingIndex != -1 && state.currentPlayingIndex < state.songs.size()) {
+        if (state.renameCurrent && state.currentPlayingIndex != -1 && state.currentPlayingIndex < state.songs.size()) {
             DownloadFile currentPlaying = new DownloadFile(downloadService, state.songs.get(state.currentPlayingIndex), false);
             currentPlaying.renamePartial();
         }
 
         downloadService.restore(state.songs, state.toDelete, state.currentPlayingIndex, state.currentPlayingPosition);
-
-        if(state != null) {
-            lastChange = state.changed;
-        }
     }
 
-    public Date getLastChange() {
-        return lastChange;
-    }
-
-    public void handleKeyEvent(KeyEvent event) {
-        if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
+    private void handleKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                     downloadService.fastForward();
@@ -347,25 +315,25 @@ public class DownloadServiceLifecycleSupport {
                     downloadService.rewind();
                     break;
             }
-        } else if(event.getAction() == KeyEvent.ACTION_UP) {
+        } else if (event.getAction() == KeyEvent.ACTION_UP) {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    if(lastPressTime < (System.currentTimeMillis() - 500)) {
+                    if (lastPressTime < (System.currentTimeMillis() - 500)) {
                         lastPressTime = System.currentTimeMillis();
                         downloadService.togglePlayPause();
                     } else {
-                        downloadService.next(false, true);
+                        downloadService.next(true);
                     }
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                    if(lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
+                    if (lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
                         lastPressTime = System.currentTimeMillis();
                         downloadService.previous();
                     }
                     break;
                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                    if(lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
+                    if (lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
                         lastPressTime = System.currentTimeMillis();
                         downloadService.next();
                     }
@@ -380,7 +348,7 @@ public class DownloadServiceLifecycleSupport {
                     downloadService.stop();
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PLAY:
-                    if(downloadService.getPlayerState() != PlayerState.STARTED) {
+                    if (downloadService.getPlayerState() != PlayerState.STARTED) {
                         downloadService.start();
                     }
                     break;
@@ -401,28 +369,25 @@ public class DownloadServiceLifecycleSupport {
 
         @Override
         public void onCallStateChanged(final int state, String incomingNumber) {
-            eventHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    switch (state) {
-                        case TelephonyManager.CALL_STATE_RINGING:
-                        case TelephonyManager.CALL_STATE_OFFHOOK:
-                            if (downloadService.getPlayerState() == PlayerState.STARTED) {
-                                resumeAfterCall = true;
-                                downloadService.pause(true);
+            eventHandler.post(() -> {
+                switch (state) {
+                    case TelephonyManager.CALL_STATE_RINGING:
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        if (downloadService.getPlayerState() == PlayerState.STARTED) {
+                            resumeAfterCall = true;
+                            downloadService.pause(true);
+                        }
+                        break;
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        if (resumeAfterCall) {
+                            resumeAfterCall = false;
+                            if (downloadService.getPlayerState() == PlayerState.PAUSED_TEMP) {
+                                downloadService.start();
                             }
-                            break;
-                        case TelephonyManager.CALL_STATE_IDLE:
-                            if (resumeAfterCall) {
-                                resumeAfterCall = false;
-                                if(downloadService.getPlayerState() == PlayerState.PAUSED_TEMP) {
-                                    downloadService.start();
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             });
         }

@@ -39,10 +39,6 @@ public abstract class SilentBackgroundTask<T> extends BackgroundTask<T> {
     }
 
     @Override
-    public void updateProgress(int messageId) {
-    }
-
-    @Override
     public void updateProgress(String message) {
     }
 }

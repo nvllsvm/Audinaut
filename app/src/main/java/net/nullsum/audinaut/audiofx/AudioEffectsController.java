@@ -19,14 +19,8 @@
 package net.nullsum.audinaut.audiofx;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.audiofx.AudioEffect;
-import android.media.audiofx.LoudnessEnhancer;
-import android.os.Build;
-import android.util.Log;
 
 public class AudioEffectsController {
-    private static final String TAG = AudioEffectsController.class.getSimpleName();
 
     private final Context context;
     private int audioSessionId = 0;
@@ -39,7 +33,7 @@ public class AudioEffectsController {
     }
 
     public void release() {
-        if(equalizerController != null) {
+        if (equalizerController != null) {
             equalizerController.release();
         }
     }

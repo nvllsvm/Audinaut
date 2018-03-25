@@ -18,12 +18,12 @@
 
 package net.nullsum.audinaut.util.tags;
 
-import java.io.RandomAccessFile;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 
-public class Bastp {
+class Bastp {
 
     public Bastp() {
     }
@@ -34,34 +34,30 @@ public class Bastp {
             RandomAccessFile ra = new RandomAccessFile(fname, "r");
             tags = getTags(ra);
             ra.close();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             /* we dont' care much: SOMETHING went wrong. d'oh! */
         }
 
         return tags;
     }
 
-    public HashMap getTags(RandomAccessFile s) {
+    private HashMap getTags(RandomAccessFile s) {
         HashMap tags = new HashMap();
         byte[] file_ff = new byte[4];
 
         try {
             s.read(file_ff);
             String magic = new String(file_ff);
-            if(magic.equals("fLaC")) {
+            if (magic.equals("fLaC")) {
                 tags = (new FlacFile()).getTags(s);
-            }
-            else if(magic.equals("OggS")) {
+            } else if (magic.equals("OggS")) {
                 tags = (new OggFile()).getTags(s);
-            }
-            else if(file_ff[0] == -1 && file_ff[1] == -5) { /* aka 0xfffb in real languages */
+            } else if (file_ff[0] == -1 && file_ff[1] == -5) { /* aka 0xfffb in real languages */
                 tags = (new LameHeader()).getTags(s);
-            }
-            else if(magic.substring(0,3).equals("ID3")) {
+            } else if (magic.substring(0, 3).equals("ID3")) {
                 tags = (new ID3v2File()).getTags(s);
-                if(tags.containsKey("_hdrlen")) {
-                    Long hlen = Long.parseLong( tags.get("_hdrlen").toString(), 10 );
+                if (tags.containsKey("_hdrlen")) {
+                    Long hlen = Long.parseLong(tags.get("_hdrlen").toString(), 10);
                     HashMap lameInfo = (new LameHeader()).parseLameHeader(s, hlen);
                     /* add gain tags if not already present */
                     inheritTag("REPLAYGAIN_TRACK_GAIN", lameInfo, tags);
@@ -69,14 +65,13 @@ public class Bastp {
                 }
             }
             tags.put("_magic", magic);
-        }
-        catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return tags;
     }
 
     private void inheritTag(String key, HashMap from, HashMap to) {
-        if(!to.containsKey(key) && from.containsKey(key)) {
+        if (!to.containsKey(key) && from.containsKey(key)) {
             to.put(key, from.get(key));
         }
     }

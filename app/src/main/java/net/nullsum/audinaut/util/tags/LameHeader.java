@@ -20,10 +20,9 @@ package net.nullsum.audinaut.util.tags;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import java.util.Enumeration;
 
 
-public class LameHeader extends Common {
+class LameHeader extends Common {
 
     public LameHeader() {
     }
@@ -41,25 +40,25 @@ public class LameHeader extends Common {
 
         String lameMark = new String(chunk, 0, chunk.length, "ISO-8859-1");
 
-        if(lameMark.equals("Info") || lameMark.equals("Xing")) {
-            s.seek(offset+0xAB);
+        if (lameMark.equals("Info") || lameMark.equals("Xing")) {
+            s.seek(offset + 0xAB);
             s.read(chunk);
 
             int raw = b2be32(chunk, 0);
             int gtrk_raw = raw >> 16;     /* first 16 bits are the raw track gain value */
             int galb_raw = raw & 0xFFFF;  /* the rest is for the album gain value       */
 
-            float gtrk_val = (float)(gtrk_raw & 0x01FF)/10;
-            float galb_val = (float)(galb_raw & 0x01FF)/10;
+            float gtrk_val = (float) (gtrk_raw & 0x01FF) / 10;
+            float galb_val = (float) (galb_raw & 0x01FF) / 10;
 
-            gtrk_val = ((gtrk_raw&0x0200)!=0 ? -1*gtrk_val : gtrk_val);
-            galb_val = ((galb_raw&0x0200)!=0 ? -1*galb_val : galb_val);
+            gtrk_val = ((gtrk_raw & 0x0200) != 0 ? -1 * gtrk_val : gtrk_val);
+            galb_val = ((galb_raw & 0x0200) != 0 ? -1 * galb_val : galb_val);
 
-            if( (gtrk_raw&0xE000) == 0x2000 ) {
-                addTagEntry(tags, "REPLAYGAIN_TRACK_GAIN", gtrk_val+" dB");
+            if ((gtrk_raw & 0xE000) == 0x2000) {
+                addTagEntry(tags, "REPLAYGAIN_TRACK_GAIN", gtrk_val + " dB");
             }
-            if( (gtrk_raw&0xE000) == 0x4000 ) {
-                addTagEntry(tags, "REPLAYGAIN_ALBUM_GAIN", galb_val+" dB");
+            if ((gtrk_raw & 0xE000) == 0x4000) {
+                addTagEntry(tags, "REPLAYGAIN_ALBUM_GAIN", galb_val + " dB");
             }
 
         }

@@ -48,7 +48,6 @@
     <string name="main.songs_top_played">Top Played</string>
     <string name="main.songs_recent">@string/main.albums_recent</string>
     <string name="main.songs_frequent">@string/main.albums_frequent</string>
-    <string name="main.scan_complete">Completed scan of Server</string>
     <string name="main.artist">Artist</string>
     <string name="main.title">Title</string>
 
@@ -134,7 +133,7 @@
     <string name="settings.server_unused">Unused</string>
     <string name="settings.server_name">Name</string>
     <string name="settings.server_address">Server address</string>
-    <string name="settings.server_local_network_ssid" >Local network SSID</string>
+    <string name="settings.server_local_network_ssid">Local network SSID</string>
     <string name="settings.server_local_network_ssid_hint">Current SSID: %s</string>
     <string name="settings.server_internal_address">Local network address</string>
     <string name="settings.server_username">Username</string>
@@ -259,14 +258,10 @@
     <string name="shuffle.genre">Genre:</string>
     <string name="shuffle.pick_genre">Pick a genre</string>
 
-    <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
-
     <string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
     <string name="background_task.network_error">A network error occurred. Please check the server address or try again later.</string>
     <string name="background_task.not_found">Resource not found. Please check the server address.</string>
     <string name="background_task.parse_error">A problem occurred communicating with the server. Please check the server address and verify that you can connect using a regular browser on your device.</string>
-
-    <string name="service.connecting">Contacting server, please wait.</string>
 
     <string name="parser.upgrade_client">Incompatible versions. Please upgrade Audinaut.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
@@ -274,7 +269,6 @@
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
     <string name="parser.artist_count">Got %d artists.</string>
     <string name="parser.server_error">Server error: %s</string>
-    <string name="parser.scan_count">Scanned %d entries</string>
 
     <string name="select_artist.folder">Select folder</string>
     <string name="select_artist.all_folders">All folders</string>
@@ -336,21 +330,12 @@
     <string name="details.author">Author</string>
     <string name="details.email">Email</string>
     <string name="details.version">Version</string>
-    <string name="details.files_cached">Files Cached</string>
-    <string name="details.files_permanent">Permanent Cached</string>
-    <string name="details.used_space">Used Space</string>
     <string name="details.available_space">Available Space</string>
-    <string name="details.of">%1$s of %2$s</string>
     <string name="details.updated">Updated</string>
     <string name="details.last_played">Last Played</string>
 
     <string name="permission.external_storage.failed">Audinaut cannot function without the ability to write to storage</string>
 
-    <plurals name="select_album_n_songs">
-        <item quantity="zero">No songs</item>
-        <item quantity="one">One song</item>
-        <item quantity="other">%d songs</item>
-    </plurals>
     <plurals name="select_album_n_songs_downloading">
         <item quantity="one">One song scheduled for download.</item>
         <item quantity="other">%d songs scheduled for download.</item>

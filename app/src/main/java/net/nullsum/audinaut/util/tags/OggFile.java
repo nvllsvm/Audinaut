@@ -23,9 +23,9 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 
-public class OggFile extends Common {
+class OggFile extends Common {
 
-    private static final int OGG_PAGE_SIZE    = 27;  // Static size of an OGG Page
+    private static final int OGG_PAGE_SIZE = 27;  // Static size of an OGG Page
     private static final int OGG_TYPE_COMMENT = 3;   // ID of 'VorbisComment's
 
     public OggFile() {
@@ -33,13 +33,13 @@ public class OggFile extends Common {
 
     public HashMap getTags(RandomAccessFile s) throws IOException {
         long offset = 0;
-        int  retry  = 64;
+        int retry = 64;
         HashMap tags = new HashMap();
 
-        for( ; retry > 0 ; retry-- ) {
+        for (; retry > 0; retry--) {
             long res[] = parse_ogg_page(s, offset);
-            if(res[2] == OGG_TYPE_COMMENT) {
-                tags = parse_ogg_vorbis_comment(s, offset+res[0], res[1]);
+            if (res[2] == OGG_TYPE_COMMENT) {
+                tags = parse_ogg_vorbis_comment(s, offset + res[0], res[1]);
                 break;
             }
             offset += res[0] + res[1];
@@ -52,29 +52,29 @@ public class OggFile extends Common {
     ** [header_size, payload_size, type]
     */
     private long[] parse_ogg_page(RandomAccessFile s, long offset) throws IOException {
-        long[] result   = new long[3];               // [header_size, payload_size]
+        long[] result = new long[3];               // [header_size, payload_size]
         byte[] p_header = new byte[OGG_PAGE_SIZE];   // buffer for the page header
         byte[] scratch;
-        int bread       = 0;                         // number of bytes read
-        int psize       = 0;                         // payload-size
-        int nsegs       = 0;                         // Number of segments
+        int bread;                         // number of bytes read
+        int psize = 0;                         // payload-size
+        int nsegs;                         // Number of segments
 
         s.seek(offset);
         bread = s.read(p_header);
-        if(bread != OGG_PAGE_SIZE)
+        if (bread != OGG_PAGE_SIZE)
             xdie("Unable to read() OGG_PAGE_HEADER");
-        if((new String(p_header, 0, 5)).equals("OggS\0") != true)
+        if (!(new String(p_header, 0, 5)).equals("OggS\0"))
             xdie("Invalid magic - not an ogg file?");
 
         nsegs = b2u(p_header[26]);
         // debug("> file seg: "+nsegs);
-        if(nsegs > 0) {
-            scratch  = new byte[nsegs];
-            bread    = s.read(scratch);
-            if(bread != nsegs)
+        if (nsegs > 0) {
+            scratch = new byte[nsegs];
+            bread = s.read(scratch);
+            if (bread != nsegs)
                 xdie("Failed to read segtable");
 
-            for(int i=0; i<nsegs; i++) {
+            for (int i = 0; i < nsegs; i++) {
                 psize += b2u(scratch[i]);
             }
         }
@@ -85,7 +85,7 @@ public class OggFile extends Common {
         result[2] = -1;
 
         /* next byte is most likely the type -> pre-read */
-        if(psize >= 1 && s.read(p_header, 0, 1) == 1) {
+        if (psize >= 1 && s.read(p_header, 0, 1) == 1) {
             result[2] = b2u(p_header[0]);
         }
 
@@ -97,18 +97,18 @@ public class OggFile extends Common {
     ** parset with the correct offset (+7) */
     private HashMap parse_ogg_vorbis_comment(RandomAccessFile s, long offset, long pl_len) throws IOException {
         final int pfx_len = 7;
-        byte[] pfx        = new byte[pfx_len];
+        byte[] pfx = new byte[pfx_len];
 
-        if(pl_len < pfx_len)
+        if (pl_len < pfx_len)
             xdie("ogg vorbis comment field is too short!");
 
         s.seek(offset);
         s.read(pfx);
 
-        if( (new String(pfx, 0, pfx_len)).equals("\3vorbis") == false )
+        if (!(new String(pfx, 0, pfx_len)).equals("\3vorbis"))
             xdie("Damaged packet found!");
 
-        return parse_vorbis_comment(s, offset+pfx_len, pl_len-pfx_len);
+        return parse_vorbis_comment(s, offset + pfx_len, pl_len - pfx_len);
     }
 
-};
+}

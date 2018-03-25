@@ -19,17 +19,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.util.Constants;
 
 public class PlayActionReceiver extends BroadcastReceiver {
-    private static final String TAG = PlayActionReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.hasExtra(Constants.TASKER_EXTRA_BUNDLE)) {
+        if (intent.hasExtra(Constants.TASKER_EXTRA_BUNDLE)) {
             Bundle data = intent.getBundleExtra(Constants.TASKER_EXTRA_BUNDLE);
             Boolean startShuffled = data.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE);
 

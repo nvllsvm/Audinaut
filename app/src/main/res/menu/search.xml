@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:compat="http://schemas.android.com/apk/res-auto">
+    xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_global_search"
         android:icon="?attr/search"
         android:title="@string/menu.search"
         compat:actionViewClass="android.support.v7.widget.SearchView"
-        compat:showAsAction="always|collapseActionView"/>
+        compat:showAsAction="always|collapseActionView" />
 </menu>

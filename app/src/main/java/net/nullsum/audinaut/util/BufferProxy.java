@@ -18,17 +18,8 @@ package net.nullsum.audinaut.util;
 import java.io.File;
 import java.net.Socket;
 
-import android.content.Context;
-
-import net.nullsum.audinaut.util.FileProxy;
-
 public class BufferProxy extends FileProxy {
-    private static final String TAG = BufferProxy.class.getSimpleName();
-    protected BufferFile progress;
-
-    public BufferProxy(Context context) {
-        super(context);
-    }
+    private BufferFile progress;
 
     protected ProxyTask getTask(Socket client) {
         return new BufferFileTask(client);
@@ -51,11 +42,12 @@ public class BufferProxy extends FileProxy {
         @Override
         Long getContentLength() {
             Long contentLength = progress.getContentLength();
-            if(contentLength == null && progress.isWorkDone()) {
+            if (contentLength == null && progress.isWorkDone()) {
                 contentLength = file.length();
             }
             return contentLength;
         }
+
         @Override
         long getFileSize() {
             return progress.getEstimatedSize();
@@ -65,10 +57,12 @@ public class BufferProxy extends FileProxy {
         public void onStart() {
             progress.onStart();
         }
+
         @Override
         public void onStop() {
             progress.onStop();
         }
+
         @Override
         public void onResume() {
             progress.onResume();

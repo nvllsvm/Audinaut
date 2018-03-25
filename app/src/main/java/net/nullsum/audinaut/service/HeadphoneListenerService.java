@@ -44,7 +44,7 @@ public class HeadphoneListenerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(!Util.shouldStartOnHeadphones(this)) {
+        if (!Util.shouldStartOnHeadphones(this)) {
             stopSelf();
         }
 
@@ -56,10 +56,10 @@ public class HeadphoneListenerService extends Service {
         super.onDestroy();
 
         try {
-            if(receiver != null) {
+            if (receiver != null) {
                 unregisterReceiver(receiver);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Don't care
         }
     }

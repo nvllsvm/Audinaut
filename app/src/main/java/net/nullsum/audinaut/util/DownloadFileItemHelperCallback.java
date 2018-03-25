@@ -2,10 +2,6 @@ package net.nullsum.audinaut.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 import net.nullsum.audinaut.adapter.SectionAdapter;
 import net.nullsum.audinaut.fragments.SubsonicFragment;
@@ -14,14 +10,15 @@ import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.view.SongView;
 import net.nullsum.audinaut.view.UpdateView;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallback {
-    private static final String TAG = DownloadFileItemHelperCallback.class.getSimpleName();
 
-    private SubsonicFragment fragment;
-    private boolean mainList;
-
+    private final SubsonicFragment fragment;
+    private final boolean mainList;
+    private final Deque pendingOperations = new ArrayDeque();
     private BackgroundTask pendingTask = null;
-    private Deque pendingOperations = new ArrayDeque();
 
     public DownloadFileItemHelperCallback(SubsonicFragment fragment, boolean mainList) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
@@ -54,17 +51,18 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
         }
     }
 
-    public DownloadService getDownloadService() {
+    private DownloadService getDownloadService() {
         return fragment.getDownloadService();
     }
-    public SectionAdapter getSectionAdapter() {
+
+    private SectionAdapter getSectionAdapter() {
         return fragment.getCurrentAdapter();
     }
 
     private void updateDownloadService() {
-        if(pendingTask == null) {
+        if (pendingTask == null) {
             final DownloadService downloadService = getDownloadService();
-            if(downloadService == null) {
+            if (downloadService == null) {
                 return;
             }
 
@@ -72,21 +70,21 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
                 @Override
                 protected Void doInBackground() throws Throwable {
                     boolean running = true;
-                    while(running) {
+                    while (running) {
                         Object nextOperation = null;
                         synchronized (pendingOperations) {
-                            if(!pendingOperations.isEmpty()) {
+                            if (!pendingOperations.isEmpty()) {
                                 nextOperation = pendingOperations.remove();
                             }
                         }
 
-                        if(nextOperation != null) {
-                            if(nextOperation instanceof Pair) {
+                        if (nextOperation != null) {
+                            if (nextOperation instanceof Pair) {
                                 Pair<Integer, Integer> swap = (Pair) nextOperation;
                                 downloadService.swap(mainList, swap.getFirst(), swap.getSecond());
-                            } else if(nextOperation instanceof DownloadFile) {
+                            } else if (nextOperation instanceof DownloadFile) {
                                 DownloadFile downloadFile = (DownloadFile) nextOperation;
-                                if(mainList) {
+                                if (mainList) {
                                     downloadService.remove(downloadFile);
                                 } else {
                                     downloadService.removeBackground(downloadFile);
@@ -101,7 +99,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
                         pendingTask = null;
 
                         // Start a task if this is non-empty.  Means someone added while we were running operations
-                        if(!pendingOperations.isEmpty()) {
+                        if (!pendingOperations.isEmpty()) {
                             updateDownloadService();
                         }
                     }

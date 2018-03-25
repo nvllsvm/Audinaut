@@ -19,10 +19,16 @@ import java.io.File;
 
 public interface BufferFile {
     File getFile();
+
     Long getContentLength();
+
     long getEstimatedSize();
+
     boolean isWorkDone();
+
     void onStart();
+
     void onStop();
+
     void onResume();
 }

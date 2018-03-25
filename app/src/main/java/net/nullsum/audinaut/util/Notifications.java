@@ -43,14 +43,11 @@ import net.nullsum.audinaut.service.DownloadService;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public final class Notifications {
+    private static final int NOTIFICATION_ID_PLAYING = 100;
+    private static final int NOTIFICATION_ID_DOWNLOADING = 102;
+    private static final String CHANNEL_PLAYING_ID = "playback_controls";
+    private static final String CHANNEL_DOWNLOADING_ID = "media_download";
     private static final String TAG = Notifications.class.getSimpleName();
-
-    public static final int NOTIFICATION_ID_PLAYING = 100;
-    public static final int NOTIFICATION_ID_DOWNLOADING = 102;
-
-    public static final String CHANNEL_PLAYING_ID = "playback_controls";
-    public static final String CHANNEL_DOWNLOADING_ID = "media_download";
-
     private static boolean playShowing = false;
     private static boolean downloadShowing = false;
     private static boolean downloadForeground = false;
@@ -71,7 +68,7 @@ public final class Notifications {
         final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
 
         RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-        setupViews(expandedContentView ,context, song, true, playing);
+        setupViews(expandedContentView, context, song, true, playing);
 
         RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
         setupViews(smallContentView, context, song, false, playing);
@@ -93,29 +90,23 @@ public final class Notifications {
                 .setPriority(NotificationCompat.PRIORITY_LOW).build();
 
         playShowing = true;
-        if(downloadForeground && downloadShowing) {
+        if (downloadForeground && downloadShowing) {
             downloadForeground = false;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    downloadService.stopForeground(true);
-                    showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
-                    downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
-                }
+            handler.post(() -> {
+                downloadService.stopForeground(true);
+                showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
+                downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
             });
         } else {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (playing) {
-                        downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
-                    } else {
-                        playShowing = false;
-                        persistentPlayingShowing = true;
-                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-                        downloadService.stopForeground(false);
-                        notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
-                    }
+            handler.post(() -> {
+                if (playing) {
+                    downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+                } else {
+                    playShowing = false;
+                    persistentPlayingShowing = true;
+                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                    downloadService.stopForeground(false);
+                    notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
                 }
             });
         }
@@ -134,7 +125,7 @@ public final class Notifications {
         try {
             ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
             Bitmap bitmap = null;
-            if(imageLoader != null) {
+            if (imageLoader != null) {
                 bitmap = imageLoader.getCachedImage(context, song, false);
             }
             if (bitmap == null) {
@@ -155,8 +146,8 @@ public final class Notifications {
         rv.setTextViewText(R.id.notification_album, album);
 
         boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
-        if(persistent) {
-            if(expanded) {
+        if (persistent) {
+            if (expanded) {
                 rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
 
                 rv.setImageViewResource(R.id.control_previous, R.drawable.notification_backward);
@@ -174,8 +165,8 @@ public final class Notifications {
 
         // Create actions for media buttons
         PendingIntent pendingIntent;
-        int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
-        if(persistent && !expanded) {
+        int previous = 0, pause, next, close = 0, rewind = 0, fastForward = 0;
+        if (persistent && !expanded) {
             pause = R.id.control_previous;
             next = R.id.control_pause;
             close = R.id.control_next;
@@ -185,27 +176,27 @@ public final class Notifications {
             next = R.id.control_next;
         }
 
-        if(persistent && close == 0 && expanded) {
+        if (persistent && close == 0 && expanded) {
             close = R.id.notification_close;
             rv.setViewVisibility(close, View.VISIBLE);
         }
 
-        if(previous > 0) {
+        if (previous > 0) {
             Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
             prevIntent.setComponent(new ComponentName(context, DownloadService.class));
             prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
             pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
             rv.setOnClickPendingIntent(previous, pendingIntent);
         }
-        if(rewind > 0) {
+        if (rewind > 0) {
             Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
             rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
             rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
             pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
             rv.setOnClickPendingIntent(rewind, pendingIntent);
         }
-        if(pause > 0) {
-            if(playing) {
+        if (pause > 0) {
+            if (playing) {
                 Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
                 pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
                 pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
@@ -219,21 +210,21 @@ public final class Notifications {
                 rv.setOnClickPendingIntent(pause, pendingIntent);
             }
         }
-        if(next > 0) {
+        if (next > 0) {
             Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
             nextIntent.setComponent(new ComponentName(context, DownloadService.class));
             nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
             pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
             rv.setOnClickPendingIntent(next, pendingIntent);
         }
-        if(fastForward > 0) {
+        if (fastForward > 0) {
             Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
             fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
             fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
             pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
             rv.setOnClickPendingIntent(fastForward, pendingIntent);
         }
-        if(close > 0) {
+        if (close > 0) {
             Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
             prevIntent.setComponent(new ComponentName(context, DownloadService.class));
             prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
@@ -246,21 +237,18 @@ public final class Notifications {
         playShowing = false;
 
         // Remove notification and remove the service from the foreground
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                downloadService.stopForeground(true);
+        handler.post(() -> {
+            downloadService.stopForeground(true);
 
-                if(persistentPlayingShowing) {
-                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-                    notificationManager.cancel(NOTIFICATION_ID_PLAYING);
-                    persistentPlayingShowing = false;
-                }
+            if (persistentPlayingShowing) {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.cancel(NOTIFICATION_ID_PLAYING);
+                persistentPlayingShowing = false;
             }
         });
 
         // Get downloadNotification in foreground if playing
-        if(downloadShowing) {
+        if (downloadShowing) {
             showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
         }
 
@@ -274,7 +262,7 @@ public final class Notifications {
         PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
 
         String currentDownloading, currentSize;
-        if(file != null) {
+        if (file != null) {
             currentDownloading = file.getSong().getTitle();
             currentSize = Util.formatLocalizedBytes(file.getEstimatedSize(), context);
         } else {
@@ -307,37 +295,28 @@ public final class Notifications {
                         cancelPI)
                 .setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(context.getResources().getString(R.string.download_downloading_summary_expanded, currentDownloading, currentSize)))
+                        .bigText(context.getResources().getString(R.string.download_downloading_summary_expanded, currentDownloading, currentSize)))
                 .setProgress(10, 5, true).build();
 
         downloadShowing = true;
-        if(playShowing) {
+        if (playShowing) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID_DOWNLOADING, notification);
         } else {
             downloadForeground = true;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    downloadService.startForeground(NOTIFICATION_ID_DOWNLOADING, notification);
-                }
-            });
+            handler.post(() -> downloadService.startForeground(NOTIFICATION_ID_DOWNLOADING, notification));
         }
 
     }
+
     public static void hideDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler) {
         downloadShowing = false;
-        if(playShowing) {
+        if (playShowing) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             notificationManager.cancel(NOTIFICATION_ID_DOWNLOADING);
         } else {
             downloadForeground = false;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    downloadService.stopForeground(true);
-                }
-            });
+            handler.post(() -> downloadService.stopForeground(true));
         }
     }
 }

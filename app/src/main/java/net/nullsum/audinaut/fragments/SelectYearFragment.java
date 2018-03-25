@@ -20,9 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.BasicListAdapter;
 import net.nullsum.audinaut.adapter.SectionAdapter;
@@ -30,6 +27,9 @@ import net.nullsum.audinaut.service.MusicService;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.view.UpdateView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectYearFragment extends SelectRecyclerFragment<String> {
 
@@ -53,7 +53,7 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
     @Override
     public List<String> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
         List<String> decades = new ArrayList<>();
-        for(int i = 2010; i >= 1800; i -= 10) {
+        for (int i = 2010; i >= 1800; i -= 10) {
             decades.add(String.valueOf(i));
         }
 
@@ -79,7 +79,8 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
     }
 
     @Override
-    public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<String> updateView, String item) {}
+    public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<String> updateView, String item) {
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem, UpdateView<String> updateView, String item) {

@@ -19,16 +19,16 @@
 package net.nullsum.audinaut.service.parser;
 
 import android.content.Context;
-import net.nullsum.audinaut.R;
+
+import net.nullsum.audinaut.domain.Artist;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.SearchResult;
-import net.nullsum.audinaut.domain.Artist;
-import net.nullsum.audinaut.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sindre Mehus
@@ -39,12 +39,12 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
         super(context, instance);
     }
 
-    public SearchResult parse(InputStream inputStream, ProgressListener progressListener) throws Exception {
+    public SearchResult parse(InputStream inputStream) throws Exception {
         init(inputStream);
 
-        List<Artist> artists = new ArrayList<Artist>();
-        List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
-        List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+        List<Artist> artists = new ArrayList<>();
+        List<MusicDirectory.Entry> albums = new ArrayList<>();
+        List<MusicDirectory.Entry> songs = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

@@ -16,9 +16,8 @@
 package net.nullsum.audinaut.fragments;
 
 import android.accounts.Account;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -31,20 +30,10 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.service.DownloadService;
@@ -59,10 +48,16 @@ import net.nullsum.audinaut.util.Util;
 import net.nullsum.audinaut.view.CacheLocationPreference;
 import net.nullsum.audinaut.view.ErrorDialog;
 
+import java.io.File;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final static String TAG = SettingsFragment.class.getSimpleName();
 
-    private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
+    private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<>();
     private boolean testingConnection;
     private ListPreference theme;
     private ListPreference maxBitrateWifi;
@@ -74,7 +69,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
     private ListPreference keepPlayedCount;
     private ListPreference tempLoss;
     private ListPreference pauseDisconnect;
-    private Preference addServerPreference;
     private PreferenceCategory serversCategory;
     private ListPreference songPressAction;
     private ListPreference syncInterval;
@@ -122,17 +116,17 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         Bundle args = new Bundle();
 
         int xml = 0;
-        if("appearance".equals(name)) {
+        if ("appearance".equals(name)) {
             xml = R.xml.settings_appearance;
-        } else if("cache".equals(name)) {
+        } else if ("cache".equals(name)) {
             xml = R.xml.settings_cache;
-        } else if("playback".equals(name)) {
+        } else if ("playback".equals(name)) {
             xml = R.xml.settings_playback;
-        } else if("servers".equals(name)) {
+        } else if ("servers".equals(name)) {
             xml = R.xml.settings_servers;
         }
 
-        if(xml != 0) {
+        if (xml != 0) {
             args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, xml);
             newFragment.setArguments(args);
             replaceFragment(newFragment);
@@ -142,7 +136,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Random error I have no idea how to reproduce
-        if(sharedPreferences == null) {
+        if (sharedPreferences == null) {
             return;
         }
 
@@ -150,25 +144,22 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
         if (Constants.PREFERENCES_KEY_HIDE_MEDIA.equals(key)) {
             setHideMedia(sharedPreferences.getBoolean(key, true));
-        }
-        else if (Constants.PREFERENCES_KEY_MEDIA_BUTTONS.equals(key)) {
+        } else if (Constants.PREFERENCES_KEY_MEDIA_BUTTONS.equals(key)) {
             setMediaButtonsEnabled(sharedPreferences.getBoolean(key, true));
-        }
-        else if (Constants.PREFERENCES_KEY_CACHE_LOCATION.equals(key)) {
+        } else if (Constants.PREFERENCES_KEY_CACHE_LOCATION.equals(key)) {
             setCacheLocation(sharedPreferences.getString(key, ""));
-        }
-        else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
+        } else if (Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
             SyncUtil.removeMostRecentSyncFiles(context);
-        } else if(Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(key)) {
+        } else if (Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(key)) {
             DownloadService downloadService = DownloadService.getInstance();
-            if(downloadService != null) {
+            if (downloadService != null) {
                 downloadService.reapplyVolume();
             }
-        } else if(Constants.PREFERENCES_KEY_START_ON_HEADPHONES.equals(key)) {
+        } else if (Constants.PREFERENCES_KEY_START_ON_HEADPHONES.equals(key)) {
             Intent serviceIntent = new Intent();
             serviceIntent.setClassName(context.getPackageName(), HeadphoneListenerService.class.getName());
 
-            if(sharedPreferences.getBoolean(key, false)) {
+            if (sharedPreferences.getBoolean(key, false)) {
                 context.startService(serviceIntent);
             } else {
                 context.stopService(serviceIntent);
@@ -199,7 +190,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         tempLoss = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
         pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
         serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
-        addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+        Preference addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
         songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
         syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
         syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
@@ -215,86 +206,69 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         settings = Util.getPreferences(context);
         serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
 
-        if(cacheSize != null) {
-            this.findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Util.confirmDialog(context, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            new LoadingTask<Void>(context, false) {
-                                @Override
-                                protected Void doInBackground() throws Throwable {
-                                    FileUtil.deleteMusicDirectory(context);
-                                    FileUtil.deleteSerializedCache(context);
-                                    FileUtil.deleteArtworkCache(context);
-                                    return null;
-                                }
+        if (cacheSize != null) {
+            this.findPreference("clearCache").setOnPreferenceClickListener(preference -> {
+                Util.confirmDialog(context, (dialog, which) -> new LoadingTask<Void>(context, false) {
+                    @Override
+                    protected Void doInBackground() throws Throwable {
+                        FileUtil.deleteMusicDirectory(context);
+                        FileUtil.deleteSerializedCache(context);
+                        FileUtil.deleteArtworkCache(context);
+                        return null;
+                    }
 
-                                @Override
-                                protected void done(Void result) {
-                                    Util.toast(context, R.string.settings_cache_clear_complete);
-                                }
+                    @Override
+                    protected void done(Void result) {
+                        Util.toast(context, R.string.settings_cache_clear_complete);
+                    }
 
-                                @Override
-                                protected void error(Throwable error) {
-                                    Util.toast(context, getErrorMessage(error), false);
-                                }
-                            }.execute();
-                        }
-                    });
-                    return false;
-                }
+                    @Override
+                    protected void error(Throwable error) {
+                        Util.toast(context, getErrorMessage(error), false);
+                    }
+                }.execute());
+                return false;
             });
         }
 
-        if(syncEnabled != null) {
-            this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Boolean syncEnabled = (Boolean) newValue;
+        if (syncEnabled != null) {
+            this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
+                Boolean syncEnabled = (Boolean) newValue;
 
-                    Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-                    ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
+                Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+                ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
 
-                    return true;
-                }
+                return true;
             });
-            syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Integer syncInterval = Integer.parseInt(((String) newValue));
+            syncInterval.setOnPreferenceChangeListener((preference, newValue) -> {
+                Integer syncInterval = Integer.parseInt(((String) newValue));
 
-                    Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-                    ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
+                Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+                ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
 
-                    return true;
-                }
+                return true;
             });
         }
 
-        if(serversCategory != null) {
-            addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    serverCount++;
-                    int instance = serverCount;
-                    serversCategory.addPreference(addServer(serverCount));
+        if (serversCategory != null) {
+            addServerPreference.setOnPreferenceClickListener(preference -> {
+                serverCount++;
+                int instance = serverCount;
+                serversCategory.addPreference(addServer(serverCount));
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-                    // Reset set folder ID
-                    editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
-                    editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, "http://yourhost");
-                    editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, getResources().getString(R.string.settings_server_unused));
-                    editor.apply();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+                // Reset set folder ID
+                editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+                editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, "http://yourhost");
+                editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, getResources().getString(R.string.settings_server_unused));
+                editor.apply();
 
-                    ServerSettings ss = new ServerSettings(instance);
-                    serverSettings.put(String.valueOf(instance), ss);
-                    ss.update();
+                ServerSettings ss = new ServerSettings(instance);
+                serverSettings.put(String.valueOf(instance), ss);
+                ss.update();
 
-                    return true;
-                }
+                return true;
             });
 
             serversCategory.setOrderingAsAdded(false);
@@ -311,18 +285,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
     }
 
     private void scheduleBackup() {
-        try {
-            Class managerClass = Class.forName("android.app.backup.BackupManager");
-            Constructor managerConstructor = managerClass.getConstructor(Context.class);
-            Object manager = managerConstructor.newInstance(context);
-            Method m = managerClass.getMethod("dataChanged");
-            m.invoke(manager);
-        } catch(ClassNotFoundException e) {
-            Log.e(TAG, "No backup manager found");
-        } catch(Throwable t) {
-            Log.e(TAG, "Scheduling backup failed " + t);
-            t.printStackTrace();
-        }
+        BackupManager backupManager = new BackupManager(context);
+        backupManager.dataChanged();
     }
 
     private void update() {
@@ -330,11 +294,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             return;
         }
 
-        if(theme != null) {
+        if (theme != null) {
             theme.setSummary(theme.getEntry());
         }
 
-        if(cacheSize != null) {
+        if (cacheSize != null) {
             maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
             maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
             networkTimeout.setSummary(networkTimeout.getEntry());
@@ -343,24 +307,24 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             preloadCountMobile.setSummary(preloadCountMobile.getEntry());
 
             try {
-                if(megabyteFromat == null) {
+                if (megabyteFromat == null) {
                     megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));
                 }
 
                 cacheSize.setSummary(megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", ""));
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Failed to format cache size", e);
                 cacheSize.setSummary(cacheSize.getText());
             }
         }
 
-        if(keepPlayedCount != null) {
+        if (keepPlayedCount != null) {
             keepPlayedCount.setSummary(keepPlayedCount.getEntry());
             tempLoss.setSummary(tempLoss.getEntry());
             pauseDisconnect.setSummary(pauseDisconnect.getEntry());
             songPressAction.setSummary(songPressAction.getEntry());
 
-            if(replayGain.isChecked()) {
+            if (replayGain.isChecked()) {
                 replayGainType.setEnabled(true);
                 replayGainBump.setEnabled(true);
                 replayGainUntagged.setEnabled(true);
@@ -372,18 +336,18 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             replayGainType.setSummary(replayGainType.getEntry());
         }
 
-        if(syncEnabled != null) {
+        if (syncEnabled != null) {
             syncInterval.setSummary(syncInterval.getEntry());
 
-            if(syncEnabled.isChecked()) {
-                if(!syncInterval.isEnabled()) {
+            if (syncEnabled.isChecked()) {
+                if (!syncInterval.isEnabled()) {
                     syncInterval.setEnabled(true);
                     syncWifi.setEnabled(true);
                     syncNotification.setEnabled(true);
                     syncMostRecent.setEnabled(true);
                 }
             } else {
-                if(syncInterval.isEnabled()) {
+                if (syncInterval.isEnabled()) {
                     syncInterval.setEnabled(false);
                     syncWifi.setEnabled(false);
                     syncNotification.setEnabled(false);
@@ -396,9 +360,10 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             ss.update();
         }
     }
-    public void checkForRemoved() {
+
+    private void checkForRemoved() {
         for (ServerSettings ss : serverSettings.values()) {
-            if(!ss.update()) {
+            if (!ss.update()) {
                 serversCategory.removePreference(ss.getScreen());
                 serverCount--;
             }
@@ -410,18 +375,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         screen.setKey(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
         screen.setOrder(instance);
 
-        screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                SettingsFragment newFragment = new SettingsFragment();
+        screen.setOnPreferenceClickListener(preference -> {
+            SettingsFragment newFragment = new SettingsFragment();
 
-                Bundle args = new Bundle();
-                args.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
-                newFragment.setArguments(args);
+            Bundle args = new Bundle();
+            args.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
+            newFragment.setArguments(args);
 
-                replaceFragment(newFragment);
-                return false;
-            }
+            replaceFragment(newFragment);
+            return false;
         });
 
         return screen;
@@ -466,12 +428,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
                 Button defaultButton = new Button(getContext());
                 defaultButton.setText(internalSSIDDisplay);
-                defaultButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editText.setText(internalSSID);
-                    }
-                });
+                defaultButton.setOnClickListener(v -> editText.setText(internalSSID));
                 root.addView(defaultButton);
             }
         };
@@ -502,12 +459,9 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
         serverOpenBrowser.setPersistent(false);
         serverOpenBrowser.setTitle(R.string.settings_server_open_browser);
-        serverOpenBrowser.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                openInBrowser(instance);
-                return true;
-            }
+        serverOpenBrowser.setOnPreferenceClickListener(preference -> {
+            openInBrowser(instance);
+            return true;
         });
 
         Preference serverRemoveServerPreference = new Preference(context);
@@ -515,53 +469,44 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         serverRemoveServerPreference.setPersistent(false);
         serverRemoveServerPreference.setTitle(R.string.settings_servers_remove);
 
-        serverRemoveServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Util.confirmDialog(context, R.string.common_delete, screen.getTitle().toString(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Reset values to null so when we ask for them again they are new
-                        serverNamePreference.setText(null);
-                        serverUrlPreference.setText(null);
-                        serverUsernamePreference.setText(null);
-                        serverPasswordPreference.setText(null);
+        serverRemoveServerPreference.setOnPreferenceClickListener(preference -> {
+            Util.confirmDialog(context, R.string.common_delete, screen.getTitle().toString(), (dialog, which) -> {
+                // Reset values to null so when we ask for them again they are new
+                serverNamePreference.setText(null);
+                serverUrlPreference.setText(null);
+                serverUsernamePreference.setText(null);
+                serverPasswordPreference.setText(null);
 
-                        // Don't use Util.getActiveServer since it is 0 if offline
-                        int activeServer = Util.getPreferences(context).getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-                        for (int i = instance; i <= serverCount; i++) {
-                            Util.removeInstanceName(context, i, activeServer);
-                        }
+                // Don't use Util.getActiveServer since it is 0 if offline
+                int activeServer = Util.getPreferences(context).getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+                for (int i = instance; i <= serverCount; i++) {
+                    Util.removeInstanceName(context, i, activeServer);
+                }
 
-                        serverCount--;
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-                        editor.apply();
+                serverCount--;
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+                editor.apply();
 
-                        removeCurrent();
+                removeCurrent();
 
-                        SubsonicFragment parentFragment = context.getCurrentFragment();
-                        if(parentFragment instanceof SettingsFragment) {
-                            SettingsFragment serverSelectionFragment = (SettingsFragment) parentFragment;
-                            serverSelectionFragment.checkForRemoved();
-                        }
-                    }
-                });
+                SubsonicFragment parentFragment = context.getCurrentFragment();
+                if (parentFragment instanceof SettingsFragment) {
+                    SettingsFragment serverSelectionFragment = (SettingsFragment) parentFragment;
+                    serverSelectionFragment.checkForRemoved();
+                }
+            });
 
-                return true;
-            }
+            return true;
         });
 
         Preference serverTestConnectionPreference = new Preference(context);
         serverTestConnectionPreference.setKey(Constants.PREFERENCES_KEY_TEST_CONNECTION + instance);
         serverTestConnectionPreference.setPersistent(false);
         serverTestConnectionPreference.setTitle(R.string.settings_test_connection_title);
-        serverTestConnectionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                testConnection(instance);
-                return false;
-            }
+        serverTestConnectionPreference.setOnPreferenceClickListener(preference -> {
+            testConnection(instance);
+            return false;
         });
 
         screen.addPreference(serverNamePreference);
@@ -585,22 +530,22 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
                 if (!nomediaDir.createNewFile()) {
                     Log.w(TAG, "Failed to create " + nomediaDir);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to create " + nomediaDir, e);
             }
 
             try {
-                if(!musicNoMedia.createNewFile()) {
+                if (!musicNoMedia.createNewFile()) {
                     Log.w(TAG, "Failed to create " + musicNoMedia);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to create " + musicNoMedia, e);
             }
         } else if (!hide && nomediaDir.exists()) {
             if (!nomediaDir.delete()) {
                 Log.w(TAG, "Failed to delete " + nomediaDir);
             }
-            if(!musicNoMedia.delete()) {
+            if (!musicNoMedia.delete()) {
                 Log.w(TAG, "Failed to delete " + musicNoMedia);
             }
         }
@@ -628,7 +573,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
                 editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, defaultPath);
                 editor.apply();
 
-                if(cacheLocation != null) {
+                if (cacheLocation != null) {
                     cacheLocation.setSummary(defaultPath);
                     cacheLocation.setText(defaultPath);
                 }
@@ -646,7 +591,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
             @Override
             protected Boolean doInBackground() throws Throwable {
-                updateProgress(R.string.settings_testing_connection);
+                updateProgress();
 
                 previousInstance = Util.getActiveServer(context);
                 testingConnection = true;
@@ -685,8 +630,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
     private void openInBrowser(final int instance) {
         SharedPreferences prefs = Util.getPreferences(context);
         String url = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-        if(url == null) {
-            new ErrorDialog(context, R.string.settings_invalid_url, false);
+        if (url == null) {
+            new ErrorDialog(context, R.string.settings_invalid_url);
             return;
         }
         Uri uriServer = Uri.parse(url);
@@ -696,13 +641,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
     }
 
     private class ServerSettings {
-        private int instance;
-        private EditTextPreference serverName;
-        private EditTextPreference serverUrl;
-        private EditTextPreference serverLocalNetworkSSID;
-        private EditTextPreference serverInternalUrl;
-        private EditTextPreference username;
-        private PreferenceScreen screen;
+        private final int instance;
+        private final EditTextPreference serverName;
+        private final EditTextPreference serverUrl;
+        private final EditTextPreference serverLocalNetworkSSID;
+        private final EditTextPreference serverInternalUrl;
+        private final EditTextPreference username;
+        private final PreferenceScreen screen;
 
         private ServerSettings(int instance) {
             this.instance = instance;
@@ -713,55 +658,46 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             serverInternalUrl = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
             username = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
-            if(serverName != null) {
-                serverUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object value) {
-                        try {
-                            String url = (String) value;
-                            new URL(url);
-                            if (url.contains(" ") || url.contains("@") || url.contains("_")) {
-                                throw new Exception();
-                            }
-                        } catch (Exception x) {
-                            new ErrorDialog(context, R.string.settings_invalid_url, false);
-                            return false;
+            if (serverName != null) {
+                serverUrl.setOnPreferenceChangeListener((preference, value) -> {
+                    try {
+                        String url = (String) value;
+                        new URL(url);
+                        if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+                            throw new Exception();
                         }
-                        return true;
+                    } catch (Exception x) {
+                        new ErrorDialog(context, R.string.settings_invalid_url);
+                        return false;
                     }
+                    return true;
                 });
-                serverInternalUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object value) {
-                        try {
-                            String url = (String) value;
-                            // Allow blank internal IP address
-                            if ("".equals(url) || url == null) {
-                                return true;
-                            }
-
-                            new URL(url);
-                            if (url.contains(" ") || url.contains("@") || url.contains("_")) {
-                                throw new Exception();
-                            }
-                        } catch (Exception x) {
-                            new ErrorDialog(context, R.string.settings_invalid_url, false);
-                            return false;
+                serverInternalUrl.setOnPreferenceChangeListener((preference, value) -> {
+                    try {
+                        String url = (String) value;
+                        // Allow blank internal IP address
+                        if ("".equals(url) || url == null) {
+                            return true;
                         }
-                        return true;
+
+                        new URL(url);
+                        if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+                            throw new Exception();
+                        }
+                    } catch (Exception x) {
+                        new ErrorDialog(context, R.string.settings_invalid_url);
+                        return false;
                     }
+                    return true;
                 });
 
-                username.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object value) {
-                        String username = (String) value;
-                        if (username == null || !username.equals(username.trim())) {
-                            new ErrorDialog(context, R.string.settings_invalid_username, false);
-                            return false;
-                        }
-                        return true;
+                username.setOnPreferenceChangeListener((preference, value) -> {
+                    String username = (String) value;
+                    if (username == null || !username.equals(username.trim())) {
+                        new ErrorDialog(context, R.string.settings_invalid_username);
+                        return false;
                     }
+                    return true;
                 });
             }
         }
@@ -773,7 +709,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         public boolean update() {
             SharedPreferences prefs = Util.getPreferences(context);
 
-            if(prefs.contains(Constants.PREFERENCES_KEY_SERVER_NAME + instance)) {
+            if (prefs.contains(Constants.PREFERENCES_KEY_SERVER_NAME + instance)) {
                 if (serverName != null) {
                     serverName.setSummary(serverName.getText());
                     serverUrl.setSummary(serverUrl.getText());

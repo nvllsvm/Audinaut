@@ -18,18 +18,20 @@
 package net.nullsum.audinaut.util.tags;
 
 import android.support.v4.util.LruCache;
+
 import java.util.HashMap;
 import java.util.Vector;
 
 public final class BastpUtil {
-    private static final RGLruCache rgCache = new RGLruCache(16);
+    private static final RGLruCache rgCache = new RGLruCache();
 
-    /** Returns the ReplayGain values of 'path' as <track,album>
+    /**
+     * Returns the ReplayGain values of 'path' as <track,album>
      */
     public static float[] getReplayGainValues(String path) {
         float[] cached = rgCache.get(path);
 
-        if(cached == null) {
+        if (cached == null) {
             cached = getReplayGainValuesFromFile(path);
             rgCache.put(path, cached);
         }
@@ -37,35 +39,36 @@ public final class BastpUtil {
     }
 
 
-
-    /** Parse given file and return track,album replay gain values
+    /**
+     * Parse given file and return track,album replay gain values
      */
     private static float[] getReplayGainValuesFromFile(String path) {
-        String[] keys = { "REPLAYGAIN_TRACK_GAIN", "REPLAYGAIN_ALBUM_GAIN" };
-        float[] adjust= { 0f                     , 0f                      };
-        HashMap tags  = (new Bastp()).getTags(path);
+        String[] keys = {"REPLAYGAIN_TRACK_GAIN", "REPLAYGAIN_ALBUM_GAIN"};
+        float[] adjust = {0f, 0f};
+        HashMap tags = (new Bastp()).getTags(path);
 
-        for (int i=0; i<keys.length; i++) {
+        for (int i = 0; i < keys.length; i++) {
             String curKey = keys[i];
-            if(tags.containsKey(curKey)) {
-                String rg_raw = (String)((Vector)tags.get(curKey)).get(0);
-                String rg_numonly = "";
+            if (tags.containsKey(curKey)) {
+                String rg_raw = (String) ((Vector) tags.get(curKey)).get(0);
                 float rg_float = 0f;
                 try {
-                    String nums = rg_raw.replaceAll("[^0-9.-]","");
+                    String nums = rg_raw.replaceAll("[^0-9.-]", "");
                     rg_float = Float.parseFloat(nums);
-                } catch(Exception e) {}
+                } catch (Exception ignored) {
+                }
                 adjust[i] = rg_float;
             }
         }
         return adjust;
     }
 
-    /** LRU cache for ReplayGain values
+    /**
+     * LRU cache for ReplayGain values
      */
     private static class RGLruCache extends LruCache<String, float[]> {
-        public RGLruCache(int size) {
-            super(size);
+        public RGLruCache() {
+            super(16);
         }
     }
 
