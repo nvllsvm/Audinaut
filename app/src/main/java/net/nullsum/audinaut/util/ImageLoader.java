@@ -209,10 +209,19 @@ public class ImageLoader {
 
     public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
         int size = large ? imageSizeLarge : imageSizeDefault;
-        return loadImage(view, entry, large, size, crossfade);
+        return loadImage(view, entry, large, size, crossfade, false);
     }
 
-    public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
+    public void loadBlurImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
+        int size = large ? imageSizeLarge : imageSizeDefault;
+        loadImage(view, entry, large, size, crossfade, true);
+    }
+
+    public void loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
+        loadImage(view, entry, large, size, crossfade, false);
+    }
+
+    private SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade, boolean blur) {
         // If we know this a artist, try to load artist info instead
         if (entry != null && !entry.isAlbum() && !Util.isOffline(context)) {
             SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, large, view, crossfade);
@@ -229,12 +238,18 @@ public class ImageLoader {
         Bitmap bitmap;
         if (entry == null || entry.getCoverArt() == null) {
             bitmap = getUnknownImage(entry, size);
+            if (blur) {
+                bitmap = BlurBuilder.blur(context, bitmap);
+            }
             setImage(view, Util.createDrawableFromBitmap(context, bitmap), crossfade);
             return null;
         }
 
         bitmap = cache.get(getKey(entry.getCoverArt(), size));
         if (bitmap != null && !bitmap.isRecycled()) {
+            if (blur) {
+                bitmap = BlurBuilder.blur(context, bitmap);
+            }
             final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(view, drawable, crossfade);
             if (large) {
@@ -246,7 +261,7 @@ public class ImageLoader {
         if (!large) {
             setImage(view, null, false);
         }
-        ImageTask task = new ViewImageTask(view.getContext(), entry, size, large, view, crossfade);
+        ImageTask task = new ViewImageTask(view.getContext(), entry, size, large, view, crossfade, blur);
         task.execute();
         return task;
     }
@@ -322,14 +337,16 @@ public class ImageLoader {
         private final Context mContext;
         private final int mSize;
         private final boolean mIsNowPlaying;
+        private final boolean mBlur;
         Drawable mDrawable;
 
-        public ImageTask(Context context, MusicDirectory.Entry entry, int size, boolean isNowPlaying) {
+        public ImageTask(Context context, MusicDirectory.Entry entry, int size, boolean isNowPlaying, boolean blur) {
             super(context);
             mContext = context;
             mEntry = entry;
             mSize = size;
             mIsNowPlaying = isNowPlaying;
+            mBlur = blur;
         }
 
         @Override
@@ -348,7 +365,9 @@ public class ImageLoader {
                 } else {
                     bitmap = getUnknownImage(mEntry, mSize);
                 }
-
+                if (mBlur) {
+                    bitmap = BlurBuilder.blur(context, bitmap);
+                }
                 mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
             } catch (Throwable x) {
                 Log.e(TAG, "Failed to download album art.", x);
@@ -363,8 +382,8 @@ public class ImageLoader {
         final boolean mCrossfade;
         private final View mView;
 
-        public ViewImageTask(Context context, MusicDirectory.Entry entry, int size, boolean isNowPlaying, View view, boolean crossfade) {
-            super(context, entry, size, isNowPlaying);
+        public ViewImageTask(Context context, MusicDirectory.Entry entry, int size, boolean isNowPlaying, View view, boolean crossfade, boolean blur) {
+            super(context, entry, size, isNowPlaying, blur);
 
             mView = view;
             mCrossfade = crossfade;
@@ -409,7 +428,7 @@ public class ImageLoader {
                 }
 
                 if (mEntry != null && mEntry.getCoverArt() != null) {
-                    subTask = new ViewImageTask(mContext, mEntry, mSize, mIsNowPlaying, mView, mCrossfade);
+                    subTask = new ViewImageTask(mContext, mEntry, mSize, mIsNowPlaying, mView, mCrossfade, false);
                 } else {
                     // If entry is null as well, we need to just set as a blank image
                     Bitmap bitmap = getUnknownImage(mEntry, mSize);

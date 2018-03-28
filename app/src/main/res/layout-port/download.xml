@@ -20,33 +20,34 @@
                 android:background="@android:color/transparent"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                    <FrameLayout
+                    <net.nullsum.audinaut.view.RecyclingImageView
+                        android:id="@+id/download_album_art_background"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:scaleType="centerCrop" />
 
-                        <net.nullsum.audinaut.view.RecyclingImageView
-                            android:id="@+id/download_album_art_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitCenter" />
+                    <net.nullsum.audinaut.view.RecyclingImageView
+                        android:id="@+id/download_album_art_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter" />
 
-                        <LinearLayout
-                            android:id="@+id/download_overlay_buttons"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|bottom"
-                            android:background="@color/overlayColor"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:visibility="invisible" />
-                    </FrameLayout>
-                </FrameLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/download_overlay_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:background="@color/overlayColor"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/download_status"

@@ -87,6 +87,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     private TextView emptyTextView;
     private TextView songTitleTextView;
     private ImageView albumArtImageView;
+    private ImageView albumArtBackgroundView;
     private RecyclerView playlistView;
     private TextView positionTextView;
     private TextView durationTextView;
@@ -151,6 +152,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         emptyTextView = rootView.findViewById(R.id.download_empty);
         songTitleTextView = rootView.findViewById(R.id.download_song_title);
         albumArtImageView = rootView.findViewById(R.id.download_album_art_image);
+        albumArtBackgroundView = rootView.findViewById(R.id.download_album_art_background);
         positionTextView = rootView.findViewById(R.id.download_position);
         durationTextView = rootView.findViewById(R.id.download_duration);
         statusTextView = rootView.findViewById(R.id.download_status);
@@ -516,6 +518,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         }
 
         if (currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
+            getImageLoader().loadBlurImage(albumArtBackgroundView, null, true, false);
             getImageLoader().loadImage(albumArtImageView, null, true, false);
         }
 
@@ -804,6 +807,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         if (currentPlaying != null) {
             Entry song = currentPlaying.getSong();
             songTitleTextView.setText(song.getTitle());
+            getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, true);
             getImageLoader().loadImage(albumArtImageView, song, true, true);
 
             DownloadService downloadService = getDownloadService();
@@ -814,6 +818,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             }
         } else {
             songTitleTextView.setText(null);
+            getImageLoader().loadBlurImage(albumArtBackgroundView, null, true, false);
             getImageLoader().loadImage(albumArtImageView, null, true, false);
             setSubtitle(null);
         }
@@ -939,6 +944,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     @Override
     public void onMetadataUpdate(Entry song, int fieldChange) {
         if (song != null && albumArtImageView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
+            getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, true);
             getImageLoader().loadImage(albumArtImageView, song, true, true);
         }
     }
