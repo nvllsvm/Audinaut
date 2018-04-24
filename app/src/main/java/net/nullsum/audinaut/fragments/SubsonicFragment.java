@@ -713,10 +713,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     void downloadPlaylist(final String id, final String name) {
-        downloadRecursively(id, name);
-    }
-
-    private void downloadRecursively(final String id, final String name) {
         downloadRecursively(id, name, false, false, true, false, false, true, false);
     }
 
