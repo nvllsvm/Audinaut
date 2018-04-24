@@ -884,13 +884,19 @@ public class DownloadService extends Service {
      * Plays or resumes the playback, depending on the current player state.
      */
     public synchronized void togglePlayPause() {
-        if (playerState == PAUSED || playerState == COMPLETED || playerState == STOPPED) {
-            start();
-        } else if (playerState == STOPPED || playerState == IDLE) {
-            autoPlayStart = true;
-            play();
-        } else if (playerState == STARTED) {
-            pause();
+        switch (playerState) {
+            case PAUSED:
+            case COMPLETED:
+            case STOPPED:
+                start();
+                break;
+            case IDLE:
+                autoPlayStart = true;
+                play();
+                break;
+            case STARTED:
+                pause();
+                break;
         }
     }
 

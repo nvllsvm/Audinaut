@@ -44,17 +44,23 @@ public class EntryListParser extends MusicDirectoryEntryParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("album".equals(name)) {
-                    MusicDirectory.Entry entry = parseEntry("");
-                    if (get("isDir") == null) {
-                        entry.setDirectory(true);
+                switch (name) {
+                    case "album": {
+                        MusicDirectory.Entry entry = parseEntry("");
+                        if (get("isDir") == null) {
+                            entry.setDirectory(true);
+                        }
+                        dir.addChild(entry);
+                        break;
                     }
-                    dir.addChild(entry);
-                } else if ("song".equals(name)) {
-                    MusicDirectory.Entry entry = parseEntry("");
-                    dir.addChild(entry);
-                } else if ("error".equals(name)) {
-                    handleError();
+                    case "song": {
+                        MusicDirectory.Entry entry = parseEntry("");
+                        dir.addChild(entry);
+                        break;
+                    }
+                    case "error":
+                        handleError();
+                        break;
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);

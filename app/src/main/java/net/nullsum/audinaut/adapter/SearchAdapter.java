@@ -78,12 +78,17 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
     @Override
     public UpdateView.UpdateViewHolder onCreateSectionViewHolder(int viewType) {
         UpdateView updateView = null;
-        if (viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
-            updateView = new AlbumView(context, viewType == VIEW_TYPE_ALBUM_CELL);
-        } else if (viewType == VIEW_TYPE_SONG) {
-            updateView = new SongView(context);
-        } else if (viewType == VIEW_TYPE_ARTIST) {
-            updateView = new ArtistView(context);
+        switch (viewType) {
+            case VIEW_TYPE_ALBUM_CELL:
+            case VIEW_TYPE_ALBUM_LINE:
+                updateView = new AlbumView(context, viewType == VIEW_TYPE_ALBUM_CELL);
+                break;
+            case VIEW_TYPE_SONG:
+                updateView = new SongView(context);
+                break;
+            case VIEW_TYPE_ARTIST:
+                updateView = new ArtistView(context);
+                break;
         }
 
         return new UpdateView.UpdateViewHolder(updateView);
@@ -92,14 +97,19 @@ public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
     @Override
     public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
         UpdateView view = holder.getUpdateView();
-        if (viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
-            AlbumView albumView = (AlbumView) view;
-            albumView.setObject((Entry) item, imageLoader);
-        } else if (viewType == VIEW_TYPE_SONG) {
-            SongView songView = (SongView) view;
-            songView.setObject((Entry) item, true);
-        } else if (viewType == VIEW_TYPE_ARTIST) {
-            view.setObject(item);
+        switch (viewType) {
+            case VIEW_TYPE_ALBUM_CELL:
+            case VIEW_TYPE_ALBUM_LINE:
+                AlbumView albumView = (AlbumView) view;
+                albumView.setObject((Entry) item, imageLoader);
+                break;
+            case VIEW_TYPE_SONG:
+                SongView songView = (SongView) view;
+                songView.setObject((Entry) item, true);
+                break;
+            case VIEW_TYPE_ARTIST:
+                view.setObject(item);
+                break;
         }
     }
 

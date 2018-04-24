@@ -51,14 +51,18 @@ public class GenreParser extends AbstractParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("genre".equals(name)) {
-                    genre = new Genre();
-                    genre.setSongCount(getInteger("songCount"));
-                    genre.setAlbumCount(getInteger("albumCount"));
-                } else if ("error".equals(name)) {
-                    handleError();
-                } else {
-                    genre = null;
+                switch (name) {
+                    case "genre":
+                        genre = new Genre();
+                        genre.setSongCount(getInteger("songCount"));
+                        genre.setAlbumCount(getInteger("albumCount"));
+                        break;
+                    case "error":
+                        handleError();
+                        break;
+                    default:
+                        genre = null;
+                        break;
                 }
             } else if (eventType == XmlPullParser.TEXT) {
                 if (genre != null) {

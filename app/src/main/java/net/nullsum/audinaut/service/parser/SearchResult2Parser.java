@@ -50,19 +50,24 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("artist".equals(name)) {
-                    Artist artist = new Artist();
-                    artist.setId(get("id"));
-                    artist.setName(get("name"));
-                    artists.add(artist);
-                } else if ("album".equals(name)) {
-                    MusicDirectory.Entry entry = parseEntry("");
-                    entry.setDirectory(true);
-                    albums.add(entry);
-                } else if ("song".equals(name)) {
-                    songs.add(parseEntry(""));
-                } else if ("error".equals(name)) {
-                    handleError();
+                switch (name) {
+                    case "artist":
+                        Artist artist = new Artist();
+                        artist.setId(get("id"));
+                        artist.setName(get("name"));
+                        artists.add(artist);
+                        break;
+                    case "album":
+                        MusicDirectory.Entry entry = parseEntry("");
+                        entry.setDirectory(true);
+                        albums.add(entry);
+                        break;
+                    case "song":
+                        songs.add(parseEntry(""));
+                        break;
+                    case "error":
+                        handleError();
+                        break;
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);

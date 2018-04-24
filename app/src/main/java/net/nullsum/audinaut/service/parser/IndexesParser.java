@@ -65,42 +65,50 @@ public class IndexesParser extends MusicDirectoryEntryParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("indexes".equals(name) || "artists".equals(name)) {
-                    changed = true;
-                    ignoredArticles = get("ignoredArticles");
-                } else if ("index".equals(name)) {
-                    index = get("name");
+                switch (name) {
+                    case "indexes":
+                    case "artists":
+                        changed = true;
+                        ignoredArticles = get("ignoredArticles");
+                        break;
+                    case "index":
+                        index = get("name");
 
-                } else if ("artist".equals(name)) {
-                    Artist artist = new Artist();
-                    artist.setId(get("id"));
-                    artist.setName(get("name"));
-                    artist.setIndex(index);
+                        break;
+                    case "artist":
+                        Artist artist = new Artist();
+                        artist.setId(get("id"));
+                        artist.setName(get("name"));
+                        artist.setIndex(index);
 
-                    // Combine the id's for the two artists
-                    if (artistList.containsKey(artist.getName())) {
-                        Artist originalArtist = artistList.get(artist.getName());
-                        originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
-                    } else {
-                        artistList.put(artist.getName(), artist);
-                        artists.add(artist);
-                    }
+                        // Combine the id's for the two artists
+                        if (artistList.containsKey(artist.getName())) {
+                            Artist originalArtist = artistList.get(artist.getName());
+                            originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
+                        } else {
+                            artistList.put(artist.getName(), artist);
+                            artists.add(artist);
+                        }
 
-                    if (artists.size() % 10 == 0) {
-                        String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());
-                        updateProgress(progressListener, msg);
-                    }
-                } else if ("shortcut".equals(name)) {
-                    Artist shortcut = new Artist();
-                    shortcut.setId(get("id"));
-                    shortcut.setName(get("name"));
-                    shortcut.setIndex("*");
-                    shortcuts.add(shortcut);
-                } else if ("child".equals(name)) {
-                    MusicDirectory.Entry entry = parseEntry("");
-                    entries.add(entry);
-                } else if ("error".equals(name)) {
-                    handleError();
+                        if (artists.size() % 10 == 0) {
+                            String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());
+                            updateProgress(progressListener, msg);
+                        }
+                        break;
+                    case "shortcut":
+                        Artist shortcut = new Artist();
+                        shortcut.setId(get("id"));
+                        shortcut.setName(get("name"));
+                        shortcut.setIndex("*");
+                        shortcuts.add(shortcut);
+                        break;
+                    case "child":
+                        MusicDirectory.Entry entry = parseEntry("");
+                        entries.add(entry);
+                        break;
+                    case "error":
+                        handleError();
+                        break;
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);

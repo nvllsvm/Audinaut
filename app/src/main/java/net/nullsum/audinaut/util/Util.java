@@ -968,33 +968,38 @@ public final class Util {
             audioManager.requestAudioFocus(focusListener = new OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
                     DownloadService downloadService = (DownloadService) context;
-                    if ((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
-                        if (downloadService.getPlayerState() == PlayerState.STARTED) {
-                            Log.i(TAG, "Temporary loss of focus");
-                            SharedPreferences prefs = getPreferences(context);
-                            int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
-                            if (lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
-                                lowerFocus = true;
-                                downloadService.setVolume(0.1f);
-                            } else if (lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
-                                pauseFocus = true;
-                                downloadService.pause(true);
+                    switch (focusChange) {
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            if (downloadService.getPlayerState() == PlayerState.STARTED) {
+                                Log.i(TAG, "Temporary loss of focus");
+                                SharedPreferences prefs = getPreferences(context);
+                                int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
+                                if (lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+                                    lowerFocus = true;
+                                    downloadService.setVolume(0.1f);
+                                } else if (lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
+                                    pauseFocus = true;
+                                    downloadService.pause(true);
+                                }
                             }
-                        }
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                        if (pauseFocus) {
-                            pauseFocus = false;
-                            downloadService.start();
-                        }
-                        if (lowerFocus) {
-                            lowerFocus = false;
-                            downloadService.setVolume(1.0f);
-                        }
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                        Log.i(TAG, "Permanently lost focus");
-                        focusListener = null;
-                        downloadService.pause();
-                        audioManager.abandonAudioFocus(this);
+                            break;
+                        case AudioManager.AUDIOFOCUS_GAIN:
+                            if (pauseFocus) {
+                                pauseFocus = false;
+                                downloadService.start();
+                            }
+                            if (lowerFocus) {
+                                lowerFocus = false;
+                                downloadService.setVolume(1.0f);
+                            }
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS:
+                            Log.i(TAG, "Permanently lost focus");
+                            focusListener = null;
+                            downloadService.pause();
+                            audioManager.abandonAudioFocus(this);
+                            break;
                     }
                 }
             }, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);

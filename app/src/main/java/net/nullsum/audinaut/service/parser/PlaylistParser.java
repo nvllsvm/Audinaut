@@ -44,13 +44,17 @@ public class PlaylistParser extends MusicDirectoryEntryParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("entry".equals(name)) {
-                    dir.addChild(parseEntry(""));
-                } else if ("error".equals(name)) {
-                    handleError();
-                } else if ("playlist".equals(name)) {
-                    dir.setName(get("name"));
-                    dir.setId(get("id"));
+                switch (name) {
+                    case "entry":
+                        dir.addChild(parseEntry(""));
+                        break;
+                    case "error":
+                        handleError();
+                        break;
+                    case "playlist":
+                        dir.setName(get("name"));
+                        dir.setId(get("id"));
+                        break;
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);

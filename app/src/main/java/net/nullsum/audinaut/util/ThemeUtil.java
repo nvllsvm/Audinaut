@@ -60,29 +60,32 @@ public final class ThemeUtil {
     private static int getThemeRes(Context context, String theme) {
         if (context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
             if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
-                if (THEME_DARK.equals(theme)) {
-                    return R.style.Theme_Audinaut_Dark_No_Actionbar;
-                } else if (THEME_BLACK.equals(theme)) {
-                    return R.style.Theme_Audinaut_Black_No_Actionbar;
-                } else {
-                    return R.style.Theme_Audinaut_Light_No_Actionbar;
+                switch (theme) {
+                    case THEME_DARK:
+                        return R.style.Theme_Audinaut_Dark_No_Actionbar;
+                    case THEME_BLACK:
+                        return R.style.Theme_Audinaut_Black_No_Actionbar;
+                    default:
+                        return R.style.Theme_Audinaut_Light_No_Actionbar;
                 }
             } else {
-                if (THEME_DARK.equals(theme)) {
-                    return R.style.Theme_Audinaut_Dark_No_Color;
-                } else if (THEME_BLACK.equals(theme)) {
-                    return R.style.Theme_Audinaut_Black_No_Color;
-                } else {
-                    return R.style.Theme_Audinaut_Light_No_Color;
+                switch (theme) {
+                    case THEME_DARK:
+                        return R.style.Theme_Audinaut_Dark_No_Color;
+                    case THEME_BLACK:
+                        return R.style.Theme_Audinaut_Black_No_Color;
+                    default:
+                        return R.style.Theme_Audinaut_Light_No_Color;
                 }
             }
         } else {
-            if (THEME_DARK.equals(theme)) {
-                return R.style.Theme_Audinaut_Dark;
-            } else if (THEME_BLACK.equals(theme)) {
-                return R.style.Theme_Audinaut_Black;
-            } else {
-                return R.style.Theme_Audinaut_Light;
+            switch (theme) {
+                case THEME_DARK:
+                    return R.style.Theme_Audinaut_Dark;
+                case THEME_BLACK:
+                    return R.style.Theme_Audinaut_Black;
+                default:
+                    return R.style.Theme_Audinaut_Light;
             }
         }
     }

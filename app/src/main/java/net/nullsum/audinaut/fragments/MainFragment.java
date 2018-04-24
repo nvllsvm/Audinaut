@@ -75,53 +75,71 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
     }
 
     private void showAlbumList(String type) {
-        if ("genres".equals(type)) {
-            SubsonicFragment fragment = new SelectGenreFragment();
-            replaceFragment(fragment);
-        } else if ("years".equals(type)) {
-            SubsonicFragment fragment = new SelectYearFragment();
-            replaceFragment(fragment);
-        } else {
-            // Clear out recently added count when viewing
-            if ("newest".equals(type)) {
-                SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-                editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
-                editor.apply();
+        switch (type) {
+            case "genres": {
+                SubsonicFragment fragment = new SelectGenreFragment();
+                replaceFragment(fragment);
+                break;
             }
+            case "years": {
+                SubsonicFragment fragment = new SelectYearFragment();
+                replaceFragment(fragment);
+                break;
+            }
+            default: {
+                // Clear out recently added count when viewing
+                if ("newest".equals(type)) {
+                    SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+                    editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
+                    editor.apply();
+                }
 
-            SubsonicFragment fragment = new SelectDirectoryFragment();
-            Bundle args = new Bundle();
-            args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
-            args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
-            args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-            fragment.setArguments(args);
+                SubsonicFragment fragment = new SelectDirectoryFragment();
+                Bundle args = new Bundle();
+                args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+                args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+                args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+                fragment.setArguments(args);
 
-            replaceFragment(fragment);
+                replaceFragment(fragment);
+                break;
+            }
         }
     }
 
     @Override
     public void onItemClicked(UpdateView<Integer> updateView, Integer item) {
-        if (item == R.string.main_albums_random) {
-            showAlbumList("random");
-        } else if (item == R.string.main_albums_recent) {
-            showAlbumList("recent");
-        } else if (item == R.string.main_albums_frequent) {
-            showAlbumList("frequent");
-        } else if (item == R.string.main_albums_genres) {
-            showAlbumList("genres");
-        } else if (item == R.string.main_albums_year) {
-            showAlbumList("years");
-        } else if (item == R.string.main_albums_alphabetical) {
-            showAlbumList("alphabeticalByName");
-        } else if (item == R.string.main_songs_newest) {
-            showAlbumList(SONGS_NEWEST);
-        } else if (item == R.string.main_songs_top_played) {
-            showAlbumList(SONGS_TOP_PLAYED);
-        } else if (item == R.string.main_songs_recent) {
-            showAlbumList(SONGS_RECENT);
-        } else if (item == R.string.main_songs_frequent) {
-            showAlbumList(SONGS_FREQUENT);
+        switch (item) {
+            case R.string.main_albums_random:
+                showAlbumList("random");
+                break;
+            case R.string.main_albums_recent:
+                showAlbumList("recent");
+                break;
+            case R.string.main_albums_frequent:
+                showAlbumList("frequent");
+                break;
+            case R.string.main_albums_genres:
+                showAlbumList("genres");
+                break;
+            case R.string.main_albums_year:
+                showAlbumList("years");
+                break;
+            case R.string.main_albums_alphabetical:
+                showAlbumList("alphabeticalByName");
+                break;
+            case R.string.main_songs_newest:
+                showAlbumList(SONGS_NEWEST);
+                break;
+            case R.string.main_songs_top_played:
+                showAlbumList(SONGS_TOP_PLAYED);
+                break;
+            case R.string.main_songs_recent:
+                showAlbumList(SONGS_RECENT);
+                break;
+            case R.string.main_songs_frequent:
+                showAlbumList(SONGS_FREQUENT);
+                break;
         }
     }
 

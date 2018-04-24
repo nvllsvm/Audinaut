@@ -538,12 +538,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     }
 
     private SubsonicFragment getNewFragment(String fragmentType) {
-        if ("Playlist".equals(fragmentType)) {
-            return new SelectPlaylistFragment();
-        } else if ("Download".equals(fragmentType)) {
-            return new DownloadFragment();
-        } else {
-            return new SelectArtistFragment();
+        switch (fragmentType) {
+            case "Playlist":
+                return new SelectPlaylistFragment();
+            case "Download":
+                return new DownloadFragment();
+            default:
+                return new SelectArtistFragment();
         }
     }
 

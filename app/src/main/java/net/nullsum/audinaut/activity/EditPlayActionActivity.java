@@ -173,15 +173,16 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            cancel();
-            return true;
-        } else if (item.getItemId() == R.id.menu_accept) {
-            accept();
-            return true;
-        } else if (item.getItemId() == R.id.menu_cancel) {
-            cancel();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                cancel();
+                return true;
+            case R.id.menu_accept:
+                accept();
+                return true;
+            case R.id.menu_cancel:
+                cancel();
+                return true;
         }
 
         return false;

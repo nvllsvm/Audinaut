@@ -71,19 +71,26 @@ public class DownloadServiceLifecycleSupport {
             eventHandler.post(() -> {
                 String action = intent.getAction();
                 Log.i(TAG, "intentReceiver.onReceive: " + action);
-                if (DownloadService.CMD_PLAY.equals(action)) {
-                    downloadService.play();
-                } else if (DownloadService.CMD_NEXT.equals(action)) {
-                    downloadService.next();
-                } else if (DownloadService.CMD_PREVIOUS.equals(action)) {
-                    downloadService.previous();
-                } else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
-                    downloadService.togglePlayPause();
-                } else if (DownloadService.CMD_PAUSE.equals(action)) {
-                    downloadService.pause();
-                } else if (DownloadService.CMD_STOP.equals(action)) {
-                    downloadService.pause();
-                    downloadService.seekTo(0);
+                switch (action) {
+                    case DownloadService.CMD_PLAY:
+                        downloadService.play();
+                        break;
+                    case DownloadService.CMD_NEXT:
+                        downloadService.next();
+                        break;
+                    case DownloadService.CMD_PREVIOUS:
+                        downloadService.previous();
+                        break;
+                    case DownloadService.CMD_TOGGLEPAUSE:
+                        downloadService.togglePlayPause();
+                        break;
+                    case DownloadService.CMD_PAUSE:
+                        downloadService.pause();
+                        break;
+                    case DownloadService.CMD_STOP:
+                        downloadService.pause();
+                        downloadService.seekTo(0);
+                        break;
                 }
             });
         }

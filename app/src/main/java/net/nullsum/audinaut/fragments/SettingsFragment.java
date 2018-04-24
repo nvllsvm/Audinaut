@@ -116,14 +116,19 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         Bundle args = new Bundle();
 
         int xml = 0;
-        if ("appearance".equals(name)) {
-            xml = R.xml.settings_appearance;
-        } else if ("cache".equals(name)) {
-            xml = R.xml.settings_cache;
-        } else if ("playback".equals(name)) {
-            xml = R.xml.settings_playback;
-        } else if ("servers".equals(name)) {
-            xml = R.xml.settings_servers;
+        switch (name) {
+            case "appearance":
+                xml = R.xml.settings_appearance;
+                break;
+            case "cache":
+                xml = R.xml.settings_cache;
+                break;
+            case "playback":
+                xml = R.xml.settings_playback;
+                break;
+            case "servers":
+                xml = R.xml.settings_servers;
+                break;
         }
 
         if (xml != 0) {
@@ -142,28 +147,37 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
         update();
 
-        if (Constants.PREFERENCES_KEY_HIDE_MEDIA.equals(key)) {
-            setHideMedia(sharedPreferences.getBoolean(key, true));
-        } else if (Constants.PREFERENCES_KEY_MEDIA_BUTTONS.equals(key)) {
-            setMediaButtonsEnabled(sharedPreferences.getBoolean(key, true));
-        } else if (Constants.PREFERENCES_KEY_CACHE_LOCATION.equals(key)) {
-            setCacheLocation(sharedPreferences.getString(key, ""));
-        } else if (Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
-            SyncUtil.removeMostRecentSyncFiles(context);
-        } else if (Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(key)) {
-            DownloadService downloadService = DownloadService.getInstance();
-            if (downloadService != null) {
-                downloadService.reapplyVolume();
-            }
-        } else if (Constants.PREFERENCES_KEY_START_ON_HEADPHONES.equals(key)) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setClassName(context.getPackageName(), HeadphoneListenerService.class.getName());
+        switch (key) {
+            case Constants.PREFERENCES_KEY_HIDE_MEDIA:
+                setHideMedia(sharedPreferences.getBoolean(key, true));
+                break;
+            case Constants.PREFERENCES_KEY_MEDIA_BUTTONS:
+                setMediaButtonsEnabled(sharedPreferences.getBoolean(key, true));
+                break;
+            case Constants.PREFERENCES_KEY_CACHE_LOCATION:
+                setCacheLocation(sharedPreferences.getString(key, ""));
+                break;
+            case Constants.PREFERENCES_KEY_SYNC_MOST_RECENT:
+                SyncUtil.removeMostRecentSyncFiles(context);
+                break;
+            case Constants.PREFERENCES_KEY_REPLAY_GAIN:
+            case Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP:
+            case Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED:
+                DownloadService downloadService = DownloadService.getInstance();
+                if (downloadService != null) {
+                    downloadService.reapplyVolume();
+                }
+                break;
+            case Constants.PREFERENCES_KEY_START_ON_HEADPHONES:
+                Intent serviceIntent = new Intent();
+                serviceIntent.setClassName(context.getPackageName(), HeadphoneListenerService.class.getName());
 
-            if (sharedPreferences.getBoolean(key, false)) {
-                context.startService(serviceIntent);
-            } else {
-                context.stopService(serviceIntent);
-            }
+                if (sharedPreferences.getBoolean(key, false)) {
+                    context.startService(serviceIntent);
+                } else {
+                    context.stopService(serviceIntent);
+                }
+                break;
         }
 
         scheduleBackup();

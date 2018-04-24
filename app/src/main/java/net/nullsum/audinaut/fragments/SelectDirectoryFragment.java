@@ -315,25 +315,37 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
     }
 
     private void getAlbumList(final String albumListType, final int size, final boolean refresh) {
-        if ("random".equals(albumListType)) {
-            setTitle(R.string.main_albums_random);
-        } else if ("recent".equals(albumListType)) {
-            setTitle(R.string.main_albums_recent);
-        } else if ("frequent".equals(albumListType)) {
-            setTitle(R.string.main_albums_frequent);
-        } else if ("genres".equals(albumListType) || "years".equals(albumListType)) {
-            setTitle(albumListExtra);
-        } else if ("alphabeticalByName".equals(albumListType)) {
-            setTitle(R.string.main_albums_alphabetical);
+        switch (albumListType) {
+            case "random":
+                setTitle(R.string.main_albums_random);
+                break;
+            case "recent":
+                setTitle(R.string.main_albums_recent);
+                break;
+            case "frequent":
+                setTitle(R.string.main_albums_frequent);
+                break;
+            case "genres":
+            case "years":
+                setTitle(albumListExtra);
+                break;
+            case "alphabeticalByName":
+                setTitle(R.string.main_albums_alphabetical);
+                break;
         }
-        if (MainFragment.SONGS_NEWEST.equals(albumListType)) {
-            setTitle(R.string.main_songs_newest);
-        } else if (MainFragment.SONGS_TOP_PLAYED.equals(albumListType)) {
-            setTitle(R.string.main_songs_top_played);
-        } else if (MainFragment.SONGS_RECENT.equals(albumListType)) {
-            setTitle(R.string.main_songs_recent);
-        } else if (MainFragment.SONGS_FREQUENT.equals(albumListType)) {
-            setTitle(R.string.main_songs_frequent);
+        switch (albumListType) {
+            case MainFragment.SONGS_NEWEST:
+                setTitle(R.string.main_songs_newest);
+                break;
+            case MainFragment.SONGS_TOP_PLAYED:
+                setTitle(R.string.main_songs_top_played);
+                break;
+            case MainFragment.SONGS_RECENT:
+                setTitle(R.string.main_songs_recent);
+                break;
+            case MainFragment.SONGS_FREQUENT:
+                setTitle(R.string.main_songs_frequent);
+                break;
         }
 
         new LoadTask() {
