@@ -599,28 +599,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             return true;
         }
     }
-
-    private void loadRemotePlayQueue() {
-        new SilentBackgroundTask<Void>(this) {
-
-            @Override
-            protected Void doInBackground() throws Throwable {
-                try {
-                    // Make sure we wait until download service is ready
-                    DownloadService downloadService = getDownloadService();
-                    while (downloadService == null || !downloadService.isInitialized()) {
-                        Util.sleepQuietly(100L);
-                        downloadService = getDownloadService();
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Failed to get playing queue to server", e);
-                }
-
-                return null;
-            }
-        }.execute();
-    }
-
+    
     private void createAccount() {
         final Context context = this;
 
