@@ -167,9 +167,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         slideUpPanel = findViewById(R.id.slide_up_panel);
         panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-
-            }
+            public void onPanelSlide(View panel, float slideOffset) {}
 
             @Override
             public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) {
