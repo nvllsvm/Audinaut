@@ -332,9 +332,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 openNowPlaying();
             }
         } else {
-            if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                closeNowPlaying();
-            }
             setIntent(intent);
         }
         if (drawer != null) {
