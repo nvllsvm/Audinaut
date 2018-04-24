@@ -152,7 +152,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     void onFinishSetupOptionsMenu(final Menu menu) {
         searchItem = menu.findItem(R.id.menu_global_search);
         if (searchItem != null) {
-            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView = (SearchView) searchItem.getActionView();
             SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
             SearchableInfo searchableInfo = searchManager.getSearchableInfo(context.getComponentName());
             if (searchableInfo == null) {
