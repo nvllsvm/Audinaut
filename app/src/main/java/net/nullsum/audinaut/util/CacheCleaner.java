@@ -136,13 +136,7 @@ public class CacheCleaner {
 
     private void sortByAscendingModificationTime(List<File> files) {
         Collections.sort(files, (a, b) -> {
-            if (a.lastModified() < b.lastModified()) {
-                return -1;
-            }
-            if (a.lastModified() > b.lastModified()) {
-                return 1;
-            }
-            return 0;
+            return Long.compare(a.lastModified(), b.lastModified());
         });
     }
 

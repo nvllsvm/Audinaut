@@ -228,31 +228,13 @@ public class OfflineMusicService implements MusicService {
         }
 
         Collections.sort(artists, (lhs, rhs) -> {
-            if (lhs.getCloseness() == rhs.getCloseness()) {
-                return 0;
-            } else if (lhs.getCloseness() > rhs.getCloseness()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
         });
         Collections.sort(albums, (lhs, rhs) -> {
-            if (lhs.getCloseness() == rhs.getCloseness()) {
-                return 0;
-            } else if (lhs.getCloseness() > rhs.getCloseness()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
         });
         Collections.sort(songs, (lhs, rhs) -> {
-            if (lhs.getCloseness() == rhs.getCloseness()) {
-                return 0;
-            } else if (lhs.getCloseness() > rhs.getCloseness()) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
         });
 
         // Respect counts in search criteria
