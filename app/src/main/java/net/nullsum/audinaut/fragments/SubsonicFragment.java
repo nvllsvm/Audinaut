@@ -178,16 +178,16 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                 refresh();
                 return true;
             case R.id.menu_play_now:
-                playNow(false, false);
+                playNow(false, false, false);
                 return true;
             case R.id.menu_play_last:
-                playNow(false, true);
+                playNow(false, true, false);
                 return true;
             case R.id.menu_play_next:
                 playNow(false, true, true);
                 return true;
             case R.id.menu_shuffle:
-                playNow(true, false);
+                playNow(true, false, false);
                 return true;
             case R.id.menu_download:
                 downloadBackground(false);
@@ -1356,11 +1356,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         return getCurrentAdapter().getSelected();
     }
 
-    private void playNow(final boolean shuffle, final boolean append) {
-        playNow(shuffle, append, false);
-    }
-
-    void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
+     void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
         List<Entry> songs = getSelectedEntries();
         if (!songs.isEmpty()) {
             download(songs, append, !append, playNext, shuffle);
