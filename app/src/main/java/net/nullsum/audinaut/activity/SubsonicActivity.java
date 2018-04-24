@@ -533,21 +533,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
         finish();
     }
 
-    boolean onBackPressedSupport() {
-        if (drawerOpen) {
-            drawer.closeDrawers();
-            return false;
-        } else if (backStack.size() > 0) {
-            removeCurrent();
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        if (onBackPressedSupport()) {
+        if (drawerOpen) {
+            drawer.closeDrawers();
+        } else if (backStack.size() > 0) {
+            removeCurrent();
+        } else {
             super.onBackPressed();
         }
     }
