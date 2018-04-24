@@ -659,8 +659,7 @@ public class CachedMusicService implements MusicService {
 
     private void deleteRemovedEntries(Context context, MusicDirectory dir, MusicDirectory cached) {
         if (cached != null) {
-            List<Entry> oldList = new ArrayList<>();
-            oldList.addAll(cached.getChildren());
+            List<Entry> oldList = new ArrayList<>(cached.getChildren());
             oldList.removeAll(dir.getChildren());
 
             // Anything remaining has been removed from server

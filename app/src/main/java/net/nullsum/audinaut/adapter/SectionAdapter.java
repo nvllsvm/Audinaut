@@ -315,8 +315,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
     }
 
     public List<T> getSelected() {
-        List<T> selected = new ArrayList<>();
-        selected.addAll(this.selected);
+        List<T> selected = new ArrayList<>(this.selected);
         return selected;
     }
 

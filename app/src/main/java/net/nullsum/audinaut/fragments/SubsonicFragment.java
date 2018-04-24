@@ -836,8 +836,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             protected List<Playlist> doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(context);
-                List<Playlist> playlists = new ArrayList<>();
-                playlists.addAll(musicService.getPlaylists(false, context, this));
+                List<Playlist> playlists = new ArrayList<>(musicService.getPlaylists(false, context, this));
 
                 // Iterate through and remove all non owned public playlists
                 Iterator<Playlist> it = playlists.iterator();
