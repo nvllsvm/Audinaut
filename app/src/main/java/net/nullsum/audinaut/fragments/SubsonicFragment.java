@@ -175,7 +175,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                 onShuffleRequested();
                 return true;
             case R.id.menu_refresh:
-                refresh();
+                refresh(true);
                 return true;
             case R.id.menu_play_now:
                 playNow(false, false, false);
@@ -432,18 +432,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         return context != null ? context.getDownloadService() : null;
     }
 
-    private void refresh() {
-        refresh(true);
-    }
-
     void refresh(boolean refresh) {
-
     }
 
     @Override
     public void onRefresh() {
         refreshLayout.setRefreshing(false);
-        refresh();
+        refresh(true);
     }
 
     public void setProgressVisible(boolean visible) {
@@ -1185,7 +1180,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if (adapter != null) {
                         adapter.removeItem(remove);
                     } else {
-                        refresh();
+                        refresh(true);
                     }
                 } else {
                     UpdateView.triggerUpdate();
@@ -1211,7 +1206,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                             adapter.removeItem(song);
                         }
                     } else {
-                        refresh();
+                        refresh(true);
                     }
                 } else {
                     UpdateView.triggerUpdate();
