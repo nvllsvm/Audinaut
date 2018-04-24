@@ -144,9 +144,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        context = (SubsonicActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = (SubsonicActivity) getActivity();
     }
 
     public void setContext(SubsonicActivity context) {
