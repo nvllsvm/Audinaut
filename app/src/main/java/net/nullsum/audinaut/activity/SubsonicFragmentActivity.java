@@ -640,9 +640,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     }
 
     private void loadRemotePlayQueue() {
-        if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER, false)) {
-            return;
-        }
         new SilentBackgroundTask<Void>(this) {
 
             @Override
