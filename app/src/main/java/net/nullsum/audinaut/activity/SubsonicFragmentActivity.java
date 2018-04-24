@@ -580,16 +580,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     }
 
     private void loadSession() {
-        loadSettings();
-        // If we are on Subsonic 5.2+, save play queue
-        if (!Util.isOffline(this)) {
-            loadRemotePlayQueue();
-        }
-
-        sessionInitialized = true;
-    }
-
-    private void loadSettings() {
         PreferenceManager.setDefaultValues(this, R.xml.settings_appearance, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_cache, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_playback, false);
@@ -624,6 +614,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
             editor.apply();
         }
+
+        sessionInitialized = true;
     }
 
     private boolean resetCacheLocation(SharedPreferences prefs) {
