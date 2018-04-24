@@ -116,6 +116,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             lastSelectedPosition = R.id.drawer_downloading;
         }
         setContentView(R.layout.abstract_fragment_activity);
+        if (drawerToggle != null) {
+            drawerToggle.setDrawerIndicatorEnabled(true);
+        }
 
         if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
             String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
@@ -411,14 +414,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
         if (savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
             panelSlideListener.onPanelStateChanged(null, null, PanelState.EXPANDED);
-        }
-    }
-
-    @Override
-    public void setContentView(int viewId) {
-        super.setContentView(viewId);
-        if (drawerToggle != null) {
-            drawerToggle.setDrawerIndicatorEnabled(true);
         }
     }
 
