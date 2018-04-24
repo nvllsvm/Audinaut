@@ -232,11 +232,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         rewindButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
             protected Void doInBackground() throws Throwable {
-                if (getDownloadService() == null) {
-                    return null;
+                if (getDownloadService() != null) {
+                    getDownloadService().rewind();
                 }
-
-                getDownloadService().rewind();
                 return null;
             }
         }.execute());
@@ -245,11 +243,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         previousButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
             protected Void doInBackground() throws Throwable {
-                if (getDownloadService() == null) {
-                    return null;
+                if (getDownloadService() != null) {
+                    getDownloadService().previous();
                 }
-
-                getDownloadService().previous();
                 return null;
             }
         }.execute());
@@ -264,7 +260,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 } else {
                     getDownloadService().start();
                 }
-
                 return null;
             }
         }.execute());
@@ -273,11 +268,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         nextButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
             protected Void doInBackground() throws Throwable {
-                if (getDownloadService() == null) {
-                    return null;
+                if (getDownloadService() != null) {
+                    getDownloadService().next();
                 }
-
-                getDownloadService().next();
                 return null;
             }
         }.execute());
