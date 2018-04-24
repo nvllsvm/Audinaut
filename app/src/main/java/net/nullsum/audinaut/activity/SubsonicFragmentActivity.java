@@ -287,14 +287,21 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 return null;
             }
         }.execute());
-    }
 
-    @Override
-    protected void onPostCreate(Bundle bundle) {
-        super.onPostCreate(bundle);
+        if (!infoDialogDisplayed) {
+            infoDialogDisplayed = true;
+            if (Util.getRestUrl(this).contains("demo.subsonic.org")) {
+                Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
+            }
+        }
 
-        showInfoDialog();
-        checkUpdates();
+        try {
+            String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            int ver = Integer.parseInt(version.replace(".", ""));
+            Updater updater = new Updater(ver);
+            updater.checkUpdates(this);
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -557,17 +564,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         }
     }
 
-    private void checkUpdates() {
-        try {
-            String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            int ver = Integer.parseInt(version.replace(".", ""));
-            Updater updater = new Updater(ver);
-            updater.checkUpdates(this);
-        } catch (Exception ignored) {
-
-        }
-    }
-
     private void loadSession() {
         PreferenceManager.setDefaultValues(this, R.xml.settings_appearance, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_cache, false);
@@ -662,15 +658,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 return null;
             }
         }.execute();
-    }
-
-    private void showInfoDialog() {
-        if (!infoDialogDisplayed) {
-            infoDialogDisplayed = true;
-            if (Util.getRestUrl(this).contains("demo.subsonic.org")) {
-                Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
-            }
-        }
     }
 
     @Override
