@@ -408,7 +408,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
         if (currentFragment != null) {
             try {
                 SubsonicFragment fragment = getCurrentFragment();
-                fragment.setContext(this);
                 fragment.onCreateOptionsMenu(menu, menuInflater);
 
                 if (isTouchscreen()) {

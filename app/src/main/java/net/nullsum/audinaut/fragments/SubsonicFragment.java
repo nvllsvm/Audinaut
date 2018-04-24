@@ -149,10 +149,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         this.context = (SubsonicActivity) getActivity();
     }
 
-    public void setContext(SubsonicActivity context) {
-        this.context = context;
-    }
-
     void onFinishSetupOptionsMenu(final Menu menu) {
         searchItem = menu.findItem(R.id.menu_global_search);
         if (searchItem != null) {
