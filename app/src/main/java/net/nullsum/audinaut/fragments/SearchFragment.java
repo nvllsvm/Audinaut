@@ -204,7 +204,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
         task.execute();
 
         if (searchItem != null) {
-            MenuItemCompat.collapseActionView(searchItem);
+            searchItem.collapseActionView();
         }
     }
 
