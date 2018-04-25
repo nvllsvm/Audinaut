@@ -33,7 +33,6 @@
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to Audinaut! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
-    <string name="main.about_title">About Audinaut</string>
     <string name="main.offline">Go Offline</string>
     <string name="main.online">Go Online</string>
     <string name="main.albums_per_folder">Per Folder</string>
@@ -80,7 +79,6 @@
     <string name="search.songs">Songs</string>
 
     <string name="progress.wait">Please wait…</string>
-    <string name="progress.artist_info">Loading Artist Bio</string>
 
     <string name="select_album.n_selected">%d selected.</string>
     <string name="select_album.offline">Offline</string>
@@ -327,10 +325,6 @@
     <string name="details.public">Public</string>
     <string name="details.created">Created</string>
     <string name="details.title">Title</string>
-    <string name="details.author">Author</string>
-    <string name="details.email">Email</string>
-    <string name="details.version">Version</string>
-    <string name="details.available_space">Available Space</string>
     <string name="details.updated">Updated</string>
     <string name="details.last_played">Last Played</string>
 
