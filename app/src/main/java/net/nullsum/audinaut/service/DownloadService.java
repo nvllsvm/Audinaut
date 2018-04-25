@@ -441,10 +441,6 @@ public class DownloadService extends Service {
         suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
     }
 
-    public boolean isInitialized() {
-        return lifecycleSupport != null && lifecycleSupport.isInitialized();
-    }
-
     public boolean isRemovePlayed() {
         return removePlayed;
     }

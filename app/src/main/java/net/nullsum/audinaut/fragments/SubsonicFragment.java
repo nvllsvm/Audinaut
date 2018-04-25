@@ -611,7 +611,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         final String oldEndYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
         final String oldGenre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
 
-        boolean _useCombo;
         genreBox.setVisibility(View.GONE);
         genreCombo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -659,7 +658,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }.execute();
             }
         });
-        final boolean useCombo = true;
 
         startYearBox.setText(oldStartYear);
         endYearBox.setText(oldEndYear);

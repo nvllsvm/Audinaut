@@ -65,7 +65,6 @@ import java.util.List;
  * Created by Scott on 10/14/13.
  */
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
-    private static final String TAG = SubsonicFragmentActivity.class.getSimpleName();
     private static boolean infoDialogDisplayed;
     private static boolean sessionInitialized = false;
     private SlidingUpPanelLayout slideUpPanel;

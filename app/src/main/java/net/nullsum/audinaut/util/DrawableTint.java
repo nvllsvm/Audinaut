@@ -34,18 +34,6 @@ public class DrawableTint {
     private static final Map<Integer, Integer> attrMap = new HashMap<>();
     private static final WeakHashMap<Integer, Drawable> tintedDrawables = new WeakHashMap<>();
 
-    public static Drawable getTintedDrawable(Context context) {
-        if (tintedDrawables.containsKey(R.drawable.ic_toggle_played)) {
-            return tintedDrawables.get(R.drawable.ic_toggle_played);
-        }
-
-        int color = getColorRes(context, R.attr.colorAccent);
-        Drawable background = context.getResources().getDrawable(R.drawable.ic_toggle_played);
-        background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        tintedDrawables.put(R.drawable.ic_toggle_played, background);
-        return background;
-    }
-
     public static Drawable getTintedDrawableFromColor(Context context) {
         if (tintedDrawables.containsKey(R.drawable.abc_spinner_mtrl_am_alpha)) {
             return tintedDrawables.get(R.drawable.abc_spinner_mtrl_am_alpha);

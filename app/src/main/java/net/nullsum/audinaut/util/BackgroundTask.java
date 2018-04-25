@@ -58,7 +58,6 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     final AtomicBoolean cancelled = new AtomicBoolean(false);
     private final Context context;
-    private final Runnable onCompletionListener = null;
     Task task;
 
     BackgroundTask(Context context) {
