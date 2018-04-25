@@ -22,16 +22,15 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.DrawableRes;
+import android.util.SparseArray;
 import android.util.TypedValue;
 
 import net.nullsum.audinaut.R;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.WeakHashMap;
 
 public class DrawableTint {
-    private static final Map<Integer, Integer> attrMap = new HashMap<>();
+    private static final SparseArray<Integer> attrMap = new SparseArray<>();
     private static final WeakHashMap<Integer, Drawable> tintedDrawables = new WeakHashMap<>();
 
     public static Drawable getTintedDrawableFromColor(Context context) {
@@ -47,24 +46,20 @@ public class DrawableTint {
     }
 
     public static int getColorRes(Context context, @AttrRes int colorAttr) {
-        int color;
-        if (attrMap.containsKey(colorAttr)) {
-            color = attrMap.get(colorAttr);
-        } else {
+        Integer color = attrMap.get(colorAttr);
+        if (color == null) {
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = context.getTheme();
             theme.resolveAttribute(colorAttr, typedValue, true);
             color = typedValue.data;
             attrMap.put(colorAttr, color);
         }
-
         return color;
     }
 
     public static int getDrawableRes(Context context, @AttrRes int drawableAttr) {
-        if (attrMap.containsKey(drawableAttr)) {
-            return attrMap.get(drawableAttr);
-        } else {
+        Integer attr = attrMap.get(drawableAttr);
+        if (attr == null) {
             int[] attrs = new int[]{drawableAttr};
             TypedArray typedArray = context.obtainStyledAttributes(attrs);
             @DrawableRes int drawableRes = typedArray.getResourceId(0, 0);
@@ -72,6 +67,7 @@ public class DrawableTint {
             attrMap.put(drawableAttr, drawableRes);
             return drawableRes;
         }
+        return attr;
     }
 
     public static void wipeTintCache() {
