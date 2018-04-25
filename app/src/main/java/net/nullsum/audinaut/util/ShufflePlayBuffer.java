@@ -127,8 +127,7 @@ public class ShufflePlayBuffer {
 
             // Get capacity based
             int n = capacity - buffer.size();
-            String folder = null;
-            MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
+            MusicDirectory songs = service.getRandomSongs(n, null, genre, startYear, endYear, context, null);
 
             synchronized (buffer) {
                 lastCount = 0;

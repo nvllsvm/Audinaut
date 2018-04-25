@@ -201,7 +201,7 @@ public class ImageLoader {
             cache.get(key);
         }
 
-        if (bitmap != null && bitmap.isRecycled()) {
+        if (bitmap.isRecycled()) {
             bitmap = null;
         }
         return bitmap;
@@ -310,7 +310,7 @@ public class ImageLoader {
                     TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
                     existingDrawable = tmp.getDrawable(tmp.getNumberOfLayers() - 1);
                 }
-                if (existingDrawable != null && drawable != null) {
+                if (existingDrawable != null) {
                     Drawable[] layers = new Drawable[]{existingDrawable, drawable};
                     final TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
                     imageView.setImageDrawable(transitionDrawable);

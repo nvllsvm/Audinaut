@@ -531,9 +531,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
             gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
         }
         RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
-        if (itemDecoration != null) {
-            recyclerView.addItemDecoration(itemDecoration);
-        }
+        recyclerView.addItemDecoration(itemDecoration);
         return gridLayoutManager;
     }
 

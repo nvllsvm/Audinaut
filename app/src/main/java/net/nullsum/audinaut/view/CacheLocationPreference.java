@@ -78,14 +78,11 @@ public class CacheLocationPreference extends EditTextPreference {
                 try {
                     if (dir != null) {
                         if (Environment.isExternalStorageRemovable(dir)) {
-                            if (externalDir != null) {
-                                externalDir = dir;
-                            }
                         } else {
                             internalDir = dir;
                         }
 
-                        if (internalDir != null && externalDir != null) {
+                        if (internalDir != null && null != null) {
                             break;
                         }
                     }
@@ -96,12 +93,10 @@ public class CacheLocationPreference extends EditTextPreference {
         }
 
         // Before 5.0, we have to guess.  Most of the time the SD card is last
-        if (externalDir == null) {
-            for (int i = dirs.length - 1; i >= 0; i--) {
-                if (dirs[i] != null) {
-                    externalDir = dirs[i];
-                    break;
-                }
+        for (int i = dirs.length - 1; i >= 0; i--) {
+            if (dirs[i] != null) {
+                externalDir = dirs[i];
+                break;
             }
         }
         if (internalDir == null) {
@@ -115,7 +110,7 @@ public class CacheLocationPreference extends EditTextPreference {
         final File finalInternalDir = new File(internalDir, "music");
         final File finalExternalDir = new File(externalDir, "music");
 
-        if (finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
+        if (finalInternalDir.exists() || finalInternalDir.mkdirs()) {
             internalLocation.setOnClickListener(v -> {
                 String path = finalInternalDir.getPath();
                 editText.setText(path);
@@ -124,7 +119,7 @@ public class CacheLocationPreference extends EditTextPreference {
             internalLocation.setEnabled(false);
         }
 
-        if (finalExternalDir != null && !finalInternalDir.equals(finalExternalDir) && (finalExternalDir.exists() || finalExternalDir.mkdirs())) {
+        if (!finalInternalDir.equals(finalExternalDir) && (finalExternalDir.exists() || finalExternalDir.mkdirs())) {
             externalLocation.setOnClickListener(v -> {
                 String path = finalExternalDir.getPath();
                 editText.setText(path);

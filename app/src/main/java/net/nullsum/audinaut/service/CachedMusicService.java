@@ -186,7 +186,7 @@ public class CachedMusicService implements MusicService {
 
                 @Override
                 protected Void doInBackground() throws Throwable {
-                    refreshed = musicService.getArtist(id, name, refresh, context, null);
+                    refreshed = musicService.getArtist(id, name, false, context, null);
                     cached.updateMetadata(refreshed);
                     deleteRemovedEntries(context, refreshed, cached);
                     FileUtil.serialize(context, refreshed, getCacheName(context, "artist", id));
@@ -235,7 +235,7 @@ public class CachedMusicService implements MusicService {
 
                 @Override
                 protected Void doInBackground() throws Throwable {
-                    refreshed = musicService.getAlbum(id, name, refresh, context, null);
+                    refreshed = musicService.getAlbum(id, name, false, context, null);
                     updateAllSongs(context, refreshed);
                     metadataUpdated = cached.updateMetadata(refreshed);
                     deleteRemovedEntries(context, refreshed, cached);
@@ -368,17 +368,9 @@ public class CachedMusicService implements MusicService {
 
             @Override
             public void updateResult(List<Entry> objects, Entry result) {
-                // Make sure this playlist is supposed to be synced
-                boolean supposedToUnpin = false;
-
                 // Remove in reverse order so indexes are still correct as we iterate through
                 for (ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
                     int index = iterator.previous();
-                    if (supposedToUnpin) {
-                        Entry entry = objects.get(index);
-                        DownloadFile file = new DownloadFile(context, entry, true);
-                        file.unpin();
-                    }
 
                     objects.remove(index);
                 }

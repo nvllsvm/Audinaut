@@ -329,7 +329,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         if (downloadService != null) {
             SharedPreferences prefs = Util.getPreferences(context);
             boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
-            if (equalizerOn && downloadService != null) {
+            if (equalizerOn) {
                 if (downloadService.getEqualizerController() != null && downloadService.getEqualizerController().isEnabled()) {
                     menu.findItem(R.id.menu_equalizer).setChecked(true);
                 }
@@ -517,7 +517,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             startFlipped = false;
         }
 
-        if (currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
+        if (currentPlaying == null && downloadService != null && null == downloadService.getCurrentPlaying()) {
             getImageLoader().loadBlurImage(albumArtBackgroundView, null, true, false);
             getImageLoader().loadImage(albumArtImageView, null, true, false);
         }

@@ -51,16 +51,11 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
             item2 = false;
         }
 
-        int res = -1;
         if (setting instanceof MusicFolderSetting) {
             titleView.setText(((MusicFolderSetting) setting).getLabel());
         } else {
             // Last resort to display the raw value
             titleView.setText(name);
-        }
-
-        if (res != -1) {
-            titleView.setText(res);
         }
 
         if (setting.getValue()) {

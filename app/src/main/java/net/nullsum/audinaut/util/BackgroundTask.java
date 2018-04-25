@@ -242,10 +242,6 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
         public void onDone(T result) {
             done(result);
-
-            if (onCompletionListener != null) {
-                onCompletionListener.run();
-            }
         }
 
         public void onError(Throwable t) {

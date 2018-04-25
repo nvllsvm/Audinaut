@@ -302,7 +302,7 @@ public final class Util {
                 String currentSSID = Util.getSSID(context);
 
                 String[] ssidParts = SSID.split(",");
-                if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
+                if (SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
                     String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
                     if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
                         serverUrl = internalUrl;
