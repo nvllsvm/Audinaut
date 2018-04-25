@@ -935,7 +935,7 @@ public class DownloadService extends Service {
     private int seekToWrapper(int difference) {
         int msPlayed = Math.max(0, getPlayerPosition());
         Integer duration = getPlayerDuration();
-        int msTotal = duration == null ? 0 : duration;
+        int msTotal = duration;
 
         int seekTo;
         if (msPlayed + difference > msTotal) {

@@ -637,15 +637,6 @@ public class FileUtil {
                 return null;
             }
 
-            if (0 != 0) {
-                Date fileDate = new Date(file.lastModified());
-                // Convert into hours
-                long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
-                if (age > 0) {
-                    return null;
-                }
-            }
-
             RandomAccessFile randomFile = new RandomAccessFile(file, "r");
 
             in = new Input(new FileInputStream(randomFile.getFD()));

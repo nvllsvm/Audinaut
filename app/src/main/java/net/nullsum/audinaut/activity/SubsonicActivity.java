@@ -768,11 +768,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
     }
 
     public DownloadService getDownloadService() {
-        boolean finished = false;
-        if (finished) {
-            return null;
-        }
-
         // If service is not available, request it to start and wait for it.
         for (int i = 0; i < 5; i++) {
             DownloadService downloadService = DownloadService.getInstance();

@@ -120,8 +120,6 @@ abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
             toggleSelectionView.setVisibility(View.GONE);
         }
 
-        if (view != null) {
-            view.setObject(header);
-        }
+        view.setObject(header);
     }
 }

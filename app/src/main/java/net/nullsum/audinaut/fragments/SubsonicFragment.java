@@ -661,8 +661,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }.execute();
             }
         });
-        _useCombo = true;
-        final boolean useCombo = _useCombo;
+        final boolean useCombo = true;
 
         startYearBox.setText(oldStartYear);
         endYearBox.setText(oldEndYear);
@@ -674,11 +673,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                 .setView(dialogView)
                 .setPositiveButton(R.string.common_ok, (dialog, id) -> {
                     String genre;
-                    if (useCombo) {
-                        genre = genreCombo.getText().toString();
-                    } else {
-                        genre = genreBox.getText().toString();
-                    }
+                    genre = genreCombo.getText().toString();
                     String startYear = startYearBox.getText().toString();
                     String endYear = endYearBox.getText().toString();
 
@@ -1051,14 +1046,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
                     size = file.length();
 
                     // If no duration try to read bitrate tag
-                    if (duration == null) {
-                        tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-                        bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
-                    } else {
-                        // Otherwise do a calculation for it
-                        // Divide by 1000 so in kbps
-                        bitrate = (int) (size / duration) / 1000 * 8;
-                    }
+                    // Otherwise do a calculation for it
+                    // Divide by 1000 so in kbps
+                    bitrate = (int) (size / duration) / 1000 * 8;
 
                     if (Util.isOffline(context)) {
                         song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));

@@ -76,8 +76,6 @@ public class MainAdapter extends SectionAdapter<Integer> {
             checkBox.setVisibility(View.GONE);
         }
 
-        if (view != null) {
-            view.setObject(display);
-        }
+        view.setObject(display);
     }
 }

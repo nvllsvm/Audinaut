@@ -65,7 +65,7 @@ public final class MenuUtil {
                     folder = ((AlbumView) updateView).getFile();
                 } else if (updateView instanceof ArtistView) {
                     folder = ((ArtistView) updateView).getFile();
-                } else if (updateView instanceof ArtistEntryView) {
+                } else {
                     folder = ((ArtistEntryView) updateView).getFile();
                 }
 

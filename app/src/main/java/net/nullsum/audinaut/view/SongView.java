@@ -199,31 +199,19 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
         boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
         if (playing) {
             if (!this.playing) {
-                this.playing = playing;
+                this.playing = true;
                 playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
             }
         } else {
             if (this.playing) {
-                this.playing = playing;
+                this.playing = false;
                 playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
 
-        boolean isPlayed = false;
-        if (isPlayed) {
-            if (!isPlayedShown) {
-                if (playedButton.getDrawable() == null) {
-                    playedButton.setImageDrawable(DrawableTint.getTintedDrawable(context));
-                }
-
-                playedButton.setVisibility(View.VISIBLE);
-                isPlayedShown = true;
-            }
-        } else {
-            if (isPlayedShown) {
-                playedButton.setVisibility(View.GONE);
-                isPlayedShown = false;
-            }
+        if (isPlayedShown) {
+            playedButton.setVisibility(View.GONE);
+            isPlayedShown = false;
         }
     }
 

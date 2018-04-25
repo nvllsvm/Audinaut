@@ -66,9 +66,6 @@ public class AudinautSearchProvider extends ContentProvider {
 
     private SearchResult search(String query) {
         MusicService musicService = MusicServiceFactory.getMusicService(getContext());
-        if (musicService == null) {
-            return null;
-        }
 
         try {
             return musicService.search(new SearchCritera(query, 5, 10, 10), getContext(), null);

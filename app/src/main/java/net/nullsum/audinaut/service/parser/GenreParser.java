@@ -67,12 +67,10 @@ public class GenreParser extends AbstractParser {
             } else if (eventType == XmlPullParser.TEXT) {
                 if (genre != null) {
                     String value = getText();
-                    if (genre != null) {
-                        genre.setName(Html.fromHtml(value).toString());
-                        genre.setIndex(value.substring(0, 1));
-                        result.add(genre);
-                        genre = null;
-                    }
+                    genre.setName(Html.fromHtml(value).toString());
+                    genre.setIndex(value.substring(0, 1));
+                    result.add(genre);
+                    genre = null;
                 }
             }
         } while (eventType != XmlPullParser.END_DOCUMENT);
