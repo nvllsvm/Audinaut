@@ -90,7 +90,6 @@ public class DownloadService extends Service {
     private static final String TAG = DownloadService.class.getSimpleName();
     private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
     private static final int REQUIRED_ALBUM_MATCHES = 4;
-    private static final int REMOTE_PLAYLIST_TOTAL = 3;
     private static final int SHUFFLE_MODE_NONE = 0;
     private static final int SHUFFLE_MODE_ALL = 1;
     private static DownloadService instance;
