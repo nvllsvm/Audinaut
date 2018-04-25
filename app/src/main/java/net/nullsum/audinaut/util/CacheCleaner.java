@@ -135,9 +135,7 @@ public class CacheCleaner {
     }
 
     private void sortByAscendingModificationTime(List<File> files) {
-        Collections.sort(files, (a, b) -> {
-            return Long.compare(a.lastModified(), b.lastModified());
-        });
+        Collections.sort(files, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
     }
 
     private Set<File> findUndeletableFiles() {

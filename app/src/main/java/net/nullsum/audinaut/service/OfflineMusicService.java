@@ -227,15 +227,9 @@ public class OfflineMusicService implements MusicService {
             }
         }
 
-        Collections.sort(artists, (lhs, rhs) -> {
-            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
-        });
-        Collections.sort(albums, (lhs, rhs) -> {
-            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
-        });
-        Collections.sort(songs, (lhs, rhs) -> {
-            return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
-        });
+        Collections.sort(artists, (lhs, rhs) -> Integer.compare(rhs.getCloseness(), lhs.getCloseness()));
+        Collections.sort(albums, (lhs, rhs) -> Integer.compare(rhs.getCloseness(), lhs.getCloseness()));
+        Collections.sort(songs, (lhs, rhs) -> Integer.compare(rhs.getCloseness(), lhs.getCloseness()));
 
         // Respect counts in search criteria
         int artistCount = Math.min(artists.size(), criteria.getArtistCount());
