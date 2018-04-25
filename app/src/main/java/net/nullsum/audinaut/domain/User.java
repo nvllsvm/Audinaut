@@ -58,7 +58,7 @@ public class User implements Serializable {
     }
 
     public static class Setting implements Serializable {
-        private String name;
+        private final String name;
         private Boolean value;
 
         public Setting(String name, Boolean value) {

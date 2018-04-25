@@ -23,7 +23,7 @@ import android.content.Context;
 public class AudioEffectsController {
 
     private final Context context;
-    private int audioSessionId;
+    private final int audioSessionId;
 
     private EqualizerController equalizerController;
 

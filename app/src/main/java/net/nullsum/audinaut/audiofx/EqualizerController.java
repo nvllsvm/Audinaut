@@ -43,7 +43,7 @@ public class EqualizerController {
     private boolean loudnessAvailable = false;
     private LoudnessEnhancerController loudnessEnhancerController;
     private boolean released = false;
-    private int audioSessionId;
+    private final int audioSessionId;
 
     public EqualizerController(Context context, int audioSessionId) {
         this.context = context;
