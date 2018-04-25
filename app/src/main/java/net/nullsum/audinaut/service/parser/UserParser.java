@@ -49,11 +49,6 @@ public class UserParser extends AbstractParser {
                 tagName = getElementName();
                 if ("user".equals(tagName)) {
                     user = new User();
-
-                    for (String role : User.ROLES) {
-                        parseSetting(user, role);
-                    }
-
                     result.add(user);
                 } else if ("error".equals(tagName)) {
                     handleError();
@@ -91,12 +86,5 @@ public class UserParser extends AbstractParser {
     private List<MusicFolder> getMusicFolders() throws Exception {
         MusicService musicService = MusicServiceFactory.getMusicService(context);
         return musicService.getMusicFolders(false, context, null);
-    }
-
-    private void parseSetting(User user, String name) {
-        String value = get(name);
-        if (value != null) {
-            user.addSetting(name, "true".equals(value));
-        }
     }
 }

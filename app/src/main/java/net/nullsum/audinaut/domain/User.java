@@ -39,15 +39,10 @@ public class User implements Serializable {
         ROLES.add(COMMENT);
     }
 
-    private final List<Setting> settings = new ArrayList<>();
     private List<Setting> musicFolders;
 
     public User() {
 
-    }
-
-    public void addSetting(String name, Boolean value) {
-        settings.add(new Setting(name, value));
     }
 
     public void addMusicFolder(MusicFolder musicFolder) {
@@ -65,10 +60,6 @@ public class User implements Serializable {
     public static class Setting implements Serializable {
         private String name;
         private Boolean value;
-
-        public Setting() {
-
-        }
 
         public Setting(String name, Boolean value) {
             this.name = name;

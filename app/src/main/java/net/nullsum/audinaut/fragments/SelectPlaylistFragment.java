@@ -106,15 +106,6 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
     @Override
     public SectionAdapter<Playlist> getAdapter(List<Playlist> playlists) {
-        List<Playlist> mine = new ArrayList<>();
-
-        String currentUsername = UserUtil.getCurrentUsername(context);
-        for (Playlist playlist : playlists) {
-            if (playlist.getOwner() == null || playlist.getOwner().equals(currentUsername)) {
-                mine.add(playlist);
-            }
-        }
-
         return new PlaylistAdapter(context, playlists, getImageLoader(), largeAlbums, this);
     }
 

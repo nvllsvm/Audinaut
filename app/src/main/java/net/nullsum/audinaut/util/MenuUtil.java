@@ -60,7 +60,7 @@ public final class MenuUtil {
             }
             // Apply similar logic to album views
             else if (updateView instanceof AlbumView || updateView instanceof ArtistView || updateView instanceof ArtistEntryView) {
-                File folder = null;
+                File folder;
                 if (updateView instanceof AlbumView) {
                     folder = ((AlbumView) updateView).getFile();
                 } else if (updateView instanceof ArtistView) {

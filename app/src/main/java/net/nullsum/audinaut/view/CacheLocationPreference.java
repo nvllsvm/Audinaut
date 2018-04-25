@@ -77,13 +77,8 @@ public class CacheLocationPreference extends EditTextPreference {
             for (File dir : dirs) {
                 try {
                     if (dir != null) {
-                        if (Environment.isExternalStorageRemovable(dir)) {
-                        } else {
+                        if (!Environment.isExternalStorageRemovable(dir)) {
                             internalDir = dir;
-                        }
-
-                        if (internalDir != null && null != null) {
-                            break;
                         }
                     }
                 } catch (Exception e) {

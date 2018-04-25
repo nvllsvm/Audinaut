@@ -232,8 +232,6 @@ public class DownloadService extends Service {
                 }
             } else if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
                 imageLoader.onLowMemory(0.25f);
-            } else if (level >= ComponentCallbacks2.TRIM_MEMORY_COMPLETE) {
-                imageLoader.onLowMemory(0.75f);
             }
         }
     }
@@ -336,7 +334,6 @@ public class DownloadService extends Service {
         }
         revision++;
         onSongsChanged();
-        updateRemotePlaylist();
 
         if (shuffle) {
             shuffle();
@@ -389,22 +386,6 @@ public class DownloadService extends Service {
 
         checkDownloads();
         lifecycleSupport.serializeDownloadQueue();
-    }
-
-    private synchronized void updateRemotePlaylist() {
-        List<DownloadFile> playlist = new ArrayList<>();
-        if (currentPlaying != null) {
-            int index = downloadList.indexOf(currentPlaying);
-            if (index == -1) {
-                index = 0;
-            }
-
-            int size = size();
-            int end = index + REMOTE_PLAYLIST_TOTAL;
-            for (int i = index; i < size && i < end; i++) {
-                playlist.add(downloadList.get(i));
-            }
-        }
     }
 
     public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
@@ -481,7 +462,6 @@ public class DownloadService extends Service {
         revision++;
         onSongsChanged();
         lifecycleSupport.serializeDownloadQueue();
-        updateRemotePlaylist();
         setNextPlaying();
     }
 
@@ -551,7 +531,6 @@ public class DownloadService extends Service {
             }
         }
         lifecycleSupport.serializeDownloadQueue();
-        updateRemotePlaylist();
         onSongsChanged();
     }
 
@@ -589,7 +568,6 @@ public class DownloadService extends Service {
         }
         setCurrentPlaying(null);
         lifecycleSupport.serializeDownloadQueue();
-        updateRemotePlaylist();
         setNextPlaying();
         if (proxy != null) {
             proxy.stop();
@@ -618,7 +596,6 @@ public class DownloadService extends Service {
         revision++;
         onSongsChanged();
         lifecycleSupport.serializeDownloadQueue();
-        updateRemotePlaylist();
         if (downloadFile == nextPlaying) {
             setNextPlaying();
         }
@@ -873,7 +850,6 @@ public class DownloadService extends Service {
             proxy = null;
         }
         checkDownloads();
-        updateRemotePlaylist();
     }
 
     /**
@@ -1329,8 +1305,6 @@ public class DownloadService extends Service {
                             setPlayerState(PAUSED);
                             onSongProgress();
                         }
-
-                        updateRemotePlaylist();
                     }
 
                     // Only call when starting, setPlayerState(PAUSED) already calls this
@@ -1650,7 +1624,6 @@ public class DownloadService extends Service {
 
         if (revisionBefore != revision) {
             onSongsChanged();
-            updateRemotePlaylist();
         }
 
         if (wasEmpty && !downloadList.isEmpty()) {
