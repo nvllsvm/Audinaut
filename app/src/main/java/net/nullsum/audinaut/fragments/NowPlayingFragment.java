@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -142,10 +143,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         rootView = inflater.inflate(R.layout.download, container, false);
         setTitle(R.string.button_bar_now_playing);
 
-        WindowManager w = context.getWindowManager();
-        Display d = w.getDefaultDisplay();
-        swipeDistance = (d.getWidth() + d.getHeight()) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
-        swipeVelocity = (d.getWidth() + d.getHeight()) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int screenWidth = displaymetrics.widthPixels;
+        int screenHeight = displaymetrics.heightPixels;
+        swipeDistance = (screenWidth + screenHeight) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
+        swipeVelocity = (screenWidth + screenHeight) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
         gestureScanner = new GestureDetector(context, this);
 
         playlistFlipper = rootView.findViewById(R.id.download_playlist_flipper);
