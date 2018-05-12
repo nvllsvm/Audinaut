@@ -1,9 +1,11 @@
 Changelog
 =========
 
-## Next
+## Version 0.3.0
+_2018-05-12_
 * Center cover art on now playing screen
 * Use blurred cover art to fill empty space on now playing screen
+* Fix extra whitespace on now playing while offline
 
 
 ## Version 0.2.5
