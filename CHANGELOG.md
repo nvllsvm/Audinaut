@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Next
+* Center cover art on now playing screen
+* Use blurred cover art to fill empty space on now playing screen
+
+
 ## Version 0.2.5
 _2018-03-24_
 * Fix pausing playback on disconnect on API 26+
