@@ -232,6 +232,8 @@
     <string name="settings.song_press_play_last">Adds song to end of Now Playing Queue</string>
     <string name="settings.large_album_art">Large Album Art</string>
     <string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
+    <string name="settings.blurred_background">Blurred Background</string>
+    <string name="settings.blurred_background_summary">Display blurred album art in the background of the now playing screen</string>
     <string name="settings.replay_gain">Replay Gain</string>
     <string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and album replay gain tags</string>
     <string name="settings.replay_gain_type">Read from tags</string>

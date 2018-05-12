@@ -49,5 +49,11 @@
             android:key="largeAlbumArt"
             android:summary="@string/settings.large_album_art_summary"
             android:title="@string/settings.large_album_art" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="blurredBackground"
+            android:summary="@string/settings.blurred_background_summary"
+            android:title="@string/settings.blurred_background" />
     </PreferenceCategory>
 </PreferenceScreen>

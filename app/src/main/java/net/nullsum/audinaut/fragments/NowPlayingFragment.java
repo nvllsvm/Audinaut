@@ -519,8 +519,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         }
 
         if (currentPlaying == null && downloadService != null && null == downloadService.getCurrentPlaying()) {
-            getImageLoader().loadBlurImage(albumArtBackgroundView, null, true, false);
-            getImageLoader().loadImage(albumArtImageView, null, true, false);
+            setAlbumArt(null, false);
         }
 
         context.runWhenServiceAvailable(() -> {
@@ -808,8 +807,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         if (currentPlaying != null) {
             Entry song = currentPlaying.getSong();
             songTitleTextView.setText(song.getTitle());
-            getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, true);
-            getImageLoader().loadImage(albumArtImageView, song, true, true);
+            setAlbumArt(song, true);
 
             DownloadService downloadService = getDownloadService();
             if (downloadService.isShufflePlayEnabled()) {
@@ -819,8 +817,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             }
         } else {
             songTitleTextView.setText(null);
-            getImageLoader().loadBlurImage(albumArtBackgroundView, null, true, false);
-            getImageLoader().loadImage(albumArtImageView, null, true, false);
+            setAlbumArt(null, false);
             setSubtitle(null);
         }
     }
@@ -942,11 +939,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         }
     }
 
+    private void setAlbumArt(Entry song, Boolean crossfade) {
+        getImageLoader().loadImage(albumArtImageView, song, true, crossfade);
+        if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BLURRED_BACKGROUND, true)) {
+            albumArtBackgroundView.setVisibility(ImageView.VISIBLE);
+            getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, crossfade);
+        } else {
+            albumArtBackgroundView.setVisibility(ImageView.GONE);
+        }
+    }
+
     @Override
     public void onMetadataUpdate(Entry song, int fieldChange) {
         if (song != null && albumArtImageView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
-            getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, true);
-            getImageLoader().loadImage(albumArtImageView, song, true, true);
+            setAlbumArt(song, true);
         }
     }
 
