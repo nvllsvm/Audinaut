@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Version 0.3.1
+_2018-06-03_
+* Fix crash on now playing & playlist while in landscape
+
+
 ## Version 0.3.0
 _2018-05-12_
 * Center cover art on now playing screen
