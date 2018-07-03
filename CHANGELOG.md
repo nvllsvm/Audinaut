@@ -3,6 +3,7 @@ Changelog
 
 ## Next
 * Prevent now playing from closing upon resuming
+* Only show save and delete playlist functions in menu
 
 
 ## Version 0.3.1

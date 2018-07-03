@@ -12,14 +12,12 @@
     <item
         android:id="@+id/menu_remove_all"
         android:icon="?attr/remove"
-        android:title="@string/download.menu_remove_all"
-        compat:showAsAction="ifRoom|withText" />
+        android:title="@string/download.menu_remove_all" />
 
     <item
         android:id="@+id/menu_save_playlist"
         android:icon="?attr/save"
-        android:title="@string/download.menu_save"
-        compat:showAsAction="ifRoom|withText" />
+        android:title="@string/download.menu_save" />
 
     <item
         android:id="@+id/menu_equalizer"
