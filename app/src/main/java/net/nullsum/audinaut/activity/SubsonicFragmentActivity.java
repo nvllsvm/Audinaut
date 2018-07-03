@@ -70,6 +70,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     private SlidingUpPanelLayout slideUpPanel;
     private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
     private boolean isPanelClosing = false;
+    private boolean resuming = false;
     private NowPlayingFragment nowPlayingFragment;
     private SubsonicFragment secondaryFragment;
     private Toolbar mainToolbar;
@@ -342,6 +343,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void onResume() {
+        resuming = true;
         super.onResume();
 
         if (getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
@@ -365,6 +367,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         UserUtil.seedCurrentUser(this);
         createAccount();
         runWhenServiceAvailable(() -> getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this));
+        resuming = false;
     }
 
     @Override
@@ -489,7 +492,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     protected void drawerItemSelected(String fragmentType) {
         super.drawerItemSelected(fragmentType);
 
-        if (isNowPlayingOpen()) {
+        if (isNowPlayingOpen() && !resuming) {
             closeNowPlaying();
         }
     }
