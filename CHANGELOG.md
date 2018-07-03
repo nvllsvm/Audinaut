@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## Next
+* Prevent now playing from closing upon resuming
+
+
 ## Version 0.3.1
 _2018-06-03_
 * Fix crash on now playing & playlist while in landscape
