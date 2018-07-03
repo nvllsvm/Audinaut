@@ -544,7 +544,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             if (downloadService != null) {
                 downloadService.removeOnSongChangeListener(this);
             }
-            playlistFlipper.setDisplayedChild(0);
         }
     }
 

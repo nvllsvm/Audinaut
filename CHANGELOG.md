@@ -4,6 +4,7 @@ Changelog
 ## Next
 * Prevent now playing from closing upon resuming
 * Only show save and delete playlist functions in menu
+* Stop hiding playlist on resume
 
 
 ## Version 0.3.1
