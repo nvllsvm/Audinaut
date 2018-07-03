@@ -418,7 +418,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     @Override
     public void onBackPressed() {
         if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment == null) {
-            slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            closeNowPlaying();
         } else if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             removeCurrent();
         } else {
@@ -488,7 +488,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         super.drawerItemSelected(fragmentType);
 
         if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            closeNowPlaying();
         }
     }
 
