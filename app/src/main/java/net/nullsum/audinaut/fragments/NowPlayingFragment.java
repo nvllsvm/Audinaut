@@ -318,11 +318,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         DownloadService downloadService = getDownloadService();
+        menuInflater.inflate(R.menu.nowplaying, menu);
+
         if (Util.isOffline(context)) {
-            menuInflater.inflate(R.menu.nowplaying_offline, menu);
-        } else {
-            menuInflater.inflate(R.menu.nowplaying, menu);
+            menu.findItem(R.id.menu_save_playlist).setEnabled(false);
         }
+
         if (downloadService != null && downloadService.isRemovePlayed()) {
             menu.findItem(R.id.menu_remove_played).setChecked(true);
         }
