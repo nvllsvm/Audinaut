@@ -310,7 +310,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         super.onNewIntent(intent);
 
         if (currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
-            if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            if (isNowPlayingOpen()) {
                 closeNowPlaying();
             }
 
@@ -329,7 +329,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
                 replaceFragment(fragment, fragment.getSupportTag());
             }
         } else if (intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, false)) {
-            if (slideUpPanel.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED) {
+            if (!isNowPlayingOpen()) {
                 openNowPlaying();
             }
         } else {
@@ -417,10 +417,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void onBackPressed() {
-        if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment == null) {
-            closeNowPlaying();
-        } else if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            removeCurrent();
+        if (isNowPlayingOpen()) {
+            if (secondaryFragment == null) {
+                closeNowPlaying();
+            } else {
+                removeCurrent();
+            }
         } else {
             super.onBackPressed();
         }
@@ -428,7 +430,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public SubsonicFragment getCurrentFragment() {
-        if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+        if (isNowPlayingOpen()) {
             if (secondaryFragment == null) {
                 return nowPlayingFragment;
             } else {
@@ -441,7 +443,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-        if (slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && !isPanelClosing) {
+        if (slideUpPanel != null && isNowPlayingOpen() && !isPanelClosing) {
             secondaryFragment = fragment;
             nowPlayingFragment.setPrimaryFragment(false);
             secondaryFragment.setPrimaryFragment(true);
@@ -459,7 +461,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void removeCurrent() {
-        if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment != null) {
+        if (isNowPlayingOpen() && secondaryFragment != null) {
             FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
             trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
             trans.remove(secondaryFragment);
@@ -476,7 +478,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void setTitle(CharSequence title) {
-        if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+        if (isNowPlayingOpen()) {
             getSupportActionBar().setTitle(title);
         } else {
             super.setTitle(title);
@@ -487,7 +489,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     protected void drawerItemSelected(String fragmentType) {
         super.drawerItemSelected(fragmentType);
 
-        if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+        if (isNowPlayingOpen()) {
             closeNowPlaying();
         }
     }
@@ -534,6 +536,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     public void closeNowPlaying() {
         slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         isPanelClosing = true;
+    }
+
+    private boolean isNowPlayingOpen() {
+        return slideUpPanel.getPanelState() == PanelState.EXPANDED;
     }
 
     private SubsonicFragment getNewFragment(String fragmentType) {
