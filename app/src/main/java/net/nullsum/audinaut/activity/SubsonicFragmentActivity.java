@@ -233,7 +233,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         rewindButton = findViewById(R.id.download_rewind);
         rewindButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 if (getDownloadService() != null) {
                     getDownloadService().rewind();
                 }
@@ -244,7 +244,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         previousButton = findViewById(R.id.download_previous);
         previousButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 if (getDownloadService() != null) {
                     getDownloadService().previous();
                 }
@@ -255,7 +255,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         startButton = findViewById(R.id.download_start);
         startButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 PlayerState state = getDownloadService().getPlayerState();
                 if (state == PlayerState.STARTED) {
                     getDownloadService().pause();
@@ -269,7 +269,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         nextButton = findViewById(R.id.download_next);
         nextButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 if (getDownloadService() != null) {
                     getDownloadService().next();
                 }
@@ -280,7 +280,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         fastforwardButton = findViewById(R.id.download_fastforward);
         fastforwardButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 if (getDownloadService() == null) {
                     return null;
                 }
@@ -613,7 +613,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
         new SilentBackgroundTask<Void>(this) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
                 Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
                 accountManager.addAccountExplicitly(account, null, null);

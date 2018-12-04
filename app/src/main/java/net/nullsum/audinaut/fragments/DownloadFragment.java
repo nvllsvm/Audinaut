@@ -91,7 +91,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
     }
 
     @Override
-    public List<DownloadFile> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+    public List<DownloadFile> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) {
         DownloadService downloadService = getDownloadService();
         if (downloadService == null) {
             return new ArrayList<>();
@@ -139,7 +139,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
             case R.id.menu_remove_all:
                 Util.confirmDialog(context, R.string.download_menu_remove_all, "", (dialog, which) -> new SilentBackgroundTask<Void>(context) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         getDownloadService().clearBackground();
                         return null;
                     }

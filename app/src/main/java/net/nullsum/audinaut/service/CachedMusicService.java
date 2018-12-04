@@ -617,7 +617,7 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) {
         User result = null;
 
         try {

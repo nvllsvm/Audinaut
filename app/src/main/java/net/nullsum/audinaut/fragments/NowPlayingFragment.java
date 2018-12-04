@@ -191,7 +191,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             warnIfStorageUnavailable();
             new SilentBackgroundTask<Void>(context) {
                 @Override
-                protected Void doInBackground() throws Throwable {
+                protected Void doInBackground() {
                     getDownloadService().previous();
                     return null;
                 }
@@ -204,7 +204,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             warnIfStorageUnavailable();
             new SilentBackgroundTask<Boolean>(context) {
                 @Override
-                protected Boolean doInBackground() throws Throwable {
+                protected Boolean doInBackground() {
                     getDownloadService().next();
                     return true;
                 }
@@ -222,7 +222,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
         pauseButton.setOnClickListener(view -> new SilentBackgroundTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 getDownloadService().pause();
                 return null;
             }
@@ -230,7 +230,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
         stopButton.setOnClickListener(view -> new SilentBackgroundTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 getDownloadService().reset();
                 return null;
             }
@@ -240,7 +240,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             warnIfStorageUnavailable();
             new SilentBackgroundTask<Void>(context) {
                 @Override
-                protected Void doInBackground() throws Throwable {
+                protected Void doInBackground() {
                     start();
                     return null;
                 }
@@ -286,7 +286,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             public void onStopTrackingTouch(final SeekBar seekBar) {
                 new SilentBackgroundTask<Void>(context) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         getDownloadService().seekTo(progressBar.getProgress());
                         return null;
                     }
@@ -421,7 +421,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             case R.id.menu_remove_all:
                 Util.confirmDialog(context, R.string.download_menu_remove_all, "", (dialog, which) -> new SilentBackgroundTask<Void>(context) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         getDownloadService().setShufflePlayEnabled(false);
                         getDownloadService().clear();
                         return null;
@@ -444,7 +444,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             case R.id.menu_shuffle:
                 new SilentBackgroundTask<Void>(context) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         getDownloadService().shuffle();
                         return null;
                     }
@@ -674,7 +674,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             int seekTo;
 
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 if (rewind) {
                     seekTo = downloadService.rewind();
                 } else {
@@ -726,7 +726,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             warnIfStorageUnavailable();
             new SilentBackgroundTask<Void>(context) {
                 @Override
-                protected Void doInBackground() throws Throwable {
+                protected Void doInBackground() {
                     switch (performAction) {
                         case ACTION_NEXT:
                             downloadService.next();
@@ -774,7 +774,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         warnIfStorageUnavailable();
         new SilentBackgroundTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 getDownloadService().play(item);
                 return null;
             }

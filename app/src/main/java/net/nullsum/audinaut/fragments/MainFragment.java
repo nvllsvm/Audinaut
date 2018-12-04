@@ -65,7 +65,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
     }
 
     @Override
-    public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+    public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) {
         return Collections.singletonList(0);
     }
 

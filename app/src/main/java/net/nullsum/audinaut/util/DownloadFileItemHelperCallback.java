@@ -68,7 +68,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 
             pendingTask = new SilentBackgroundTask<Void>(downloadService) {
                 @Override
-                protected Void doInBackground() throws Throwable {
+                protected Void doInBackground() {
                     boolean running = true;
                     while (running) {
                         Object nextOperation = null;

@@ -827,7 +827,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
             if (service != null) {
                 new SilentBackgroundTask<Void>(this) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         service.clearIncomplete();
                         return null;
                     }

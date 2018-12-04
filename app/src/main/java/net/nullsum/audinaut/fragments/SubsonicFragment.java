@@ -1151,7 +1151,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         new LoadingTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 MediaStoreService mediaStore = new MediaStoreService(context);
                 FileUtil.recursiveDelete(dir, mediaStore);
                 return null;
@@ -1176,7 +1176,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void deleteSongs(final List<Entry> songs) {
         new LoadingTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 getDownloadService().delete(songs);
                 return null;
             }
@@ -1287,7 +1287,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void playNow(final List<Entry> entries, final Entry song, final String playlistName, final String playlistId) {
         new LoadingTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 playNowInTask(entries, song, playlistName, playlistId);
                 return null;
             }

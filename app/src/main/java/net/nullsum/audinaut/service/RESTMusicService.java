@@ -729,7 +729,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public void setInstance(Integer instance) throws Exception {
+    public void setInstance(Integer instance) {
         this.instance = instance;
     }
 

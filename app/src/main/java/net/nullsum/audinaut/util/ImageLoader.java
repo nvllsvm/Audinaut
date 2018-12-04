@@ -99,7 +99,7 @@ public class ImageLoader {
         nowPlayingSmall = null;
         new SilentBackgroundTask<Void>(context) {
             @Override
-            protected Void doInBackground() throws Throwable {
+            protected Void doInBackground() {
                 clearingCache = true;
                 cache.evictAll();
                 clearingCache = false;

@@ -224,7 +224,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             this.findPreference("clearCache").setOnPreferenceClickListener(preference -> {
                 Util.confirmDialog(context, (dialog, which) -> new LoadingTask<Void>(context, false) {
                     @Override
-                    protected Void doInBackground() throws Throwable {
+                    protected Void doInBackground() {
                         FileUtil.deleteMusicDirectory(context);
                         FileUtil.deleteSerializedCache(context);
                         FileUtil.deleteArtworkCache(context);

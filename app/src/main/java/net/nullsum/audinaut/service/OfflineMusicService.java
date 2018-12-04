@@ -62,12 +62,12 @@ public class OfflineMusicService implements MusicService {
     private static final Random random = new Random();
 
     @Override
-    public void ping(Context context, ProgressListener progressListener) throws Exception {
+    public void ping(Context context, ProgressListener progressListener) {
 
     }
 
     @Override
-    public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) {
         List<Artist> artists = new ArrayList<>();
         List<Entry> entries = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
@@ -91,7 +91,7 @@ public class OfflineMusicService implements MusicService {
         return getMusicDirectory(id, context);
     }
 
-    private MusicDirectory getMusicDirectory(String id, Context context) throws Exception {
+    private MusicDirectory getMusicDirectory(String id, Context context) {
         File dir = new File(id);
         MusicDirectory result = new MusicDirectory();
         result.setName(dir.getName());
@@ -186,7 +186,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) {
         try {
             return FileUtil.getAlbumArtBitmap(context, entry, size);
         } catch (Exception e) {
@@ -205,7 +205,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
+    public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) {
         List<Artist> artists = new ArrayList<>();
         List<Entry> albums = new ArrayList<>();
         List<Entry> songs = new ArrayList<>();
@@ -294,7 +294,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) {
         List<Playlist> playlists = new ArrayList<>();
         File root = FileUtil.getPlaylistDirectory(context);
         String lastServer = null;
@@ -481,7 +481,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) {
         File root = FileUtil.getMusicDirectory(context);
         List<File> children = new LinkedList<>();
         listFilesRecursively(root, children);
