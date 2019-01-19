@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "net.nullsum.audinaut"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 197
         versionName '0.3.2'
         setProperty("archivesBaseName", "Audinaut $versionName")
@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.esotericsoftware:kryo:4.0.2'
     implementation "com.android.support:design:$android_support_version"
     implementation 'com.sothree.slidinguppanel:library:3.3.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
