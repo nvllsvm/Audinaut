@@ -19,6 +19,7 @@ package net.nullsum.audinaut.util.tags;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 
@@ -38,7 +39,7 @@ class LameHeader extends Common {
         s.seek(offset + 0x24);
         s.read(chunk);
 
-        String lameMark = new String(chunk, 0, chunk.length, "ISO-8859-1");
+        String lameMark = new String(chunk, 0, chunk.length, StandardCharsets.ISO_8859_1);
 
         if (lameMark.equals("Info") || lameMark.equals("Xing")) {
             s.seek(offset + 0xAB);

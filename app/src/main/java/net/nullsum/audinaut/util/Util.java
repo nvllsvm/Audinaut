@@ -63,6 +63,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
@@ -714,7 +715,7 @@ public final class Util {
 
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
-            return hexEncode(md5.digest(s.getBytes(Constants.UTF_8)));
+            return hexEncode(md5.digest(s.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception x) {
             throw new RuntimeException(x.getMessage(), x);
         }

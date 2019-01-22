@@ -87,7 +87,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener) {
         return getMusicDirectory(id, context);
     }
 

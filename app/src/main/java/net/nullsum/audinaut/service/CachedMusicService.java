@@ -635,7 +635,7 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public void setInstance(Integer instance) throws Exception {
+    public void setInstance(Integer instance) {
         musicService.setInstance(instance);
     }
 

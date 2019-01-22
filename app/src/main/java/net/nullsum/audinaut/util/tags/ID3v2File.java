@@ -19,6 +19,7 @@ package net.nullsum.audinaut.util.tags;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -156,13 +157,13 @@ class ID3v2File extends Common {
             int ID3_ENC_UTF16BE = 0x02;
             int ID3_ENC_UTF16LE = 0x01;
             if (encid == ID3_ENC_LATIN) {
-                v = new String(raw, 1, len - 1, "ISO-8859-1");
+                v = new String(raw, 1, len - 1, StandardCharsets.ISO_8859_1);
             } else if (encid == ID3_ENC_UTF8) {
-                v = new String(raw, 1, len - 1, "UTF-8");
+                v = new String(raw, 1, len - 1, StandardCharsets.UTF_8);
             } else if (encid == ID3_ENC_UTF16LE) {
-                v = new String(raw, 3, len - 3, "UTF-16LE");
+                v = new String(raw, 3, len - 3, StandardCharsets.UTF_16LE);
             } else if (encid == ID3_ENC_UTF16BE) {
-                v = new String(raw, 3, len - 3, "UTF-16BE");
+                v = new String(raw, 3, len - 3, StandardCharsets.UTF_16BE);
             }
         } catch (Exception ignored) {
         }
