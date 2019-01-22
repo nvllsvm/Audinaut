@@ -49,8 +49,8 @@ class OggFile extends Common {
 
 
     /* Parses the ogg page at offset 'offset' and returns
-    ** [header_size, payload_size, type]
-    */
+     ** [header_size, payload_size, type]
+     */
     private long[] parse_ogg_page(RandomAccessFile s, long offset) throws IOException {
         long[] result = new long[3];               // [header_size, payload_size]
         byte[] p_header = new byte[OGG_PAGE_SIZE];   // buffer for the page header
@@ -93,8 +93,8 @@ class OggFile extends Common {
     }
 
     /* In 'vorbiscomment' field is prefixed with \3vorbis in OGG files
-    ** we check that this marker is present and call the generic comment
-    ** parset with the correct offset (+7) */
+     ** we check that this marker is present and call the generic comment
+     ** parset with the correct offset (+7) */
     private HashMap parse_ogg_vorbis_comment(RandomAccessFile s, long offset, long pl_len) throws IOException {
         final int pfx_len = 7;
         byte[] pfx = new byte[pfx_len];

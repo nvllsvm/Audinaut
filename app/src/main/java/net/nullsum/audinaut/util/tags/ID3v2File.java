@@ -56,8 +56,8 @@ class ID3v2File extends Common {
     }
 
     /* Parses all ID3v2 frames at the current position up until payload_len
-    ** bytes were read
-    */
+     ** bytes were read
+     */
     private HashMap parse_v3_frames(RandomAccessFile s, long payload_len) throws IOException {
         HashMap tags = new HashMap();
         byte[] frame = new byte[10]; // a frame header is always 10 bytes

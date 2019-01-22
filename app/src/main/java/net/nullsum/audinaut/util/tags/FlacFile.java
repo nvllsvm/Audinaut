@@ -52,8 +52,8 @@ class FlacFile extends Common {
     }
 
     /* Parses the metadata block at 'offset' and returns
-    ** [header_size, payload_size, type, stop_after]
-    */
+     ** [header_size, payload_size, type, stop_after]
+     */
     private int[] parse_metadata_block(RandomAccessFile s, long offset) throws IOException {
         int[] result = new int[4];
         byte[] mb_head = new byte[4];

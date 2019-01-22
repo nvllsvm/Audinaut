@@ -31,8 +31,8 @@ class Common {
     }
 
     /*
-    ** Returns a 32bit int from given byte offset in LE
-    */
+     ** Returns a 32bit int from given byte offset in LE
+     */
     private int b2le32(byte[] b, int off) {
         int r = 0;
         for (int i = 0; i < 4; i++) {
@@ -50,8 +50,8 @@ class Common {
     }
 
     /*
-    ** convert 'byte' value into unsigned int
-    */
+     ** convert 'byte' value into unsigned int
+     */
     int b2u(byte x) {
         return (x & 0xFF);
     }

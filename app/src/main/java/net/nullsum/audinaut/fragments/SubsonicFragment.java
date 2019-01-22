@@ -1331,7 +1331,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         return getCurrentAdapter().getSelected();
     }
 
-     void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
+    void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
         List<Entry> songs = getSelectedEntries();
         if (!songs.isEmpty()) {
             download(songs, append, !append, playNext, shuffle);
