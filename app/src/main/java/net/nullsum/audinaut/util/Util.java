@@ -36,6 +36,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
@@ -70,6 +71,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import okhttp3.HttpUrl;
@@ -277,21 +279,22 @@ public final class Util {
     }
 
     public static String getRestUrl(Context context) {
-        return getRestUrl(context, null, true);
+        return getRestUrl(context, null, true, null);
     }
 
-    public static String getRestUrl(Context context, String method, boolean allowAltAddress) {
+    // used
+    public static String getRestUrl(Context context, String method, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         SharedPreferences prefs = getPreferences(context);
         int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-        return getRestUrl(context, method, prefs, instance, allowAltAddress);
+        return getRestUrl(context, method, prefs, instance, allowAltAddress, parameters);
     }
 
-    public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
+    public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         SharedPreferences prefs = getPreferences(context);
-        return getRestUrl(context, method, prefs, instance, allowAltAddress);
+        return getRestUrl(context, method, prefs, instance, allowAltAddress, parameters);
     }
 
-    private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+    private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 
         HttpUrl.Builder builder;
@@ -334,6 +337,12 @@ public final class Util {
         builder.addQueryParameter("v", Constants.REST_PROTOCOL_VERSION_SUBSONIC);
         builder.addQueryParameter("c", Constants.REST_CLIENT_ID);
 
+        if (parameters != null) {
+            for (Map.Entry<String, String> parameter : parameters.entrySet()) {
+                builder.addQueryParameter(parameter.getKey(), parameter.getValue());
+            }
+        }
+
         return builder.build().toString();
     }
 
@@ -352,7 +361,7 @@ public final class Util {
     }
 
     private static String getBlockTokenUsePref(Context context, int instance) {
-        return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
+        return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false, null);
     }
 
     public static void setBlockTokenUse(Context context, int instance) {
@@ -366,7 +375,7 @@ public final class Util {
     }
 
     public static String getCacheName(Context context, String name, String id) {
-        String s = getRestUrl(context, null, getActiveServer(context), false) + id;
+        String s = getRestUrl(context, null, getActiveServer(context), false, null) + id;
         return name + "-" + s.hashCode() + ".ser";
     }
 

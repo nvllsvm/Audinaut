@@ -21,6 +21,7 @@ package net.nullsum.audinaut.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.nullsum.audinaut.domain.Genre;
@@ -55,6 +56,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
@@ -75,7 +77,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "ping");
+        String url = getRestUrl(context, "ping", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -87,7 +89,7 @@ public class RESTMusicService implements MusicService {
     }
 
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getMusicFolders");
+        String url = getRestUrl(context, "getMusicFolders", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -100,7 +102,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getArtists");
+        String url = getRestUrl(context, "getArtists", null);
 
         Builder builder = new FormBody.Builder();
 
@@ -158,7 +160,7 @@ public class RESTMusicService implements MusicService {
     }
 
     private MusicDirectory getMusicDirectoryImpl(String id, String name, Context context) throws Exception {
-        String url = getRestUrl(context, "getMusicDirectory");
+        String url = getRestUrl(context, "getMusicDirectory", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -176,7 +178,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getArtist");
+        String url = getRestUrl(context, "getArtist", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -194,7 +196,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbum");
+        String url = getRestUrl(context, "getAlbum", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -212,7 +214,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public SearchResult search(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "search3");
+        String url = getRestUrl(context, "search3", null);
 
         Builder builder = new FormBody.Builder();
 
@@ -235,7 +237,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getPlaylist");
+        String url = getRestUrl(context, "getPlaylist", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -253,7 +255,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getPlaylists");
+        String url = getRestUrl(context, "getPlaylists", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -266,7 +268,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "createPlaylist");
+        String url = getRestUrl(context, "createPlaylist", null);
 
         Builder builder = new FormBody.Builder();
 
@@ -296,7 +298,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "deletePlaylist");
+        String url = getRestUrl(context, "deletePlaylist", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -314,7 +316,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        String url = getRestUrl(context, "updatePlaylist", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("playlistId", id);
@@ -336,7 +338,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        String url = getRestUrl(context, "updatePlaylist", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("playlistId", id);
@@ -359,7 +361,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        String url = getRestUrl(context, "updatePlaylist", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("playlistId", id);
@@ -387,7 +389,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        String url = getRestUrl(context, "updatePlaylist", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("playlistId", id);
@@ -409,7 +411,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbumList2");
+        String url = getRestUrl(context, "getAlbumList2", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("type", type);
@@ -439,7 +441,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbumList2");
+        String url = getRestUrl(context, "getAlbumList2", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("size", Integer.toString(size));
@@ -501,7 +503,7 @@ public class RESTMusicService implements MusicService {
                 method = "getNewaddedSongs";
         }
 
-        String url = getRestUrl(context, method);
+        String url = getRestUrl(context, method, null);
 
         RequestBody formBody = builder.build();
 
@@ -546,7 +548,7 @@ public class RESTMusicService implements MusicService {
             builder.add("toYear", endYear);
         }
 
-        String url = getRestUrl(context, "getRandomSongs");
+        String url = getRestUrl(context, "getRandomSongs", null);
 
         RequestBody formBody = builder.build();
 
@@ -572,7 +574,7 @@ public class RESTMusicService implements MusicService {
                 return bitmap;
             }
 
-            String url = getRestUrl(context, "getCoverArt");
+            String url = getRestUrl(context, "getCoverArt", null);
 
             Builder builder = new FormBody.Builder();
             builder.add("id", entry.getCoverArt());
@@ -619,7 +621,7 @@ public class RESTMusicService implements MusicService {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        String url = getRestUrl(context, "stream");
+        String url = getRestUrl(context, "stream", null);
 
         Builder builder = new FormBody.Builder();
         builder.add("id", song.getId());
@@ -643,7 +645,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getGenres");
+        String url = getRestUrl(context, "getGenres", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -670,7 +672,7 @@ public class RESTMusicService implements MusicService {
             }
         }
 
-        String url = getRestUrl(context, "getSongsByGenre");
+        String url = getRestUrl(context, "getSongsByGenre", null);
 
         RequestBody formBody = builder.build();
 
@@ -686,7 +688,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getUser");
+        String url = getRestUrl(context, "getUser", null);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("username", username)
@@ -742,15 +744,15 @@ public class RESTMusicService implements MusicService {
     }
 
 
-    public String getRestUrl(Context context, String method) {
-        return getRestUrl(context, method, true);
+    public String getRestUrl(Context context, String method, @Nullable Map<String, String> parameters) {
+        return getRestUrl(context, method, true, parameters);
     }
 
-    public String getRestUrl(Context context, String method, boolean allowAltAddress) {
+    public String getRestUrl(Context context, String method, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         if (instance == null) {
-            return Util.getRestUrl(context, method, allowAltAddress);
+            return Util.getRestUrl(context, method, allowAltAddress, parameters);
         } else {
-            return Util.getRestUrl(context, method, instance, allowAltAddress);
+            return Util.getRestUrl(context, method, instance, allowAltAddress, parameters);
         }
     }
 }
