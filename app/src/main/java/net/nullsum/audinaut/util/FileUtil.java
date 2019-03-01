@@ -292,7 +292,7 @@ public class FileUtil {
         }
 
         // Do a special lookup since 4.7+ doesn't match artist/album to entry.getPath
-        String s = Util.getRestUrl(context, null, false) + entry.getId();
+        String s = Util.getRestUrl(context, null, false, null) + entry.getId();
         String cacheName = "album-" + s.hashCode() + ".ser";
         MusicDirectory entryDir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
 
