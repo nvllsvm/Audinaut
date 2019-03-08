@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## Next
+* Add [Funkwhale](https://funkwhale.audio/) (Subsonic API) support
+* Use query parameters instead of body
+
+
 ## Version 0.3.2
 _2018-07-05_
 * Prevent now playing from closing upon resuming
