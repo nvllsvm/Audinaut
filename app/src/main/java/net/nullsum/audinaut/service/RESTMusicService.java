@@ -21,6 +21,7 @@ package net.nullsum.audinaut.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.nullsum.audinaut.domain.Genre;
@@ -54,7 +55,9 @@ import net.nullsum.audinaut.util.Util;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
@@ -75,7 +78,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "ping");
+        String url = getRestUrl(context, "ping", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -87,7 +90,7 @@ public class RESTMusicService implements MusicService {
     }
 
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getMusicFolders");
+        String url = getRestUrl(context, "getMusicFolders", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -100,19 +103,21 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getArtists");
 
-        Builder builder = new FormBody.Builder();
+
+
+        Map<String, String> parameters = new HashMap<>();
 
         if (musicFolderId != null) {
-            builder.add("musicFolderId", musicFolderId);
+            parameters.put("musicFolderId", musicFolderId);
+        } else {
+            parameters = null;
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "getArtists", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -158,15 +163,14 @@ public class RESTMusicService implements MusicService {
     }
 
     private MusicDirectory getMusicDirectoryImpl(String id, String name, Context context) throws Exception {
-        String url = getRestUrl(context, "getMusicDirectory");
+        Map<String, String> parameters = new HashMap<>();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", id)
-                .build();
+        parameters.put("id", id);
+
+        String url = getRestUrl(context, "getMusicDirectory", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -176,15 +180,15 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getArtist");
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", id)
-                .build();
+        Map<String, String> parameters = new HashMap<>();
+
+        parameters.put("id", id);
+
+        String url = getRestUrl(context, "getArtist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -194,15 +198,14 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbum");
+        Map<String, String> parameters = new HashMap<>();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", id)
-                .build();
+        parameters.put("id", id);
+
+        String url = getRestUrl(context, "getAlbum", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -212,20 +215,17 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public SearchResult search(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "search3");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
+        parameters.put("query", critera.getQuery());
+        parameters.put("artistCount", Integer.toString(critera.getArtistCount()));
+        parameters.put("albumCount", Integer.toString(critera.getAlbumCount()));
+        parameters.put("songCount", Integer.toString(critera.getSongCount()));
 
-        builder.add("query", critera.getQuery());
-        builder.add("artistCount", Integer.toString(critera.getArtistCount()));
-        builder.add("albumCount", Integer.toString(critera.getAlbumCount()));
-        builder.add("songCount", Integer.toString(critera.getSongCount()));
-
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "search3", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -235,15 +235,14 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getPlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", id)
-                .build();
+        parameters.put("id", id);
+
+        String url = getRestUrl(context, "getPlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -253,7 +252,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getPlaylists");
+        String url = getRestUrl(context, "getPlaylists", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -266,27 +265,24 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "createPlaylist");
-
-        Builder builder = new FormBody.Builder();
+        Map<String, String> parameters = new HashMap<>();
 
         if (id != null) {
-            builder.add("playlistId", id);
+            parameters.put("playlistId", id);
         }
 
         if (name != null) {
-            builder.add("name", name);
+            parameters.put("name", name);
         }
 
         for (MusicDirectory.Entry entry : entries) {
-            builder.add("songId", getOfflineSongId(entry.getId(), context, progressListener));
+            parameters.put("songId", getOfflineSongId(entry.getId(), context, progressListener));
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "createPlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -296,15 +292,14 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "deletePlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("id", id)
-                .build();
+        parameters.put("id", id);
+
+        String url = getRestUrl(context, "deletePlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -314,19 +309,17 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("playlistId", id);
+        parameters.put("playlistId", id);
         for (MusicDirectory.Entry song : toAdd) {
-            builder.add("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
+            parameters.put("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "updatePlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -336,20 +329,18 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("playlistId", id);
+        parameters.put("playlistId", id);
 
         for (Integer song : toRemove) {
-            builder.add("songIndexToRemove", Integer.toString(song));
+            parameters.put("songIndexToRemove", Integer.toString(song));
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "updatePlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -359,25 +350,23 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("playlistId", id);
-        builder.add("name", name);
+        parameters.put("playlistId", id);
+        parameters.put("name", name);
 
         for (MusicDirectory.Entry song : toAdd) {
-            builder.add("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
+            parameters.put("songIdToAdd", getOfflineSongId(song.getId(), context, progressListener));
         }
 
         for (int i = 0; i < toRemove; i++) {
-            builder.add("songIndexToRemove", Integer.toString(i));
+            parameters.put("songIndexToRemove", Integer.toString(i));
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "updatePlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -387,19 +376,17 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "updatePlaylist");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("playlistId", id);
-        builder.add("name", name);
-        builder.add("comment", comment);
-        builder.add("public", Boolean.toString(pub));
+        parameters.put("playlistId", id);
+        parameters.put("name", name);
+        parameters.put("comment", comment);
+        parameters.put("public", Boolean.toString(pub));
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "updatePlaylist", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -409,27 +396,25 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbumList2");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("type", type);
-        builder.add("size", Integer.toString(size));
-        builder.add("offset", Integer.toString(offset));
+        parameters.put("type", type);
+        parameters.put("size", Integer.toString(size));
+        parameters.put("offset", Integer.toString(offset));
 
         // Add folder if it was set and is non null
         int instance = getInstance(context);
         if (Util.getAlbumListsPerFolder(context, instance)) {
             String folderId = Util.getSelectedMusicFolderId(context, instance);
             if (folderId != null) {
-                builder.add("musicFolderId", folderId);
+                parameters.put("musicFolderId", folderId);
             }
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "getAlbumList2", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -439,37 +424,35 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getAlbumList2");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("size", Integer.toString(size));
-        builder.add("offset", Integer.toString(offset));
+        parameters.put("size", Integer.toString(size));
+        parameters.put("offset", Integer.toString(offset));
 
         int instance = getInstance(context);
         if ("genres".equals(type)) {
-            builder.add("type", "byGenre");
-            builder.add("genre", extra);
+            parameters.put("type", "byGenre");
+            parameters.put("genre", extra);
         } else if ("years".equals(type)) {
             int decade = Integer.parseInt(extra);
 
-            builder.add("type", "byYear");
-            builder.add("fromYear", Integer.toString(decade + 9));
-            builder.add("toYear", Integer.toString(decade));
+            parameters.put("type", "byYear");
+            parameters.put("fromYear", Integer.toString(decade + 9));
+            parameters.put("toYear", Integer.toString(decade));
         }
 
         // Add folder if it was set and is non null
         if (Util.getAlbumListsPerFolder(context, instance)) {
             String folderId = Util.getSelectedMusicFolderId(context, instance);
             if (folderId != null) {
-                builder.add("musicFolderId", folderId);
+                parameters.put("musicFolderId", folderId);
             }
         }
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "getAlbumList2", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -479,9 +462,10 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-        Builder builder = new FormBody.Builder();
-        builder.add("size", Integer.toString(size));
-        builder.add("offset", Integer.toString(offset));
+        Map<String, String> parameters = new HashMap<>();
+
+        parameters.put("size", Integer.toString(size));
+        parameters.put("offset", Integer.toString(offset));
 
         String method;
         switch (type) {
@@ -501,13 +485,10 @@ public class RESTMusicService implements MusicService {
                 method = "getNewaddedSongs";
         }
 
-        String url = getRestUrl(context, method);
-
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, method, parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -517,11 +498,12 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
-        Builder builder = new FormBody.Builder();
-        builder.add("size", Integer.toString(size));
+        Map<String, String> parameters = new HashMap<>();
+
+        parameters.put("size", Integer.toString(size));
 
         if (genre != null && !"".equals(genre)) {
-            builder.add("genre", genre);
+            parameters.put("genre", genre);
         }
         if (startYear != null && !"".equals(startYear)) {
             // Check to make sure user isn't doing 2015 -> 2010 since Subsonic will return no results
@@ -540,19 +522,16 @@ public class RESTMusicService implements MusicService {
                 }
             }
 
-            builder.add("fromYear", startYear);
+            parameters.put("fromYear", startYear);
         }
         if (endYear != null && !"".equals(endYear)) {
-            builder.add("toYear", endYear);
+            parameters.put("toYear", endYear);
         }
 
-        String url = getRestUrl(context, "getRandomSongs");
-
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "getRandomSongs", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -572,16 +551,14 @@ public class RESTMusicService implements MusicService {
                 return bitmap;
             }
 
-            String url = getRestUrl(context, "getCoverArt");
+            Map<String, String> parameters = new HashMap<>();
 
-            Builder builder = new FormBody.Builder();
-            builder.add("id", entry.getCoverArt());
+            parameters.put("id", entry.getCoverArt());
 
-            RequestBody formBody = builder.build();
+            String url = getRestUrl(context, "getCoverArt", parameters);
 
             Request request = new Request.Builder()
                     .url(url)
-                    .post(formBody)
                     .build();
 
             try (Response response = client.newCall(request).execute()) {
@@ -619,13 +596,12 @@ public class RESTMusicService implements MusicService {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        String url = getRestUrl(context, "stream");
+        Map<String, String> parameters = new HashMap<>();
 
-        Builder builder = new FormBody.Builder();
-        builder.add("id", song.getId());
-        builder.add("maxBitRate", Integer.toString(maxBitrate));
+        parameters.put("id", song.getId());
+        parameters.put("maxBitRate", Integer.toString(maxBitrate));
 
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "stream", parameters);
 
         Request.Builder requestBuilder = new Request.Builder();
         if (offset > 0) {
@@ -633,7 +609,6 @@ public class RESTMusicService implements MusicService {
         }
 
         requestBuilder.url(url);
-        requestBuilder.post(formBody);
 
         Request request = requestBuilder.build();
 
@@ -643,7 +618,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getGenres");
+        String url = getRestUrl(context, "getGenres", null);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -656,27 +631,25 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
-        Builder builder = new FormBody.Builder();
-        builder.add("genre", genre);
-        builder.add("count", Integer.toString(count));
-        builder.add("offset", Integer.toString(offset));
+        Map<String, String> parameters = new HashMap<>();
+
+        parameters.put("genre", genre);
+        parameters.put("count", Integer.toString(count));
+        parameters.put("offset", Integer.toString(offset));
 
         // Add folder if it was set and is non null
         int instance = getInstance(context);
         if (Util.getAlbumListsPerFolder(context, instance)) {
             String folderId = Util.getSelectedMusicFolderId(context, instance);
             if (folderId != null) {
-                builder.add("musicFolderId", folderId);
+                parameters.put("musicFolderId", folderId);
             }
         }
 
-        String url = getRestUrl(context, "getSongsByGenre");
-
-        RequestBody formBody = builder.build();
+        String url = getRestUrl(context, "getSongsByGenre", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -686,15 +659,14 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-        String url = getRestUrl(context, "getUser");
+        Map<String, String> parameters = new HashMap<>();
 
-        RequestBody formBody = new FormBody.Builder()
-                .add("username", username)
-                .build();
+        parameters.put("username", username);
+
+        String url = getRestUrl(context, "getUser", parameters);
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(formBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -742,15 +714,15 @@ public class RESTMusicService implements MusicService {
     }
 
 
-    public String getRestUrl(Context context, String method) {
-        return getRestUrl(context, method, true);
+    public String getRestUrl(Context context, String method, @Nullable Map<String, String> parameters) {
+        return getRestUrl(context, method, true, parameters);
     }
 
-    public String getRestUrl(Context context, String method, boolean allowAltAddress) {
+    public String getRestUrl(Context context, String method, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         if (instance == null) {
-            return Util.getRestUrl(context, method, allowAltAddress);
+            return Util.getRestUrl(context, method, allowAltAddress, parameters);
         } else {
-            return Util.getRestUrl(context, method, instance, allowAltAddress);
+            return Util.getRestUrl(context, method, instance, allowAltAddress, parameters);
         }
     }
 }

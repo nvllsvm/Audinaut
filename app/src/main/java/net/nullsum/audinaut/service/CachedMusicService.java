@@ -640,12 +640,12 @@ public class CachedMusicService implements MusicService {
     }
 
     private String getCacheName(Context context, String name, String id) {
-        String s = musicService.getRestUrl(context, null, false) + id;
+        String s = musicService.getRestUrl(context, null, false, null) + id;
         return name + "-" + s.hashCode() + ".ser";
     }
 
     private String getCacheName(Context context, String name) {
-        String s = musicService.getRestUrl(context, null, false);
+        String s = musicService.getRestUrl(context, null, false, null);
         return name + "-" + s.hashCode() + ".ser";
     }
 
@@ -672,7 +672,7 @@ public class CachedMusicService implements MusicService {
 
     private void checkSettingsChanged(Context context) {
         int instance = musicService.getInstance(context);
-        String newUrl = musicService.getRestUrl(context, null, false);
+        String newUrl = musicService.getRestUrl(context, null, false, null);
         if (!Util.equals(newUrl, restUrl)) {
             cachedMusicFolders.clear();
             cachedIndexes.clear();

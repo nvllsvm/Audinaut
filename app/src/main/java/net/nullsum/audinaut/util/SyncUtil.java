@@ -15,7 +15,7 @@ public final class SyncUtil {
 
     private static void checkRestURL(Context context) {
         int instance = Util.getActiveServer(context);
-        String newURL = Util.getRestUrl(context, null, instance, false);
+        String newURL = Util.getRestUrl(context, null, instance, false, null);
         if (url == null || !url.equals(newURL)) {
             syncedPlaylists = null;
             url = newURL;
@@ -72,7 +72,7 @@ public final class SyncUtil {
     }
 
     private static String getPlaylistSyncFile(Context context, int instance) {
-        return "sync-playlist-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
+        return "sync-playlist-" + (Util.getRestUrl(context, null, instance, false, null)).hashCode() + ".ser";
     }
 
     public static void removeMostRecentSyncFiles(Context context) {
@@ -84,7 +84,7 @@ public final class SyncUtil {
     }
 
     private static String getMostRecentSyncFile(Context context, int instance) {
-        return "sync-most_recent-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
+        return "sync-most_recent-" + (Util.getRestUrl(context, null, instance, false, null)).hashCode() + ".ser";
     }
 
     public static class SyncSet implements Serializable {
