@@ -274,12 +274,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
         View overlay = rootView.findViewById(R.id.download_overlay_buttons);
         final int overlayHeight = overlay != null ? overlay.getHeight() : -1;
-        albumArtImageView.setOnClickListener(view -> {
-            if (overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
-                toggleFullscreenAlbumArt();
-                setControlsVisible(true);
-            }
-        });
+        // seems pointless, but allows swipe gestures to work
+        albumArtImageView.setOnClickListener(view -> {});
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
