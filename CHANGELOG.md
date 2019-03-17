@@ -4,6 +4,9 @@ Changelog
 ## Next
 * Add [Funkwhale](https://funkwhale.audio/) (Subsonic API) support
 * Use query parameters instead of body
+* Disable most "now playing" swipe gestures - too sensitive and often
+  accidentally triggered.
+  Only swipe left/right to change track ramains.
 
 
 ## Version 0.3.2
