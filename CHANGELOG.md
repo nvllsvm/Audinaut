@@ -1,8 +1,9 @@
 Changelog
 =========
 
-## Next
-* Add [Funkwhale](https://funkwhale.audio/) (Subsonic API) support
+## Version 0.3.3
+_2019-03-17_
+* Fix [Funkwhale](https://funkwhale.audio/) (Subsonic API) support
 * Use query parameters instead of body
 * Disable most "now playing" swipe gestures - too sensitive and often
   accidentally triggered.
