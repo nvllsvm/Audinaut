@@ -708,6 +708,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         else if (e2.getX() - e1.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
             action = ACTION_PREVIOUS;
         }
+        /*
+         * too finnicky, no visual feedback
         // Top to Bottom swipe
         else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
             action = ACTION_FORWARD;
@@ -716,6 +718,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         else if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
             action = ACTION_REWIND;
         }
+        */
 
         if (action > 0) {
             final int performAction = action;
