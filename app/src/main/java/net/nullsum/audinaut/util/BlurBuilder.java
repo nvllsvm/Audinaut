@@ -12,6 +12,14 @@ class BlurBuilder {
     private static final float BLUR_RADIUS = 25f;
 
     public static Bitmap blur(Context context, Bitmap image) {
+        Bitmap newImage = image;
+        for(int i = 0; i<3; i++) {
+            newImage = blur_real(context, newImage);
+        }
+        return newImage;
+    }
+
+    private static Bitmap blur_real(Context context, Bitmap image) {
         int width = Math.round(image.getWidth() * BITMAP_SCALE);
         int height = Math.round(image.getHeight() * BITMAP_SCALE);
 
