@@ -25,7 +25,7 @@
         android:paddingBottom="7dip"
         android:paddingLeft="55dip"
         android:paddingRight="55dip"
-        android:paddingTop="3dip" />
+        android:paddingTop="7dip" />
 
     <TextView
         android:id="@+id/download_duration"
