@@ -77,4 +77,7 @@
         <item name="android:layout_weight">1</item>
     </style>
 
+    <style name="SeekBar">
+        <item name="colorAccent">?android:textColorPrimary</item>
+    </style>
 </resources>
