@@ -29,21 +29,21 @@
 
     <ImageButton
         android:id="@+id/download_pause"
-        style="@style/PlaybackControl.Large"
+        style="@style/PlaybackControl.Larger"
         android:layout_centerInParent="true"
         android:src="?attr/media_button_pause"
         android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/download_stop"
-        style="@style/PlaybackControl.Large"
+        style="@style/PlaybackControl.Larger"
         android:layout_centerInParent="true"
         android:src="?attr/media_button_stop"
         android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/download_start"
-        style="@style/PlaybackControl.Large"
+        style="@style/PlaybackControl.Larger"
         android:layout_centerInParent="true"
         android:src="?attr/media_button_start" />
 

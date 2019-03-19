@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="Button">54dip</dimen>
+    <dimen name="Button.Larger">80dip</dimen>
     <dimen name="Button.Large">60dip</dimen>
     <dimen name="Button.Small">42dip</dimen>
     <dimen name="AlbumArt.Small">78dip</dimen>

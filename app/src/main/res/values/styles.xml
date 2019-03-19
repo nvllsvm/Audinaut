@@ -66,6 +66,11 @@
         <item name="android:paddingRight">3dp</item>
     </style>
 
+    <style name="PlaybackControl.Larger" parent="@style/PlaybackControl">
+        <item name="android:layout_width">@dimen/Button.Larger</item>
+        <item name="android:layout_height">@dimen/Button.Larger</item>
+    </style>
+
     <style name="PlaybackControl.Match" parent="@style/PlaybackControl">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">wrap_content</item>
