@@ -106,31 +106,31 @@
                         android:id="@+id/download_rewind"
                         style="@style/PlaybackControl.BottomBar"
                         android:padding="2dp"
-                        android:src="?attr/actionbar_rewind"
+                        app:srcCompat="?attr/actionbar_rewind"
                         android:visibility="gone" />
 
                     <ImageButton
                         android:id="@+id/download_previous"
                         style="@style/PlaybackControl.BottomBar"
                         android:padding="2dp"
-                        android:src="?attr/actionbar_backward" />
+                        app:srcCompat="?attr/actionbar_backward" />
 
                     <ImageButton
                         android:id="@+id/download_start"
                         style="@style/PlaybackControl.BottomBar"
-                        android:src="?attr/actionbar_start" />
+                        app:srcCompat="?attr/actionbar_start" />
 
                     <ImageButton
                         android:id="@+id/download_next"
                         style="@style/PlaybackControl.BottomBar"
                         android:padding="2dp"
-                        android:src="?attr/actionbar_forward" />
+                        app:srcCompat="?attr/actionbar_forward" />
 
                     <ImageButton
                         android:id="@+id/download_fastforward"
                         style="@style/PlaybackControl.BottomBar"
                         android:padding="2dp"
-                        android:src="?attr/actionbar_fastforward"
+                        app:srcCompat="?attr/actionbar_fastforward"
                         android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -17,7 +18,7 @@
         android:paddingBottom="6dip"
         android:paddingTop="6dip"
         android:scaleType="fitCenter"
-        android:src="@drawable/appwidget_art_default" />
+        app:srcCompat="@drawable/appwidget_art_default" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,7 +96,7 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:src="@drawable/media_backward_dark" />
+                app:srcCompat="@drawable/media_backward_dark" />
 
             <ImageButton
                 android:id="@+id/control_play"
@@ -103,7 +104,7 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:src="@drawable/media_start_dark" />
+                app:srcCompat="@drawable/media_start_dark" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -111,7 +112,7 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:src="@drawable/media_forward_dark" />
+                app:srcCompat="@drawable/media_forward_dark" />
         </LinearLayout>
 
     </LinearLayout>

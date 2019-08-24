@@ -17,7 +17,6 @@
  */
 package net.nullsum.audinaut.util;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -36,9 +35,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -48,6 +44,11 @@ import android.view.Gravity;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.DetailsAdapter;
@@ -945,7 +946,7 @@ public final class Util {
         }
     }
 
-    public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
+    public static void startActivityWithoutTransition(AppCompatActivity currentActivity, Intent intent) {
         currentActivity.startActivity(intent);
     }
 

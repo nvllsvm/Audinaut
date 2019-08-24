@@ -18,9 +18,10 @@
  */
 package net.nullsum.audinaut.view;
 
-import android.app.Activity;
 import android.content.Intent;
+
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
@@ -31,11 +32,11 @@ import net.nullsum.audinaut.util.Util;
  */
 public class ErrorDialog {
 
-    public ErrorDialog(Activity activity, int messageId) {
+    public ErrorDialog(AppCompatActivity activity, int messageId) {
         this(activity, activity.getResources().getString(messageId), false);
     }
 
-    public ErrorDialog(final Activity activity, String message, final boolean finishActivityOnClose) {
+    public ErrorDialog(final AppCompatActivity activity, String message, final boolean finishActivityOnClose) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -60,7 +61,7 @@ public class ErrorDialog {
         }
     }
 
-    private void restart(Activity activity) {
+    private void restart(AppCompatActivity activity) {
         Intent intent = new Intent(activity, SubsonicFragmentActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Util.startActivityWithoutTransition(activity, intent);

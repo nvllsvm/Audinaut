@@ -19,7 +19,6 @@
 
 package net.nullsum.audinaut.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +31,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.util.Constants;
@@ -215,7 +216,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 
     private PreferenceManager createPreferenceManager() {
         try {
-            Constructor<PreferenceManager> c = PreferenceManager.class.getDeclaredConstructor(Activity.class, int.class);
+            Constructor<PreferenceManager> c = PreferenceManager.class.getDeclaredConstructor(AppCompatActivity.class, int.class);
             c.setAccessible(true);
             return c.newInstance(this.getActivity(), FIRST_REQUEST_CODE);
         } catch (Exception e) {

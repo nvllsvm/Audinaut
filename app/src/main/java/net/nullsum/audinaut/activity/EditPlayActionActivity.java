@@ -15,11 +15,8 @@
 
 package net.nullsum.audinaut.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +26,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Genre;
@@ -58,7 +59,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.tasker_start_playing_title);
         setContentView(R.layout.edit_play_action);
-        final Activity context = this;
+        final AppCompatActivity context = this;
         doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 
         shuffleCheckbox = findViewById(R.id.edit_shuffle_checkbox);
@@ -218,12 +219,12 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
         intent.putExtra(Constants.TASKER_EXTRA_BUNDLE, data);
 
-        setResult(Activity.RESULT_OK, intent);
+        setResult(AppCompatActivity.RESULT_OK, intent);
         finish();
     }
 
     private void cancel() {
-        setResult(Activity.RESULT_CANCELED);
+        setResult(AppCompatActivity.RESULT_CANCELED);
         finish();
     }
 }

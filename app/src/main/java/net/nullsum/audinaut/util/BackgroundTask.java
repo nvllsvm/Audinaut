@@ -18,11 +18,12 @@
  */
 package net.nullsum.audinaut.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.view.ErrorDialog;
@@ -79,8 +80,8 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         }
     }
 
-    private Activity getActivity() {
-        return (context instanceof Activity) ? ((Activity) context) : null;
+    private AppCompatActivity getActivity() {
+        return (context instanceof AppCompatActivity) ? ((AppCompatActivity) context) : null;
     }
 
     Handler getHandler() {
@@ -95,7 +96,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     protected void error(Throwable error) {
         Log.w(TAG, "Got exception: " + error, error);
-        Activity activity = getActivity();
+        AppCompatActivity activity = getActivity();
         if (activity != null) {
             new ErrorDialog(activity, getErrorMessage(error), true);
         }

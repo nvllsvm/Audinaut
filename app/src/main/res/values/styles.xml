@@ -2,11 +2,11 @@
 <resources>
 
     <style name="BasicButton">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="NotificationButtonBase">
-        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="background">?attr/selectableItemBackground</item>
         <item name="android:layout_width">46dip</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_gravity">center</item>
@@ -17,7 +17,7 @@
     <style name="NotificationButton" parent="NotificationButtonBase" />
 
     <style name="NotificationButton.ExpandedBase">
-        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="background">?attr/selectableItemBackground</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_weight">1</item>
@@ -34,11 +34,11 @@
     <style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent" />
 
     <style name="NotificationLayoutDivider">
-        <item name="android:divider">?android:listDivider</item>
+        <item name="divider">?android:listDivider</item>
     </style>
 
     <style name="NotificationDivider">
-        <item name="android:background">?android:dividerHorizontal</item>
+        <item name="background">?attr/dividerHorizontal</item>
     </style>
 
     <style name="MoreButton" parent="@style/BasicButton">

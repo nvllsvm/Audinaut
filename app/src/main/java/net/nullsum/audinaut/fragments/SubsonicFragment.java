@@ -18,7 +18,6 @@
  */
 package net.nullsum.audinaut.fragments;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -26,13 +25,6 @@ import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.StatFs;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -45,6 +37,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;
@@ -151,7 +153,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
     void onFinishSetupOptionsMenu(final Menu menu) {
         searchItem = menu.findItem(R.id.menu_global_search);
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
             SearchableInfo searchableInfo = searchManager.getSearchableInfo(context.getComponentName());
             if (searchableInfo == null) {
@@ -1444,7 +1446,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
         boolean playNowOverride = false;
         List<Entry> songs = new ArrayList<>();
 
-        public RecursiveLoader(Activity context) {
+        public RecursiveLoader(AppCompatActivity context) {
             super(context);
             musicService = MusicServiceFactory.getMusicService(context);
         }

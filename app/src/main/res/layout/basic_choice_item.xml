@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dip"
-        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_height="?attr/listPreferredItemHeight"
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:gravity="left|center_vertical"

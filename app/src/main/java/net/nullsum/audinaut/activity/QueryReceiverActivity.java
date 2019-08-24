@@ -19,10 +19,11 @@
 
 package net.nullsum.audinaut.activity;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.Util;
@@ -32,7 +33,7 @@ import net.nullsum.audinaut.util.Util;
  *
  * @author Sindre Mehus
  */
-public class QueryReceiverActivity extends Activity {
+public class QueryReceiverActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

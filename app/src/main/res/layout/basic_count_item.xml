@@ -30,7 +30,7 @@
         android:gravity="right|center_vertical"
         android:paddingRight="10dp"
         android:text="99"
-        android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+        android:textAppearance="?attr/textAppearanceSmallPopupMenu"
         android:textColor="?android:textColorPrimary"
         android:textSize="11sp"
         android:visibility="gone" />

@@ -1,14 +1,16 @@
 package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.ArtistAdapter;
@@ -203,7 +205,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
         task.execute();
 
         if (searchItem != null) {
-            searchItem.collapseActionView();
+            MenuItemCompat.collapseActionView(searchItem);
         }
     }
 

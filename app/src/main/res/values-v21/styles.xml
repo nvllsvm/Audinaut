@@ -6,19 +6,19 @@
     <style name="NotificationText.Content" parent="@android:style/TextAppearance.Material.Notification" />
 
     <style name="NotificationButton" parent="NotificationButtonBase">
-        <item name="android:background">?android:selectableItemBackgroundBorderless</item>
+        <item name="background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
         <item name="android:padding">2dip</item>
-        <item name="android:background">?android:selectableItemBackgroundBorderless</item>
+        <item name="background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
     <style name="NotificationLayoutDivider">
-        <item name="android:divider">@drawable/notification_divider</item>
+        <item name="divider">@drawable/notification_divider</item>
     </style>
 
     <style name="NotificationDivider">
-        <item name="android:background">@drawable/notification_divider</item>
+        <item name="background">@drawable/notification_divider</item>
     </style>
 </resources>

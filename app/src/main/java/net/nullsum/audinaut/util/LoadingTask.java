@@ -1,7 +1,8 @@
 package net.nullsum.audinaut.util;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.activity.SubsonicActivity;
 
@@ -11,17 +12,17 @@ import net.nullsum.audinaut.activity.SubsonicActivity;
  */
 public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
-    private final Activity tabActivity;
+    private final AppCompatActivity tabActivity;
     private final boolean cancellable;
     private ProgressDialog loading;
 
-    public LoadingTask(Activity activity) {
+    public LoadingTask(AppCompatActivity activity) {
         super(activity);
         tabActivity = activity;
         this.cancellable = true;
     }
 
-    public LoadingTask(Activity activity, final boolean cancellable) {
+    public LoadingTask(AppCompatActivity activity, final boolean cancellable) {
         super(activity);
         tabActivity = activity;
         this.cancellable = cancellable;

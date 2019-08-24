@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/drag_handle"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="?attr/listPreferredItemHeight"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
@@ -67,7 +68,7 @@
                 android:layout_width="@dimen/SongStatusIcon"
                 android:layout_height="@dimen/SongStatusIcon"
                 android:layout_gravity="top"
-                android:src="?attr/downloading"
+                app:srcCompat="?attr/downloading"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -110,5 +111,5 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="right|center_vertical"
-        android:src="?attr/download_none" />
+        app:srcCompat="?attr/download_none" />
 </LinearLayout>
