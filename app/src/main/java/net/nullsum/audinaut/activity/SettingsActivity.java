@@ -19,7 +19,7 @@
 package net.nullsum.audinaut.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.fragments.PreferenceCompatFragment;

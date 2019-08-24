@@ -17,7 +17,7 @@ package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

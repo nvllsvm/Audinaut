@@ -30,7 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;

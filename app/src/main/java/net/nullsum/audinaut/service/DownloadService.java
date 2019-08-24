@@ -32,7 +32,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.util.Log;
 
 import net.nullsum.audinaut.R;
@@ -60,7 +60,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import static net.nullsum.audinaut.domain.PlayerState.COMPLETED;
 import static net.nullsum.audinaut.domain.PlayerState.DOWNLOADING;
 import static net.nullsum.audinaut.domain.PlayerState.IDLE;
 import static net.nullsum.audinaut.domain.PlayerState.PAUSED;
