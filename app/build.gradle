@@ -12,16 +12,11 @@ android {
         versionCode 198
         versionName '0.3.3'
         setProperty("archivesBaseName", "Audinaut $versionName")
-        resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    packagingOptions {
-        exclude 'META-INF/beans.xml'
     }
 
     lintOptions {
