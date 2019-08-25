@@ -25,11 +25,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import androidx.core.app.NotificationCompat;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;

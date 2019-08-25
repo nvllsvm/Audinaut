@@ -16,11 +16,12 @@
 package net.nullsum.audinaut.adapter;
 
 import android.content.Context;
-import androidx.appcompat.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.PopupMenu;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Artist;

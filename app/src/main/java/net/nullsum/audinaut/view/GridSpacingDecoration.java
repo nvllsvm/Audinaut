@@ -16,13 +16,14 @@
 package net.nullsum.audinaut.view;
 
 import android.graphics.Rect;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
     public static final int SPACING = 10;

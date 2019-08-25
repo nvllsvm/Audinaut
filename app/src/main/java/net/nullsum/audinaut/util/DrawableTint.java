@@ -20,10 +20,11 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.AttrRes;
-import androidx.annotation.DrawableRes;
 import android.util.SparseArray;
 import android.util.TypedValue;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.DrawableRes;
 
 import net.nullsum.audinaut.R;
 

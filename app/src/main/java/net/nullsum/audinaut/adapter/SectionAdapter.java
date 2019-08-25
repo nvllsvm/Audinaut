@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
-import androidx.appcompat.view.ActionMode;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -31,6 +29,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupMenu;
+
+import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;

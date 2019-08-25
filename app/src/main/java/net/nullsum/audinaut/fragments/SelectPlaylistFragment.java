@@ -1,13 +1,14 @@
 package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.PlaylistAdapter;

@@ -30,12 +30,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.collection.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.collection.LruCache;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;

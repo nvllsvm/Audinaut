@@ -19,6 +19,7 @@
 package net.nullsum.audinaut.activity;
 
 import android.os.Bundle;
+
 import androidx.appcompat.widget.Toolbar;
 
 import net.nullsum.audinaut.R;

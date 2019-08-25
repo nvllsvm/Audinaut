@@ -1,7 +1,7 @@
 package net.nullsum.audinaut.util;
 
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.nullsum.audinaut.adapter.SectionAdapter;
 import net.nullsum.audinaut.fragments.SubsonicFragment;

@@ -17,8 +17,9 @@ package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import net.nullsum.audinaut.domain.User;
 import net.nullsum.audinaut.service.MusicServiceFactory;

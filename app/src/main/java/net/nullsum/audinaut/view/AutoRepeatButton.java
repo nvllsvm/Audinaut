@@ -1,9 +1,10 @@
 package net.nullsum.audinaut.view;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.appcompat.widget.AppCompatImageButton;
 
 public class AutoRepeatButton extends AppCompatImageButton {
 

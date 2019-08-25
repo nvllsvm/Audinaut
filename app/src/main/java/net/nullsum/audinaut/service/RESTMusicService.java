@@ -21,8 +21,9 @@ package net.nullsum.audinaut.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import androidx.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;

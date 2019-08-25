@@ -18,9 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -37,6 +34,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;

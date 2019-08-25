@@ -17,13 +17,14 @@ package net.nullsum.audinaut.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.adapter.DownloadFileAdapter;

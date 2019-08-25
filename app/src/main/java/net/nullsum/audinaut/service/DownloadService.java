@@ -32,8 +32,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import androidx.collection.LruCache;
 import android.util.Log;
+
+import androidx.collection.LruCache;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;
