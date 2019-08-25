@@ -25,7 +25,6 @@
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/ic_number_border"
         android:focusable="false"
         android:gravity="right|center_vertical"
         android:paddingRight="10dp"

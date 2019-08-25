@@ -139,30 +139,6 @@ public class AudinautSearchProvider extends ContentProvider {
                 cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
             } else {
                 MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
-
-                if (entry.isDirectory()) {
-                    String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
-                    cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
-                } else {
-                    String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-                    String id;
-                    id = entry.getAlbumId();
-
-                    String artistDisplay;
-                    if (entry.getArtist() == null) {
-                        if (entry.getAlbum() != null) {
-                            artistDisplay = entry.getAlbumDisplay();
-                        } else {
-                            artistDisplay = "";
-                        }
-                    } else if (entry.getAlbum() != null) {
-                        artistDisplay = entry.getArtist() + " - " + entry.getAlbumDisplay();
-                    } else {
-                        artistDisplay = entry.getArtist();
-                    }
-
-                    cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "so-" + id, entry.getTitle(), icon});
-                }
             }
         }
         return cursor;
