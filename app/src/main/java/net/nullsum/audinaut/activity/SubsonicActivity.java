@@ -125,7 +125,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
             touchscreen = false;
         }
 
-        setUncaughtExceptionHandler();
         applyTheme();
         applyFullscreen();
         super.onCreate(bundle);
@@ -883,52 +882,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                 return R.id.drawer_playlists;
             default:
                 return R.id.drawer_library;
-        }
-    }
-
-    private void setUncaughtExceptionHandler() {
-        Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
-        if (!(handler instanceof SubsonicActivity.SubsonicUncaughtExceptionHandler)) {
-            Thread.setDefaultUncaughtExceptionHandler(new SubsonicActivity.SubsonicUncaughtExceptionHandler(this));
-        }
-    }
-
-    /**
-     * Logs the stack trace of uncaught exceptions to a file on the SD card.
-     */
-    private static class SubsonicUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-
-        private final Thread.UncaughtExceptionHandler defaultHandler;
-        private final Context context;
-
-        private SubsonicUncaughtExceptionHandler(Context context) {
-            this.context = context;
-            defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        }
-
-        @Override
-        public void uncaughtException(Thread thread, Throwable throwable) {
-            File file = null;
-            PrintWriter printWriter = null;
-            try {
-
-                PackageInfo packageInfo = context.getPackageManager().getPackageInfo("net.nullsum.audinaut", 0);
-                file = new File(Environment.getExternalStorageDirectory(), "audinaut-stacktrace.txt");
-                printWriter = new PrintWriter(file);
-                printWriter.println("Subsonic version name: " + packageInfo.versionName);
-                printWriter.println("Subsonic version code: " + packageInfo.versionCode);
-                printWriter.println();
-                throwable.printStackTrace(printWriter);
-                Log.i(TAG, "Stack trace written to " + file);
-            } catch (Throwable x) {
-                Log.e(TAG, "Failed to write stack trace to " + file, x);
-            } finally {
-                Util.close(printWriter);
-                if (defaultHandler != null) {
-                    defaultHandler.uncaughtException(thread, throwable);
-                }
-
-            }
         }
     }
 }
