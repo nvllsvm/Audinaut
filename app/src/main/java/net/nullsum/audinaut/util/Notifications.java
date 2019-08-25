@@ -160,6 +160,7 @@ public final class Notifications {
         } else {
             // Necessary for switching back since it appears to re-use the same layout
             rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_backward);
+            rv.setImageViewResource(R.id.control_pause, R.drawable.notification_media_pause);
             rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_forward);
         }
 
