@@ -37,7 +37,7 @@ class OggFile extends Common {
         HashMap tags = new HashMap();
 
         for (; retry > 0; retry--) {
-            long res[] = parse_ogg_page(s, offset);
+            long[] res = parse_ogg_page(s, offset);
             if (res[2] == OGG_TYPE_COMMENT) {
                 tags = parse_ogg_vorbis_comment(s, offset + res[0], res[1]);
                 break;

@@ -106,7 +106,7 @@ class ID3v2File extends Common {
             rv[1] = getDecodedString(v);
         } else if (k.equals("TXXX")) {
             /* A freestyle field, ieks! */
-            String txData[] = getDecodedString(v).split(Character.toString('\0'), 2);
+            String[] txData = getDecodedString(v).split(Character.toString('\0'), 2);
             /* Check if we got replaygain info in key\0value style */
             if (txData.length == 2) {
                 if (txData[0].matches("^(?i)REPLAYGAIN_(ALBUM|TRACK)_GAIN$")) {

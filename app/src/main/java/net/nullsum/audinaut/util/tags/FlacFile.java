@@ -31,7 +31,7 @@ class FlacFile extends Common {
     public HashMap getTags(RandomAccessFile s) throws IOException {
         int xoff = 4;  // skip file magic
         int retry = 64;
-        int r[];
+        int[] r;
         HashMap tags = new HashMap();
 
         for (; retry > 0; retry--) {
