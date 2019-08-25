@@ -47,6 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingRight="20dp"
-            app:srcCompat="@drawable/main_select_server_dark" />
+            app:srcCompat="@drawable/main_select_server" />
     </LinearLayout>
 </RelativeLayout>

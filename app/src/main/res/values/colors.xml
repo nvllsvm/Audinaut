@@ -6,6 +6,8 @@
     <color name="lightPrimary">#2196F3</color>
     <color name="lightPrimaryDark">#1E88E5</color>
     <color name="lightAccent">#448AFF</color>
+    <color name="lightElement">#A0000000</color>
 
     <color name="black">#000000</color>
+    <color name="darkElement">#CCFFFFFF</color>
 </resources>

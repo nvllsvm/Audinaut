@@ -88,7 +88,7 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/media_backward_dark" />
+                app:srcCompat="@drawable/widget_media_backward" />
 
             <ImageButton
                 android:id="@+id/control_play"
@@ -96,7 +96,7 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/media_start_dark" />
+                app:srcCompat="@drawable/widget_media_start" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -104,7 +104,7 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/media_forward_dark" />
+                app:srcCompat="@drawable/widget_media_forward" />
         </LinearLayout>
     </LinearLayout>
 

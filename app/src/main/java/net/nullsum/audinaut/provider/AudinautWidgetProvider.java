@@ -239,9 +239,9 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
 
         // Set correct drawable for pause state
         if (playing) {
-            views.setImageViewResource(R.id.control_play, R.drawable.media_pause_dark);
+            views.setImageViewResource(R.id.control_play, R.drawable.widget_media_pause);
         } else {
-            views.setImageViewResource(R.id.control_play, R.drawable.media_start_dark);
+            views.setImageViewResource(R.id.control_play, R.drawable.widget_media_start);
         }
 
         // Set the cover art

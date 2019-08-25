@@ -50,17 +50,17 @@
     <ImageButton
         android:id="@+id/control_previous"
         style="@style/NotificationButton"
-        app:srcCompat="@drawable/notification_backward" />
+        app:srcCompat="@drawable/notification_media_backward" />
 
     <ImageButton
         android:id="@+id/control_pause"
         style="@style/NotificationButton"
         android:layout_width="54dip"
         android:padding="0dip"
-        app:srcCompat="@drawable/notification_pause" />
+        app:srcCompat="@drawable/notification_media_pause" />
 
     <ImageButton
         android:id="@+id/control_next"
         style="@style/NotificationButton"
-        app:srcCompat="@drawable/notification_forward" />
+        app:srcCompat="@drawable/notification_media_forward" />
 </LinearLayout>
