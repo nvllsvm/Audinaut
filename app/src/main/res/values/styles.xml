@@ -12,6 +12,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:padding">2dip</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="NotificationButton" parent="NotificationButtonBase" />
@@ -52,6 +53,7 @@
         <item name="android:layout_width">@dimen/Button</item>
         <item name="android:layout_height">@dimen/Button</item>
         <item name="android:contentDescription">@null</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="PlaybackControl.Small" parent="@style/PlaybackControl">
