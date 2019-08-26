@@ -65,7 +65,6 @@ import java.util.List;
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
     private static boolean infoDialogDisplayed;
     private static boolean sessionInitialized = false;
-    private boolean resuming = false;
     private NowPlayingFragment nowPlayingFragment;
     private SubsonicFragment secondaryFragment;
     private Toolbar mainToolbar;
@@ -277,7 +276,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void onResume() {
-        resuming = true;
         super.onResume();
 
         if (getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
@@ -301,7 +299,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         UserUtil.seedCurrentUser(this);
         createAccount();
         runWhenServiceAvailable(() -> getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this));
-        resuming = false;
     }
 
     @Override
