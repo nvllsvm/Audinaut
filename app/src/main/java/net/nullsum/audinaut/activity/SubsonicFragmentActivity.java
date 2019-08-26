@@ -551,6 +551,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         switch (fragmentType) {
             case "Playlist":
                 return new SelectPlaylistFragment();
+            case "Now Playing":
+                return new NowPlayingFragment();
             case "Download":
                 return new DownloadFragment();
             default:

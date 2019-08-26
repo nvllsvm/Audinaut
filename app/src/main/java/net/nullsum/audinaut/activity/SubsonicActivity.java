@@ -248,6 +248,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
                     case R.id.drawer_downloading:
                         drawerItemSelected("Download");
                         return true;
+                    case R.id.drawer_now_playing:
+                        drawerItemSelected("Now Playing");
+                        return true;
                     case R.id.drawer_offline:
                         toggleOffline();
                         return true;
