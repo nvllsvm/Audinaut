@@ -109,7 +109,6 @@
     <string name="download.repeat_off">Repeat off</string>
     <string name="download.repeat_all">Repeat all</string>
     <string name="download.repeat_single">Repeat song</string>
-    <string name="download.playing_out_of">Playing: %1$d/%2$d</string>
     <string name="download.downloading_title">Downloading %1$d songs</string>
     <string name="download.downloading_summary">Current: %1$s</string>
     <string name="download.downloading_summary_expanded">Current: %1$s

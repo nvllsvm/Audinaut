@@ -809,11 +809,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             setAlbumArt(song, true);
 
             DownloadService downloadService = getDownloadService();
-            if (downloadService.isShufflePlayEnabled()) {
-                setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_shuffle));
-            } else {
-                setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
-            }
         } else {
             songTitleTextView.setText(null);
             setAlbumArt(null, false);
