@@ -37,9 +37,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
 import net.nullsum.audinaut.domain.PlayerState;
@@ -68,19 +65,11 @@ import java.util.List;
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
     private static boolean infoDialogDisplayed;
     private static boolean sessionInitialized = false;
-    private SlidingUpPanelLayout slideUpPanel;
-    private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
-    private boolean isPanelClosing = false;
     private boolean resuming = false;
     private NowPlayingFragment nowPlayingFragment;
     private SubsonicFragment secondaryFragment;
     private Toolbar mainToolbar;
-    private Toolbar nowPlayingToolbar;
 
-    private View bottomBar;
-    private ImageView coverArtView;
-    private TextView trackView;
-    private TextView artistView;
     private ImageButton startButton;
     private DownloadFile currentPlaying;
     private ImageButton previousButton;
@@ -167,130 +156,81 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             }
         }
 
-        slideUpPanel = findViewById(R.id.slide_up_panel);
-        panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) {
-                if (newState == PanelState.COLLAPSED) {
-                    isPanelClosing = false;
-                    if (bottomBar.getVisibility() == View.GONE) {
-                        bottomBar.setVisibility(View.VISIBLE);
-                        nowPlayingToolbar.setVisibility(View.GONE);
-                        nowPlayingFragment.setPrimaryFragment(false);
-                        setSupportActionBar(mainToolbar);
-                        recreateSpinner();
-                    }
-                } else if (newState == PanelState.EXPANDED) {
-                    isPanelClosing = false;
-                    currentFragment.stopActionMode();
-
-                    // Disable custom view before switching
-                    getSupportActionBar().setDisplayShowCustomEnabled(false);
-                    getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-                    bottomBar.setVisibility(View.GONE);
-                    nowPlayingToolbar.setVisibility(View.VISIBLE);
-                    setSupportActionBar(nowPlayingToolbar);
-
-                    if (secondaryFragment == null) {
-                        nowPlayingFragment.setPrimaryFragment(true);
-                    } else {
-                        secondaryFragment.setPrimaryFragment(true);
-                    }
-
-                    drawerToggle.setDrawerIndicatorEnabled(false);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                }
-            }
-        };
-        slideUpPanel.addPanelSlideListener(panelSlideListener);
-
         if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
-            // Post this later so it actually runs
-            handler.postDelayed(this::openNowPlaying, 200);
-
             getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
         }
 
-        bottomBar = findViewById(R.id.bottom_bar);
         mainToolbar = findViewById(R.id.main_toolbar);
-        nowPlayingToolbar = findViewById(R.id.now_playing_toolbar);
-        coverArtView = bottomBar.findViewById(R.id.album_art);
-        trackView = bottomBar.findViewById(R.id.track_name);
-        artistView = bottomBar.findViewById(R.id.artist_name);
 
         setSupportActionBar(mainToolbar);
 
         if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
             nowPlayingFragment = new NowPlayingFragment();
             FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-            trans.add(R.id.now_playing_fragment_container, nowPlayingFragment, nowPlayingFragment.getTag() + "");
             trans.commit();
         }
 
-        rewindButton = findViewById(R.id.download_rewind);
-        rewindButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-            @Override
-            protected Void doInBackground() {
-                if (getDownloadService() != null) {
-                    getDownloadService().rewind();
-                }
-                return null;
-            }
-        }.execute());
-
-        previousButton = findViewById(R.id.download_previous);
-        previousButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-            @Override
-            protected Void doInBackground() {
-                if (getDownloadService() != null) {
-                    getDownloadService().previous();
-                }
-                return null;
-            }
-        }.execute());
-
-        startButton = findViewById(R.id.download_start);
-        startButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-            @Override
-            protected Void doInBackground() {
-                PlayerState state = getDownloadService().getPlayerState();
-                if (state == PlayerState.STARTED) {
-                    getDownloadService().pause();
-                } else {
-                    getDownloadService().start();
-                }
-                return null;
-            }
-        }.execute());
-
-        nextButton = findViewById(R.id.download_next);
-        nextButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-            @Override
-            protected Void doInBackground() {
-                if (getDownloadService() != null) {
-                    getDownloadService().next();
-                }
-                return null;
-            }
-        }.execute());
-
-        fastforwardButton = findViewById(R.id.download_fastforward);
-        fastforwardButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-            @Override
-            protected Void doInBackground() {
-                if (getDownloadService() == null) {
+        if (currentFragment instanceof NowPlayingFragment) {
+            rewindButton = findViewById(R.id.download_rewind);
+            rewindButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+                @Override
+                protected Void doInBackground() {
+                    if (getDownloadService() != null) {
+                        getDownloadService().rewind();
+                    }
                     return null;
                 }
+            }.execute());
 
-                getDownloadService().fastForward();
-                return null;
-            }
-        }.execute());
+            previousButton = findViewById(R.id.download_previous);
+            previousButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+                @Override
+                protected Void doInBackground() {
+                    if (getDownloadService() != null) {
+                        getDownloadService().previous();
+                    }
+                    return null;
+                }
+            }.execute());
+
+            startButton = findViewById(R.id.download_start);
+            startButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+                @Override
+                protected Void doInBackground() {
+                    PlayerState state = getDownloadService().getPlayerState();
+                    if (state == PlayerState.STARTED) {
+                        getDownloadService().pause();
+                    } else {
+                        getDownloadService().start();
+                    }
+                    return null;
+                }
+            }.execute());
+
+            nextButton = findViewById(R.id.download_next);
+            nextButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+                @Override
+                protected Void doInBackground() {
+                    if (getDownloadService() != null) {
+                        getDownloadService().next();
+                    }
+                    return null;
+                }
+            }.execute());
+
+            fastforwardButton = findViewById(R.id.download_fastforward);
+            fastforwardButton.setOnClickListener(v -> new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+                @Override
+                protected Void doInBackground() {
+                    if (getDownloadService() == null) {
+                        return null;
+                    }
+
+                    getDownloadService().fastForward();
+                    return null;
+                }
+            }.execute());
+        }
 
         if (!infoDialogDisplayed) {
             infoDialogDisplayed = true;
@@ -313,10 +253,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         super.onNewIntent(intent);
 
         if (currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
-            if (isNowPlayingOpen()) {
-                closeNowPlaying();
-            }
-
             if (currentFragment instanceof SearchFragment) {
                 String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
                 boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
@@ -330,10 +266,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
                 SearchFragment fragment = new SearchFragment();
                 replaceFragment(fragment, fragment.getSupportTag());
-            }
-        } else if (intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, false)) {
-            if (!isNowPlayingOpen()) {
-                openNowPlaying();
             }
         } else {
             setIntent(intent);
@@ -388,7 +320,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         if (secondaryFragment != null) {
             savedInstanceState.putString(Constants.MAIN_NOW_PLAYING_SECONDARY, secondaryFragment.getTag());
         }
-        savedInstanceState.putInt(Constants.MAIN_SLIDE_PANEL_STATE, slideUpPanel.getPanelState().hashCode());
     }
 
     @Override
@@ -414,18 +345,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         if (drawerToggle != null && backStack.size() > 0) {
             drawerToggle.setDrawerIndicatorEnabled(false);
         }
-
-        if (savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
-            panelSlideListener.onPanelStateChanged(null, null, PanelState.EXPANDED);
-        }
     }
 
     @Override
     public void onBackPressed() {
         if (isNowPlayingOpen()) {
-            if (secondaryFragment == null) {
-                closeNowPlaying();
-            } else {
+            if (secondaryFragment != null) {
                 removeCurrent();
             }
         } else {
@@ -448,20 +373,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-        if (slideUpPanel != null && isNowPlayingOpen() && !isPanelClosing) {
-            secondaryFragment = fragment;
-            nowPlayingFragment.setPrimaryFragment(false);
-            secondaryFragment.setPrimaryFragment(true);
-            supportInvalidateOptionsMenu();
-
-            FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-            trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            trans.hide(nowPlayingFragment);
-            trans.add(R.id.now_playing_fragment_container, secondaryFragment, tag + "");
-            trans.commit();
-        } else {
-            super.replaceFragment(fragment, tag, replaceCurrent);
-        }
+        super.replaceFragment(fragment, tag, replaceCurrent);
     }
 
     @Override
@@ -487,15 +399,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             getSupportActionBar().setTitle(title);
         } else {
             super.setTitle(title);
-        }
-    }
-
-    @Override
-    protected void drawerItemSelected(String fragmentType) {
-        super.drawerItemSelected(fragmentType);
-
-        if (isNowPlayingOpen() && !resuming) {
-            closeNowPlaying();
         }
     }
 
@@ -532,19 +435,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         }
     }
 
-    @Override
-    public void openNowPlaying() {
-        slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-    }
-
-    @Override
-    public void closeNowPlaying() {
-        slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        isPanelClosing = true;
-    }
-
     private boolean isNowPlayingOpen() {
-        return slideUpPanel.getPanelState() == PanelState.EXPANDED;
+        return false;
     }
 
     private SubsonicFragment getNewFragment(String fragmentType) {
@@ -642,35 +534,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         MusicDirectory.Entry song = null;
         if (currentPlaying != null) {
             song = currentPlaying.getSong();
-            trackView.setText(song.getTitle());
-
-            if (song.getArtist() != null) {
-                artistView.setVisibility(View.VISIBLE);
-                artistView.setText(song.getArtist());
-            } else {
-                artistView.setVisibility(View.GONE);
-            }
-        } else {
-            trackView.setText(R.string.main_title);
-            artistView.setText(R.string.main_artist);
         }
-
-        if (coverArtView != null) {
-            int height = coverArtView.getHeight();
-            if (height <= 0) {
-                int[] attrs = new int[]{R.attr.actionBarSize};
-                TypedArray typedArray = this.obtainStyledAttributes(attrs);
-                height = typedArray.getDimensionPixelSize(0, 0);
-                typedArray.recycle();
-            }
-            getImageLoader().loadImage(coverArtView, song, false, height, false);
-        }
-
-        previousButton.setVisibility(View.VISIBLE);
-        nextButton.setVisibility(View.VISIBLE);
-
-        rewindButton.setVisibility(View.GONE);
-        fastforwardButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -689,26 +553,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     public void onStateUpdate(PlayerState playerState) {
         int[] attrs = new int[]{(playerState == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
         TypedArray typedArray = this.obtainStyledAttributes(attrs);
-        startButton.setImageResource(typedArray.getResourceId(0, 0));
         typedArray.recycle();
     }
 
     @Override
     public void onMetadataUpdate(MusicDirectory.Entry song, int fieldChange) {
-        if (song != null && coverArtView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
-            int height = coverArtView.getHeight();
-            if (height <= 0) {
-                int[] attrs = new int[]{R.attr.actionBarSize};
-                TypedArray typedArray = this.obtainStyledAttributes(attrs);
-                height = typedArray.getDimensionPixelSize(0, 0);
-                typedArray.recycle();
-            }
-            getImageLoader().loadImage(coverArtView, song, false, height, false);
-
-            // We need to update it immediately since it won't update if updater is not running for it
-            if (nowPlayingFragment != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                nowPlayingFragment.onMetadataUpdate(song, fieldChange);
-            }
-        }
     }
 }
