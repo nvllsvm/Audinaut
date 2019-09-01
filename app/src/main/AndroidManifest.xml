@@ -45,6 +45,7 @@
         android:backupAgent="net.nullsum.audinaut.util.SettingsBackupAgent"
         android:icon="@drawable/launch"
         android:label="@string/common.appname"
+        android:usesCleartextTraffic="true"
         android:theme="@style/LaunchScreen">
 
         <uses-library android:name="android.test.runner" />
