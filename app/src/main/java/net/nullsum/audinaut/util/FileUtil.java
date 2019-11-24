@@ -66,7 +66,7 @@ public class FileUtil {
     private static final String TAG = FileUtil.class.getSimpleName();
     private static final String[] FILE_SYSTEM_UNSAFE = {"/", "\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final String[] FILE_SYSTEM_UNSAFE_DIR = {"\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
-    private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma");
+    private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "opus", "aac", "flac", "m4a", "wav", "wma");
     private static final List<String> PLAYLIST_FILE_EXTENSIONS = Collections.singletonList("m3u");
     private static final int MAX_FILENAME_LENGTH = 254 - ".complete.mp3".length();
     private static final Kryo kryo = new Kryo();
