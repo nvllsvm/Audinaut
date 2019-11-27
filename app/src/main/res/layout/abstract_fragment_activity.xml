@@ -1,11 +1,13 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:id="@+id/slide_up_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    sothree:umanoDragView="@+id/slide_up_swipe_target"
+    sothree:umanoPanelHeight="?attr/actionBarSize"
+    sothree:umanoShadowHeight="4dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -22,4 +24,123 @@
 
         <include layout="@layout/abstract_fragment_container" />
     </FrameLayout>
-</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/slide_up_swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/actionbarBackgroundColor">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/now_playing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="4dp"
+                android:theme="?attr/actionbarThemeStyle"
+                android:visibility="gone"
+                app:popupTheme="?attr/actionbarPopupStyle" />
+
+            <LinearLayout
+                android:id="@+id/bottom_bar"
+                style="@style/BasicButton"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                android:orientation="horizontal">
+
+                <net.nullsum.audinaut.view.RecyclingImageView
+                    android:id="@+id/album_art"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="left|center"
+                    android:scaleType="fitCenter" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dip">
+
+                    <TextView
+                        android:id="@+id/track_name"
+                        style="?attr/actionbarTitleStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/main.title">
+
+                        <requestFocus
+                            android:duplicateParentState="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true" />
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/artist_name"
+                        style="?attr/actionbarSubtitleStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@string/main.artist" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/download_rewind"
+                        style="@style/PlaybackControl.BottomBar"
+                        android:padding="2dp"
+                        app:srcCompat="?attr/actionbar_rewind"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/download_previous"
+                        style="@style/PlaybackControl.BottomBar"
+                        android:padding="2dp"
+                        app:srcCompat="?attr/actionbar_backward" />
+
+                    <ImageButton
+                        android:id="@+id/download_start"
+                        style="@style/PlaybackControl.BottomBar"
+                        app:srcCompat="?attr/actionbar_start" />
+
+                    <ImageButton
+                        android:id="@+id/download_next"
+                        style="@style/PlaybackControl.BottomBar"
+                        android:padding="2dp"
+                        app:srcCompat="?attr/actionbar_forward" />
+
+                    <ImageButton
+                        android:id="@+id/download_fastforward"
+                        style="@style/PlaybackControl.BottomBar"
+                        android:padding="2dp"
+                        app:srcCompat="?attr/actionbar_fastforward"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/now_playing_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clickable="true" />
+    </LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
