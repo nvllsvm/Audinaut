@@ -949,7 +949,7 @@ public class DownloadService extends Service {
 
     public synchronized void next(boolean forceStart) {
         // If only one song, just skip within song
-        if (size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+        if (currentPlaying != null && !currentPlaying.isSong()) {
             fastForward();
             return;
         } else if (playerState == PREPARING || playerState == PREPARED) {
@@ -958,10 +958,6 @@ public class DownloadService extends Service {
 
         int index = getCurrentPlayingIndex();
         int nextPlayingIndex = getNextPlayingIndex();
-        // Make sure to actually go to next when repeat song is on
-        if (index == nextPlayingIndex) {
-            nextPlayingIndex++;
-        }
         if (index != -1 && nextPlayingIndex < size()) {
             play(nextPlayingIndex, playerState != PAUSED && playerState != STOPPED && playerState != IDLE || forceStart);
         }
