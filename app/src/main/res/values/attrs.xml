@@ -43,7 +43,6 @@
     <attr name="drawerLibrary" format="reference" />
     <attr name="drawerPlaylists" format="reference" />
     <attr name="drawerDownloading" format="reference" />
-    <attr name="drawerNowPlaying" format="reference" />
     <attr name="drawerSettings" format="reference" />
     <attr name="actionbarThemeStyle" format="reference" />
     <attr name="actionbarTitleStyle" format="reference" />

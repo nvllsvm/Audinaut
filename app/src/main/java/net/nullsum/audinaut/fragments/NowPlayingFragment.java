@@ -128,7 +128,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                 startFlipped = true;
             }
         }
-        primaryFragment = true;
+        primaryFragment = false;
     }
 
     @Override

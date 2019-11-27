@@ -14,10 +14,6 @@
             android:icon="?attr/drawerDownloading"
             android:title="@string/button_bar.downloading"
             android:visible="false" />
-        <item
-            android:id="@+id/drawer_now_playing"
-            android:icon="?attr/drawerNowPlaying"
-            android:title="@string/button_bar.now_playing" />
     </group>
 
     <group android:checkableBehavior="single">
