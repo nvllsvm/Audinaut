@@ -2,6 +2,11 @@ package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -16,6 +21,7 @@ class BlurBuilder {
         for(int i = 0; i<3; i++) {
             newImage = blur_real(context, newImage);
         }
+        newImage = changeBitmapContrastBrightness(newImage, 0.5f, 48);
         return newImage;
     }
 
@@ -36,5 +42,26 @@ class BlurBuilder {
         tmpOut.copyTo(outputBitmap);
 
         return outputBitmap;
+    }
+
+    public static Bitmap changeBitmapContrastBrightness(Bitmap bmp, float contrast, float brightness)
+    {
+        ColorMatrix cm = new ColorMatrix(new float[]
+                {
+                    contrast, 0, 0, 0, brightness,
+                    0, contrast, 0, 0, brightness,
+                    0, 0, contrast, 0, brightness,
+                    0, 0, 0, 1, 0
+                });
+
+        Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+
+        Canvas canvas = new Canvas(ret);
+
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        canvas.drawBitmap(bmp, 0, 0, paint);
+
+        return ret;
     }
 }
