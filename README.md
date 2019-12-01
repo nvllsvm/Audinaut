@@ -1,7 +1,7 @@
 # Audinaut
 <img src="audinaut.png" align="left" width="200" hspace="10" vspace="10">
 
-An [Airsonic] client for Android.
+A Subsonic client for Android.
 
 
 <a href="https://f-droid.org/app/net.nullsum.audinaut">
@@ -12,5 +12,3 @@ An [Airsonic] client for Android.
     <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
     alt="Get it on Google Play" height="80" />
 </a>
-
-[Airsonic]: https://airsonic.github.io
