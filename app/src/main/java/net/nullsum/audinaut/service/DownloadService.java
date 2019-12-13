@@ -950,7 +950,6 @@ public class DownloadService extends Service {
     public synchronized void next(boolean forceStart) {
         // If only one song, just skip within song
         if (currentPlaying != null && !currentPlaying.isSong()) {
-            fastForward();
             return;
         } else if (playerState == PREPARING || playerState == PREPARED) {
             return;
@@ -958,6 +957,9 @@ public class DownloadService extends Service {
 
         int index = getCurrentPlayingIndex();
         int nextPlayingIndex = getNextPlayingIndex();
+        if (index == nextPlayingIndex && size() > 1) {
+            nextPlayingIndex++;
+        }
         if (index != -1 && nextPlayingIndex < size()) {
             play(nextPlayingIndex, playerState != PAUSED && playerState != STOPPED && playerState != IDLE || forceStart);
         }
