@@ -4,11 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip">
 
     <ImageButton
         android:id="@+id/download_repeat"
-        style="@style/PlaybackControl"
+        style="@style/PlaybackControl.Small"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         app:srcCompat="?attr/media_button_repeat_off" />
@@ -65,7 +67,7 @@
 
     <ImageButton
         android:id="@+id/download_toggle_list"
-        style="@style/PlaybackControl"
+        style="@style/PlaybackControl.Small"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         app:srcCompat="?attr/toggle_list" />
