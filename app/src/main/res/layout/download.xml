@@ -57,6 +57,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="20dp"
+            android:clipChildren="false"
             android:orientation="vertical">
 
                 <TextView
@@ -70,6 +71,10 @@
                     android:layout_marginTop="6dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:shadowColor="@color/nowPlayingShadow"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="10.0"
                     android:textColor="?android:textColorSecondary" />
 
                 <TextView
@@ -82,6 +87,10 @@
                     android:layout_marginRight="16dip"
                     android:maxLines="1"
                     android:textColor="?android:textColorPrimary"
+                    android:shadowColor="@color/nowPlayingShadow"
+                    android:shadowDx="1.0"
+                    android:shadowDy="1.0"
+                    android:shadowRadius="10.0"
                     android:textStyle="bold" />
                 <LinearLayout
                     android:id="@+id/download_overlay_buttons"
