@@ -16,12 +16,8 @@
         android:layout_centerVertical="true"
         android:paddingBottom="4dip"
         android:paddingLeft="8dip"
-        android:shadowColor="@color/nowPlayingShadow"
-        android:shadowDx="1.0"
-        android:shadowDy="1.0"
-        android:shadowRadius="10.0"
         android:text="0:00"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="?android:textColorSecondary"
         android:textSize="12sp" />
 
     <SeekBar
@@ -43,11 +39,7 @@
         android:layout_centerVertical="true"
         android:paddingBottom="4dip"
         android:paddingRight="8dip"
-        android:shadowColor="@color/nowPlayingShadow"
-        android:shadowDx="1.0"
-        android:shadowDy="1.0"
-        android:shadowRadius="10.0"
         android:text="-:--"
-        android:textColor="?android:textColorPrimary"
+        android:textColor="?android:textColorSecondary"
         android:textSize="12sp" />
 </RelativeLayout>

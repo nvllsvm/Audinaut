@@ -2,52 +2,46 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings.appearance_title">
 
-    <PreferenceCategory android:title="@string/settings.theme_title">
+    <ListPreference
+        android:defaultValue="light"
+        android:entries="@array/themeNames"
+        android:entryValues="@array/themeValues"
+        android:key="theme"
+        android:title="@string/settings.theme_title" />
 
-        <ListPreference
-            android:defaultValue="light"
-            android:entries="@array/themeNames"
-            android:entryValues="@array/themeValues"
-            android:key="theme"
-            android:title="@string/settings.theme_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="fullScreen"
+        android:summary="@string/settings.theme_fullscreen_summary"
+        android:title="@string/settings.theme_fullscreen" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="fullScreen"
-            android:summary="@string/settings.theme_fullscreen_summary"
-            android:title="@string/settings.theme_fullscreen" />
-    </PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="displayTrack"
+        android:summary="@string/settings.track_summary"
+        android:title="@string/settings.track_title" />
 
-    <PreferenceCategory android:title="@string/settings.appearance_title">
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="hideWidget"
+        android:summary="@string/settings.hide_widget_summary"
+        android:title="@string/settings.hide_widget_title" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="displayTrack"
-            android:summary="@string/settings.track_summary"
-            android:title="@string/settings.track_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="customSortEnabled"
+        android:summary="@string/settings.custom_sort_summary"
+        android:title="@string/settings.custom_sort" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="hideWidget"
-            android:summary="@string/settings.hide_widget_summary"
-            android:title="@string/settings.hide_widget_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="largeAlbumArt"
+        android:summary="@string/settings.large_album_art_summary"
+        android:title="@string/settings.large_album_art" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="customSortEnabled"
-            android:summary="@string/settings.custom_sort_summary"
-            android:title="@string/settings.custom_sort" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="largeAlbumArt"
-            android:summary="@string/settings.large_album_art_summary"
-            android:title="@string/settings.large_album_art" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="blurredBackground"
-            android:summary="@string/settings.blurred_background_summary"
-            android:title="@string/settings.blurred_background" />
-    </PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="blurredBackground"
+        android:summary="@string/settings.blurred_background_summary"
+        android:title="@string/settings.blurred_background" />
 </PreferenceScreen>

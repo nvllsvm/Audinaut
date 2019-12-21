@@ -88,6 +88,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     private TextView songTitleTextView;
     private ImageView albumArtImageView;
     private ImageView albumArtBackgroundView;
+    private View nowPlayingView;
     private RecyclerView playlistView;
     private TextView positionTextView;
     private TextView durationTextView;
@@ -155,6 +156,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         songTitleTextView = rootView.findViewById(R.id.download_song_title);
         albumArtImageView = rootView.findViewById(R.id.download_album_art_image);
         albumArtBackgroundView = rootView.findViewById(R.id.download_album_art_background);
+        nowPlayingView = rootView.findViewById(R.id.now_playing_top);
         positionTextView = rootView.findViewById(R.id.download_position);
         durationTextView = rootView.findViewById(R.id.download_duration);
         statusTextView = rootView.findViewById(R.id.download_status);
@@ -937,9 +939,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         getImageLoader().loadImage(albumArtImageView, song, true, crossfade);
         if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BLURRED_BACKGROUND, true)) {
             albumArtBackgroundView.setVisibility(ImageView.VISIBLE);
+            nowPlayingView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.gradient));
             getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, crossfade);
         } else {
             albumArtBackgroundView.setVisibility(ImageView.GONE);
+            nowPlayingView.setBackgroundResource(0);
         }
     }
 
