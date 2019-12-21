@@ -243,8 +243,6 @@
     <string name="settings.replay_gain_untagged">Songs without Replay Gain</string>
     <string name="settings.start_on_headphones">Start on headphones</string>
     <string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when Audinaut is not running.</string>
-    <string name="settings.color_action_bar">Color Action Bar</string>
-    <string name="settings.color_action_bar.summary">Color the action bar and status bar or leave them alone</string>
     <string name="settings.shuffle_by_album">Shuffle By Album</string>
     <string name="settings.shuffle_by_album.true">Shuffle order of albums</string>
     <string name="settings.shuffle_by_album.false">Shuffle all songs together</string>

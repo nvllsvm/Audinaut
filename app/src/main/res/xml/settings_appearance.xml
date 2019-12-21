@@ -16,12 +16,6 @@
             android:key="fullScreen"
             android:summary="@string/settings.theme_fullscreen_summary"
             android:title="@string/settings.theme_fullscreen" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="colorActionBar"
-            android:summary="@string/settings.color_action_bar.summary"
-            android:title="@string/settings.color_action_bar" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings.appearance_title">

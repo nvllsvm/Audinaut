@@ -121,7 +121,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_ALBUMS_PER_FOLDER = "albumsPerFolder";
     public static final String PREFERENCES_KEY_FIRST_LEVEL_ARTIST = "firstLevelArtist";
     public static final String PREFERENCES_KEY_START_ON_HEADPHONES = "startOnHeadphones";
-    public static final String PREFERENCES_KEY_COLOR_ACTION_BAR = "colorActionBar";
     public static final String PREFERENCES_KEY_SHUFFLE_BY_ALBUM = "shuffleByAlbum";
     public static final String PREFERENCES_KEY_BATCH_MODE = "batchMode";
 
