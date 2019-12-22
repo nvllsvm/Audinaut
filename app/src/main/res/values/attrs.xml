@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="gradient" format="reference"/>
+
     <attr name="element_color" format="reference"/>
     <attr name="card_background" format="reference"/>
     <attr name="actionbar_element_color" format="reference"/>

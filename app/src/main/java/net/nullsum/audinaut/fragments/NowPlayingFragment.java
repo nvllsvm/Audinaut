@@ -939,7 +939,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
         getImageLoader().loadImage(albumArtImageView, song, true, crossfade);
         if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BLURRED_BACKGROUND, true)) {
             albumArtBackgroundView.setVisibility(ImageView.VISIBLE);
-            nowPlayingView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.gradient));
+            nowPlayingView.setBackgroundResource(DrawableTint.getDrawableRes(context, R.attr.gradient));
             getImageLoader().loadBlurImage(albumArtBackgroundView, song, true, crossfade);
         } else {
             albumArtBackgroundView.setVisibility(ImageView.GONE);
