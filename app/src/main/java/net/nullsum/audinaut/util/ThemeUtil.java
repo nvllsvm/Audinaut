@@ -58,24 +58,13 @@ public final class ThemeUtil {
     }
 
     private static int getThemeRes(Context context, String theme) {
-        if (context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
-            switch (theme) {
-                case THEME_DARK:
-                    return R.style.Theme_Audinaut_Dark_No_Color;
-                case THEME_BLACK:
-                    return R.style.Theme_Audinaut_Black_No_Color;
-                default:
-                    return R.style.Theme_Audinaut_Light_No_Color;
-            }
-        } else {
-            switch (theme) {
-                case THEME_DARK:
-                    return R.style.Theme_Audinaut_Dark;
-                case THEME_BLACK:
-                    return R.style.Theme_Audinaut_Black;
-                default:
-                    return R.style.Theme_Audinaut_Light;
-            }
+        switch (theme) {
+            case THEME_DARK:
+                return R.style.Theme_Audinaut_Dark;
+            case THEME_BLACK:
+                return R.style.Theme_Audinaut_Black;
+            default:
+                return R.style.Theme_Audinaut_Light;
         }
     }
 
