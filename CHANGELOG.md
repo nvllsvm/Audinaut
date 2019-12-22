@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## Version 0.4.0
+_2019-12-22_
+* Add support for .opus files
+* Fix HTTP support
+* Fix infinite loop when playing contains only invalid files
+* Overhaul themes
+* Replace raster images with vector images
+
 ## Version 0.3.3
 _2019-03-17_
 * Fix [Funkwhale](https://funkwhale.audio/) (Subsonic API) support
