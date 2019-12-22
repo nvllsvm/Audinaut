@@ -3,11 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <net.nullsum.audinaut.view.RecyclingImageView
+    <FrameLayout
         android:id="@+id/download_album_art_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent" >
+
+        <net.nullsum.audinaut.view.RecyclingImageView
+            android:id="@+id/download_album_art_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?gradient" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/now_playing_top"
