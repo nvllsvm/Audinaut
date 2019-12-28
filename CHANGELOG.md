@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## Version 0.4.1
+_2019-12-28_
+* Revert attempt to fix infinite loop as it sometimes deleted valid files.
+
 ## Version 0.4.0
 _2019-12-22_
 * Add support for .opus files
