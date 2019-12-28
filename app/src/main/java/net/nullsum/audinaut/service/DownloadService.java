@@ -1370,10 +1370,15 @@ public class DownloadService extends Service {
         final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
         mediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
             Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
-            int index = getNextPlayingIndex();
-            remove(downloadFile);
-            downloadFile.delete();
-            play(index - 1);
+            int pos = getPlayerPosition();
+            reset();
+            if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
+                playNext();
+            } else {
+                downloadFile.setPlaying(false);
+                doPlay(downloadFile, pos, isPlaying);
+                downloadFile.setPlaying(true);
+            }
             return true;
         });
 
