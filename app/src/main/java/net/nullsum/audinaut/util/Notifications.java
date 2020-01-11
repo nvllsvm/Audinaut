@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
+import android.support.v4.media.session.MediaSessionCompat;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;
@@ -67,7 +68,6 @@ public final class Notifications {
         }
 
         final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
-
         Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
         notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -76,10 +76,12 @@ public final class Notifications {
                 .setComponent(new ComponentName(context, DownloadService.class))
                 .putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
         int[] compactActions = new int[]{0, 1, 2};
+        MediaSessionCompat mediaSession = new MediaSessionCompat(context, "Audinaut");
         MediaStyle mediaStyle = new MediaStyle()
                 .setShowActionsInCompactView(compactActions)
                 .setShowCancelButton(true)
-                .setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, 0));
+                .setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, 0))
+                .setMediaSession(mediaSession.getSessionToken());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_PLAYING_ID)
                 .setChannelId(CHANNEL_PLAYING_ID)
