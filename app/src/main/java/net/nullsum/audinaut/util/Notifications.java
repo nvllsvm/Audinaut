@@ -26,12 +26,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.MediaMetadataCompat;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;
@@ -77,6 +79,8 @@ public final class Notifications {
                 .putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
         int[] compactActions = new int[]{0, 1, 2};
         MediaSessionCompat mediaSession = new MediaSessionCompat(context, "Audinaut");
+        MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
+        mediaSession.setMetadata(metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1).build());
         MediaStyle mediaStyle = new MediaStyle()
                 .setShowActionsInCompactView(compactActions)
                 .setShowCancelButton(true)
