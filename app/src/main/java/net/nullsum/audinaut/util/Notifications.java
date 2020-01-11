@@ -23,14 +23,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SubsonicActivity;
@@ -68,27 +68,38 @@ public final class Notifications {
 
         final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
 
-        RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-        setupViews(expandedContentView, context, song, true, playing);
-
-        RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-        setupViews(smallContentView, context, song, false, playing);
-
         Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
         notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        final Notification notification = new NotificationCompat.Builder(context, CHANNEL_PLAYING_ID)
+        Intent cancelIntent = new Intent("KEYCODE_MEDIA_STOP")
+                .setComponent(new ComponentName(context, DownloadService.class))
+                .putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
+        int[] compactActions = new int[]{0, 1, 2};
+        MediaStyle mediaStyle = new MediaStyle()
+                .setShowActionsInCompactView(compactActions)
+                .setShowCancelButton(true)
+                .setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, 0));
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_PLAYING_ID)
                 .setChannelId(CHANNEL_PLAYING_ID)
                 .setSmallIcon(R.drawable.stat_notify_playing)
                 .setContentTitle(song.getTitle())
-                .setContentText(song.getTitle())
+                .setContentText(song.getArtist())
+                .setSubText(song.getAlbum())
+                .setTicker(song.getTitle())
                 .setOngoing(playing)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setCustomContentView(smallContentView)
-                .setCustomBigContentView(expandedContentView)
-                .setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0))
-                .setPriority(NotificationCompat.PRIORITY_LOW).build();
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setShowWhen(false)
+                .setLargeIcon(getAlbumArt(context, song))
+                .setStyle(mediaStyle)
+                .setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+        addActions(context, builder, playing);
+        final Notification notification = builder.build();
+
+        if(playing) {
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        }
 
         playShowing = true;
         if (downloadForeground && downloadShowing) {
@@ -116,13 +127,7 @@ public final class Notifications {
         AudinautWidgetProvider.notifyInstances(context, downloadService, playing);
     }
 
-    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing) {
-        // Use the same text for the ticker and the expanded notification
-        String title = song.getTitle();
-        String arist = song.getArtist();
-        String album = song.getAlbum();
-
-        // Set the album art.
+    private static Bitmap getAlbumArt(Context context, MusicDirectory.Entry song) {
         try {
             ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
             Bitmap bitmap = null;
@@ -131,90 +136,42 @@ public final class Notifications {
             }
             if (bitmap == null) {
                 // set default album art
-                rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
+                return BitmapFactory.decodeResource(context.getResources(), R.drawable.unknown_album);
             } else {
-                imageLoader.setNowPlayingSmall(bitmap);
-                rv.setImageViewBitmap(R.id.notification_image, bitmap);
+                return bitmap;
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to get notification cover art", x);
-            rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.unknown_album);
         }
+    }
 
-        // set the text for the notifications
-        rv.setTextViewText(R.id.notification_title, title);
-        rv.setTextViewText(R.id.notification_artist, arist);
-        rv.setTextViewText(R.id.notification_album, album);
-
-        boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
-        if (persistent) {
-            if (expanded) {
-                rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_media_pause : R.drawable.notification_media_start);
-
-                rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_backward);
-                rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_forward);
-            } else {
-                rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_media_pause : R.drawable.notification_media_start);
-                rv.setImageViewResource(R.id.control_pause, R.drawable.notification_media_forward);
-                rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
-            }
-        } else {
-            // Necessary for switching back since it appears to re-use the same layout
-            rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_backward);
-            rv.setImageViewResource(R.id.control_pause, R.drawable.notification_media_pause);
-            rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_forward);
-        }
-
-        // Create actions for media buttons
+    private static void addActions(final Context context, final NotificationCompat.Builder builder, final boolean playing) {
         PendingIntent pendingIntent;
-        int previous = 0, pause, next, close = 0;
-        if (persistent && !expanded) {
-            pause = R.id.control_previous;
-            next = R.id.control_pause;
-            close = R.id.control_next;
-        } else {
-            previous = R.id.control_previous;
-            pause = R.id.control_pause;
-            next = R.id.control_next;
-        }
 
-        if (persistent && close == 0 && expanded) {
-            close = R.id.notification_close;
-            rv.setViewVisibility(close, View.VISIBLE);
-        }
-
-        if (previous > 0) {
-            Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
-            prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-            prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-            pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-            rv.setOnClickPendingIntent(previous, pendingIntent);
-        }
+        Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
+        prevIntent.setComponent(new ComponentName(context, DownloadService.class));
+        prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+        pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+        builder.addAction(R.drawable.notification_media_backward, "Previous", pendingIntent);
         if (playing) {
             Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
             pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
             pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
             pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
-            rv.setOnClickPendingIntent(pause, pendingIntent);
+            builder.addAction(R.drawable.notification_media_pause, "Pause", pendingIntent);
         } else {
-            Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
-            prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-            prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-            pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-            rv.setOnClickPendingIntent(pause, pendingIntent);
+            Intent playIntent = new Intent("KEYCODE_MEDIA_PLAY");
+            playIntent.setComponent(new ComponentName(context, DownloadService.class));
+            playIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+            pendingIntent = PendingIntent.getService(context, 0, playIntent, 0);
+            builder.addAction(R.drawable.notification_media_start, "Play", pendingIntent);
         }
         Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
         nextIntent.setComponent(new ComponentName(context, DownloadService.class));
         nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
         pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
-        rv.setOnClickPendingIntent(next, pendingIntent);
-        if (close > 0) {
-            Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
-            prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-            prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
-            pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-            rv.setOnClickPendingIntent(close, pendingIntent);
-        }
+        builder.addAction(R.drawable.notification_media_forward, "Next", pendingIntent);
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadService downloadService, Handler handler) {
