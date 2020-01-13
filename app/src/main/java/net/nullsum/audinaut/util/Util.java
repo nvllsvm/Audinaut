@@ -325,7 +325,7 @@ public final class Util {
 
         builder.addQueryParameter("u", username);
 
-        if (prefs.getBoolean(Constants.PREFERENCES_KEY_AUTH_METHOD, true)) {
+        if (prefs.getBoolean(Constants.PREFERENCES_KEY_AUTH_METHOD + instance, true)) {
             int hash = (username + password).hashCode();
             Pair<String, String> values = tokens.get(hash);
             if (values == null) {
