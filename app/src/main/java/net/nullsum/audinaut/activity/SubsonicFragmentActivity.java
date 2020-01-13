@@ -171,6 +171,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
+                Util.hideKeyboard(panel);
             }
 
             @Override
