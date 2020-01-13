@@ -41,9 +41,12 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Activity;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -1134,5 +1137,11 @@ public final class Util {
         }
 
         return random;
+    }
+
+    public static void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
