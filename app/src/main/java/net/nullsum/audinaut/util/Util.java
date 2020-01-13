@@ -323,18 +323,24 @@ public final class Util {
         builder.addPathSegment("rest");
         builder.addPathSegment(method + ".view");
 
-        int hash = (username + password).hashCode();
-        Pair<String, String> values = tokens.get(hash);
-        if (values == null) {
-            String salt = new BigInteger(130, getRandom()).toString(32);
-            String token = md5Hex(password + salt);
-            values = new Pair<>(salt, token);
-            tokens.put(hash, values);
+        builder.addQueryParameter("u", username);
+
+        if (prefs.getBoolean(Constants.PREFERENCES_KEY_AUTH_METHOD, true)) {
+            int hash = (username + password).hashCode();
+            Pair<String, String> values = tokens.get(hash);
+            if (values == null) {
+                String salt = new BigInteger(130, getRandom()).toString(32);
+                String token = md5Hex(password + salt);
+                values = new Pair<>(salt, token);
+                tokens.put(hash, values);
+            }
+
+            builder.addQueryParameter("s", values.getFirst());
+            builder.addQueryParameter("t", values.getSecond());
+        } else {
+            builder.addQueryParameter("p", password);
         }
 
-        builder.addQueryParameter("u", username);
-        builder.addQueryParameter("s", values.getFirst());
-        builder.addQueryParameter("t", values.getSecond());
         builder.addQueryParameter("v", Constants.REST_PROTOCOL_VERSION_SUBSONIC);
         builder.addQueryParameter("c", Constants.REST_CLIENT_ID);
 
