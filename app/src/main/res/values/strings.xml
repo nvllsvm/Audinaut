@@ -135,6 +135,8 @@
     <string name="settings.server_internal_address">Local network address</string>
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
+    <string name="settings.auth_method">Authentication Method</string>
+    <string name="settings.auth_summary">Use token/salt authentication?</string>
     <string name="settings.server_open_browser">Open in browser</string>
     <string name="settings.cache_title">Music cache</string>
     <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
