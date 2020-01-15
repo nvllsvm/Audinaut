@@ -28,6 +28,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -469,6 +470,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         serverPasswordPreference.setSummary("***");
         serverPasswordPreference.setTitle(R.string.settings_server_password);
 
+        final SwitchPreference authMethodPreference = new SwitchPreference(context);
+        authMethodPreference.setKey(Constants.PREFERENCES_KEY_AUTH_METHOD + instance);
+        authMethodPreference.setSummary(R.string.settings_auth_summary);
+        authMethodPreference.setDefaultValue(true); // use Token/Salt by default
+        authMethodPreference.setTitle(R.string.settings_auth_method);
+
         final Preference serverOpenBrowser = new Preference(context);
         serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
         serverOpenBrowser.setPersistent(false);
@@ -529,6 +536,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         screen.addPreference(serverLocalNetworkSSIDPreference);
         screen.addPreference(serverUsernamePreference);
         screen.addPreference(serverPasswordPreference);
+        screen.addPreference(authMethodPreference);
         screen.addPreference(serverTestConnectionPreference);
         screen.addPreference(serverOpenBrowser);
         screen.addPreference(serverRemoveServerPreference);
