@@ -298,6 +298,8 @@ public final class Util {
     private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress, @Nullable Map<String, String> parameters) {
         String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 
+        if (serverUrl == null) return "OFFLINE";
+
         HttpUrl.Builder builder;
         builder = HttpUrl.parse(serverUrl).newBuilder();
 
