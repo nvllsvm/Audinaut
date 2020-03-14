@@ -58,6 +58,9 @@ public final class ThemeUtil {
     }
 
     private static int getThemeRes(Context context, String theme) {
+        if(theme == null)
+            return  R.style.Theme_Audinaut_Light;
+
         switch (theme) {
             case THEME_DARK:
                 return R.style.Theme_Audinaut_Dark;
