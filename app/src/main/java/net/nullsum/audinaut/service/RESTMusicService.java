@@ -25,6 +25,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.Genre;
 import net.nullsum.audinaut.domain.Indexes;
 import net.nullsum.audinaut.domain.MusicDirectory;
@@ -674,6 +675,22 @@ public class RESTMusicService implements MusicService {
                 return users.get(0);
             } else {
                 return null;
+            }
+        }
+    }
+
+    @Override
+    public void startScan(Context context) throws Exception {
+        String url = getRestUrl(context, "startScan", null);
+
+        Request request = new Request.Builder().url(url).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                Log.d(TAG, "Media scan started" + response.toString());
+            } else {
+                Log.w(TAG, "media scan start failed" + response.toString());
+                Util.toast(context, R.string.settings_media_scan_start_failed);
             }
         }
     }

@@ -18,6 +18,7 @@ package net.nullsum.audinaut.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SettingsActivity;
@@ -58,6 +59,9 @@ public final class ThemeUtil {
     }
 
     private static int getThemeRes(Context context, String theme) {
+        if(theme == null)
+            return  R.style.Theme_Audinaut_Light;
+
         switch (theme) {
             case THEME_DARK:
                 return R.style.Theme_Audinaut_Dark;

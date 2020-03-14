@@ -124,6 +124,7 @@
 
     <string name="settings.title">Settings</string>
     <string name="settings.test_connection_title">Test connection</string>
+    <string name="settings.start_scan_title">Start Media Scan Now</string>
     <string name="settings.servers_add">Add Server</string>
     <string name="settings.servers_remove">Remove Server</string>
     <string name="settings.servers_title">Servers</string>
@@ -152,6 +153,8 @@
     <string name="settings.testing_connection">Testing connection…</string>
     <string name="settings.testing_ok">Connection is OK</string>
     <string name="settings.connection_failure">Connection failure.</string>
+    <string name="settings.media_scan_started">Media scan started</string>
+    <string name="settings.media_scan_start_failed">Could not start media scan</string>
     <string name="settings.invalid_url">Please specify a valid URL.</string>
     <string name="settings.invalid_username">Please specify a valid username (no trailing spaces).</string>
     <string name="settings.appearance_title">Appearance</string>

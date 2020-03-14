@@ -635,6 +635,11 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
+    public void startScan(Context c) throws Exception {
+        musicService.startScan(c);
+    }
+
+    @Override
     public void setInstance(Integer instance) {
         musicService.setInstance(instance);
     }
