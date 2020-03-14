@@ -71,6 +71,7 @@ public class OfflineMusicService implements MusicService {
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) {
         List<Artist> artists = new ArrayList<>();
         List<Entry> entries = new ArrayList<>();
+
         File root = FileUtil.getMusicDirectory(context);
         for (File file : FileUtil.listFiles(root)) {
             if (file.isDirectory()) {
