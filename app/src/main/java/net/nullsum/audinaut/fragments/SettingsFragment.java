@@ -530,6 +530,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             return false;
         });
 
+        Preference serverStartScanPreference = new Preference(context);
+        serverStartScanPreference.setKey(Constants.PREFERENCES_KEY_START_SCAN + instance);
+        serverStartScanPreference.setPersistent(false);
+        serverStartScanPreference.setTitle(R.string.settings_start_scan_title);
+        serverStartScanPreference.setOnPreferenceClickListener(preference -> {
+            startScan(instance);
+            return false;
+        });
+
         screen.addPreference(serverNamePreference);
         screen.addPreference(serverUrlPreference);
         screen.addPreference(serverInternalUrlPreference);
@@ -538,6 +547,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
         screen.addPreference(serverPasswordPreference);
         screen.addPreference(authMethodPreference);
         screen.addPreference(serverTestConnectionPreference);
+        screen.addPreference(serverStartScanPreference);
         screen.addPreference(serverOpenBrowser);
         screen.addPreference(serverRemoveServerPreference);
 
@@ -605,6 +615,42 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
             DownloadService downloadService = DownloadService.getInstance();
             downloadService.clear();
         }
+    }
+
+    private void startScan(final int instance) {
+        LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
+            @Override
+            protected Boolean doInBackground() throws Throwable {
+                MusicService musicService = MusicServiceFactory.getOnlineService();
+
+                try {
+                    musicService.setInstance(instance);
+                    musicService.startScan(context);
+                    return true;
+                } finally {
+                    musicService.setInstance(null);
+                }
+            }
+
+            @Override
+            protected void done(Boolean licenseValid) {
+                Log.d(TAG, "Finished media scan start");
+                Util.toast(context, R.string.settings_media_scan_started);
+            }
+
+            @Override
+            public void cancel() {
+                super.cancel();
+            }
+
+            @Override
+            protected void error(Throwable error) {
+                Log.w(TAG, error.toString(), error);
+                new ErrorDialog(context, getResources().getString(R.string.settings_media_scan_start_failed) +
+                        " " + getErrorMessage(error), false);
+            }
+        };
+        task.execute();
     }
 
     private void testConnection(final int instance) {

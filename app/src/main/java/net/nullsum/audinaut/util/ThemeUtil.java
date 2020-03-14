@@ -18,6 +18,7 @@ package net.nullsum.audinaut.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SettingsActivity;
