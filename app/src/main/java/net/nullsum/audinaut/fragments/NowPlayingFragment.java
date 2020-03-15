@@ -65,8 +65,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
@@ -105,11 +103,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     private ImageButton repeatButton;
     private View toggleListButton;
 
-    private ScheduledExecutorService executorService;
     private DownloadFile currentPlaying;
     private int swipeDistance;
     private int swipeVelocity;
-    private ScheduledFuture<?> hideControlsFuture;
     private List<DownloadFile> songList;
     private DownloadFileAdapter songListAdapter;
     private boolean seekInProgress = false;
@@ -201,7 +197,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                     return null;
                 }
             }.execute();
-            setControlsVisible(true);
         });
         previousButton.setOnRepeatListener(() -> changeProgress(true));
 
@@ -214,7 +209,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                     return true;
                 }
             }.execute();
-            setControlsVisible(true);
         });
         nextButton.setOnRepeatListener(() -> changeProgress(false));
 
@@ -269,12 +263,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                     break;
             }
             updateRepeatButton();
-            setControlsVisible(true);
         });
 
         toggleListButton.setOnClickListener(view -> {
             toggleFullscreenAlbumArt();
-            setControlsVisible(true);
         });
 
         View overlay = rootView.findViewById(R.id.download_overlay_buttons);
@@ -308,7 +300,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
             public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
                 if (fromUser) {
                     positionTextView.setText(Util.formatDuration(position / 1000));
-                    setControlsVisible(true);
                 }
             }
         });
@@ -473,7 +464,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
                     if (controller != null) {
                         SubsonicFragment fragment = new EqualizerFragment();
                         replaceFragment(fragment);
-                        setControlsVisible(true);
 
                         return true;
                     }
@@ -510,19 +500,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     }
 
     private void onResumeHandlers() {
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        setControlsVisible(true);
-
-        final DownloadService downloadService = getDownloadService();
-        if (downloadService == null || downloadService.getCurrentPlaying() == null || startFlipped) {
-            playlistFlipper.setDisplayedChild(1);
-            startFlipped = false;
-        }
-
-        if (currentPlaying == null && downloadService != null && null == downloadService.getCurrentPlaying()) {
-            setAlbumArt(null, false);
-        }
-
         context.runWhenServiceAvailable(() -> {
             if (primaryFragment) {
                 DownloadService downloadService1 = getDownloadService();
@@ -540,11 +517,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     }
 
     private void onPauseHandlers() {
-        if (executorService != null) {
-            DownloadService downloadService = getDownloadService();
-            if (downloadService != null) {
-                downloadService.removeOnSongChangeListener(this);
-            }
+        DownloadService downloadService = getDownloadService();
+        if (downloadService != null) {
+            downloadService.removeOnSongChangeListener(this);
         }
     }
 
@@ -579,29 +554,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
     @Override
     public SectionAdapter getCurrentAdapter() {
         return songListAdapter;
-    }
-
-    private void scheduleHideControls() {
-        if (hideControlsFuture != null) {
-            hideControlsFuture.cancel(false);
-        }
-
-        final Handler handler = new Handler();
-        Runnable runnable = () -> handler.post(() -> setControlsVisible(false));
-        hideControlsFuture = executorService.schedule(runnable, 3000L, TimeUnit.MILLISECONDS);
-    }
-
-    private void setControlsVisible(boolean visible) {
-        try {
-            long duration = 1700L;
-            FadeOutAnimation.createAndStart(rootView.findViewById(R.id.download_overlay_buttons), !visible, duration);
-
-            if (visible) {
-                scheduleHideControls();
-            }
-        } catch (Exception ignored) {
-
-        }
     }
 
     // Scroll to current playing/downloading.
@@ -693,7 +645,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
     @Override
     public boolean onDown(MotionEvent me) {
-        setControlsVisible(true);
         return false;
     }
 
