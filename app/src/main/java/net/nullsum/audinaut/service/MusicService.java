@@ -89,5 +89,7 @@ public interface MusicService {
 
     User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
 
+    void startScan(Context c) throws Exception;
+
     void setInstance(Integer instance) throws Exception;
 }
