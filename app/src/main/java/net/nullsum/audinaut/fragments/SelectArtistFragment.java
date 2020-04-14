@@ -169,7 +169,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
             String musicFolderId = Util.getSelectedMusicFolderId(context);
 
             Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
-            indexes.sortChildren(context);
+            indexes.sortChildren();
             items = new ArrayList<>(indexes.getShortcuts().size() + indexes.getArtists().size());
             items.addAll(indexes.getShortcuts());
             items.addAll(indexes.getArtists());
@@ -184,8 +184,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
             }
 
             Indexes indexes = new Indexes();
-            //indexes.setArtists = artists;
-            indexes.sortChildren(context);
+            indexes.sortChildren();
             items = new ArrayList<>(indexes.getArtists());
 
             entries = dir.getChildren(false, true);
