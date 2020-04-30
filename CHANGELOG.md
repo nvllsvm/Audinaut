@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## Version 0.5.1
+_2020-04-30_
+* Add option to force server-side media scan
+* Change to local artist sorting (case-insensitive)
+* Fix crash while offline (#25)
+* Fix read timeout not being respected
+* Fix switching to playlist on app resume
+
 ## Version 0.5.0
 _2020-01-15_
 * Add 24kbps and 48kbps options
