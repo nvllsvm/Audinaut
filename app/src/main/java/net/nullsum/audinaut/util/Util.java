@@ -127,7 +127,7 @@ public final class Util {
 
     public static int getNetworkTimeoutMs(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getInt(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, 30000);
+        return Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "30000"));
     }
 
     public static boolean isScreenLitOnDownload(Context context) {
