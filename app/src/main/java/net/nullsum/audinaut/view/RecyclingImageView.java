@@ -46,7 +46,7 @@ public class RecyclingImageView extends AppCompatImageView {
             if (drawable instanceof BitmapDrawable) {
                 if (isBitmapRecycled(drawable)) {
                     this.setImageDrawable(null);
-                    setInvalidated(true);
+                    this.invalidated = true;
                 }
             } else if (drawable instanceof TransitionDrawable) {
                 TransitionDrawable transitionDrawable = (TransitionDrawable) drawable;
