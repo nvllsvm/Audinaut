@@ -72,6 +72,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -120,6 +123,11 @@ public final class Util {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
         editor.apply();
+    }
+
+    public static int getNetworkTimeoutMs(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getInt(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, 30000);
     }
 
     public static boolean isScreenLitOnDownload(Context context) {

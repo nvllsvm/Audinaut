@@ -592,7 +592,7 @@ public class RESTMusicService implements MusicService {
     public Response getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
 
         OkHttpClient eagerClient = client.newBuilder()
-                .readTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(Util.getNetworkTimeoutMs(context), TimeUnit.MILLISECONDS)
                 .build();
 
         Map<String, String> parameters = new HashMap<>();
