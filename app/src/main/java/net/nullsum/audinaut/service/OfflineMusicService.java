@@ -501,11 +501,6 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException();
-    }
-
-    @Override
     public void startScan(Context c) throws Exception {
         throw new OfflineException();
     }

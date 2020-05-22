@@ -835,7 +835,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
             }
             Util.setActiveServer(this, instance);
             invalidate();
-            UserUtil.refreshCurrentUser(this);
             updateDrawerHeader();
         }
     }
@@ -863,7 +862,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
             service.setOnline(isOffline);
         }
 
-        UserUtil.seedCurrentUser(this);
         this.updateDrawerHeader();
         drawer.closeDrawers();
     }

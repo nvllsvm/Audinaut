@@ -617,24 +617,6 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) {
-        User result = null;
-
-        try {
-            result = musicService.getUser(refresh, username, context, progressListener);
-            FileUtil.serialize(context, result, getCacheName(context, "user-" + username));
-        } catch (Exception e) {
-            // Don't care
-        }
-
-        if (result == null && !refresh) {
-            result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
-        }
-
-        return result;
-    }
-
-    @Override
     public void startScan(Context c) throws Exception {
         musicService.startScan(c);
     }

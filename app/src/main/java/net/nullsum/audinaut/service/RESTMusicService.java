@@ -657,29 +657,6 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-        Map<String, String> parameters = new HashMap<>();
-
-        parameters.put("username", username);
-
-        String url = getRestUrl(context, "getUser", parameters);
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            List<User> users = new UserParser(context, getInstance(context)).parse(response.body().byteStream());
-            if (users.size() > 0) {
-                // Should only have returned one anyways
-                return users.get(0);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    @Override
     public void startScan(Context context) throws Exception {
         String url = getRestUrl(context, "startScan", null);
 

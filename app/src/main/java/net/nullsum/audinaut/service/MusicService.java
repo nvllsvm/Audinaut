@@ -87,8 +87,6 @@ public interface MusicService {
 
     MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 
-    User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
-
     void startScan(Context c) throws Exception;
 
     void setInstance(Integer instance) throws Exception;
