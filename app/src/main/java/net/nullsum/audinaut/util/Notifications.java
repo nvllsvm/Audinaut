@@ -77,18 +77,27 @@ public final class Notifications {
                 .setComponent(new ComponentName(context, DownloadService.class))
                 .putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
         int[] compactActions = new int[]{0, 1, 2};
+
         MediaSessionCompat mediaSession = new MediaSessionCompat(context, "Audinaut");
+        MediaSessionCompat.Token mediaToken = mediaSession.getSessionToken();
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
-        mediaSession.setMetadata(metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1).build());
+
+        mediaSession.setMetadata(metadataBuilder
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, getAlbumArt(context, song))
+                //.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, R.drawable.notification_logo)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.getArtist())
+                .build() );
+
         MediaStyle mediaStyle = new MediaStyle()
                 .setShowActionsInCompactView(compactActions)
                 .setShowCancelButton(true)
                 .setCancelButtonIntent(PendingIntent.getService(context, 0, cancelIntent, 0))
-                .setMediaSession(mediaSession.getSessionToken());
+                .setMediaSession(mediaToken);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_PLAYING_ID)
                 .setChannelId(CHANNEL_PLAYING_ID)
-                .setSmallIcon(R.drawable.stat_notify_playing)
                 .setContentTitle(song.getTitle())
                 .setContentText(song.getArtist())
                 .setSubText(song.getAlbum())
@@ -97,6 +106,7 @@ public final class Notifications {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setShowWhen(false)
                 .setLargeIcon(getAlbumArt(context, song))
+                .setSmallIcon(R.drawable.notification_logo)
                 .setStyle(mediaStyle)
                 .setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
         addActions(context, builder, playing);
