@@ -21,8 +21,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.activity.SettingsActivity;
 import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
