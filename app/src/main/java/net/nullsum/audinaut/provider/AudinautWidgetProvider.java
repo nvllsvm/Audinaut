@@ -245,6 +245,10 @@ public class AudinautWidgetProvider extends AppWidgetProvider {
             views.setImageViewResource(R.id.control_play, R.drawable.widget_media_start);
         }
 
+        // Set next/back button images
+        views.setImageViewResource(R.id.control_next, R.drawable.widget_media_forward);
+        views.setImageViewResource(R.id.control_previous, R.drawable.widget_media_backward);
+
         // Set the cover art
         try {
             boolean large = false;
