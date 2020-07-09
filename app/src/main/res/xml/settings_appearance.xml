@@ -3,7 +3,6 @@
     android:title="@string/settings.appearance_title">
 
     <ListPreference
-        android:defaultValue="light"
         android:entries="@array/themeNames"
         android:entryValues="@array/themeValues"
         android:key="theme"
