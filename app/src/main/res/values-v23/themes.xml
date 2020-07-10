@@ -134,6 +134,7 @@
     </style>
 
     <style name="Theme.Audinaut.Black" parent="Theme.Audinaut.Dark">
+        <item name="gradient">@drawable/black_gradient</item>
         <item name="actionModeBackground">@android:color/black</item>
         <item name="android:windowBackground">@android:color/black</item>
         <item name="colorPrimaryDark">@android:color/black</item>
