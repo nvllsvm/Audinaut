@@ -24,21 +24,30 @@ import net.nullsum.audinaut.service.DownloadService;
 import net.nullsum.audinaut.util.Constants;
 
 public class PlayActionReceiver extends BroadcastReceiver {
+    private Bundle lastdata = null;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (lastdata.equals(intent.getBundleExtra(Constants.TASKER_EXTRA_BUNDLE))) {
+            // nothing has changed; we can safely return
+            return;
+        }
+        updateValues(intent);
         if (intent.hasExtra(Constants.TASKER_EXTRA_BUNDLE)) {
-            Bundle data = intent.getBundleExtra(Constants.TASKER_EXTRA_BUNDLE);
-            Boolean startShuffled = data.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE);
+            Boolean startShuffled = lastdata.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE);
 
             Intent start = new Intent(context, DownloadService.class);
             start.setAction(DownloadService.START_PLAY);
             start.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, startShuffled);
-            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, data.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR));
-            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, data.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR));
-            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, data.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE));
-            start.putExtra(Constants.PREFERENCES_KEY_OFFLINE, data.getInt(Constants.PREFERENCES_KEY_OFFLINE));
+            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, lastdata.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR));
+            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, lastdata.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR));
+            start.putExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, lastdata.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE));
+            start.putExtra(Constants.PREFERENCES_KEY_OFFLINE, lastdata.getInt(Constants.PREFERENCES_KEY_OFFLINE));
             context.startService(start);
         }
+    }
+
+    private void updateValues(Intent intent) {
+        lastdata = intent.getBundleExtra(Constants.TASKER_EXTRA_BUNDLE);
     }
 }
