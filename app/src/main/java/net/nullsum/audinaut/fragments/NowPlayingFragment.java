@@ -17,7 +17,6 @@ package net.nullsum.audinaut.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -57,15 +56,12 @@ import net.nullsum.audinaut.util.MenuUtil;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
 import net.nullsum.audinaut.util.Util;
 import net.nullsum.audinaut.view.AutoRepeatButton;
-import net.nullsum.audinaut.view.FadeOutAnimation;
 import net.nullsum.audinaut.view.FastScroller;
 import net.nullsum.audinaut.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static net.nullsum.audinaut.domain.MusicDirectory.Entry;
 import static net.nullsum.audinaut.domain.PlayerState.COMPLETED;

@@ -56,7 +56,6 @@ import net.nullsum.audinaut.updates.Updater;
 import net.nullsum.audinaut.util.Constants;
 import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.SilentBackgroundTask;
-import net.nullsum.audinaut.util.UserUtil;
 import net.nullsum.audinaut.util.Util;
 
 import java.io.File;

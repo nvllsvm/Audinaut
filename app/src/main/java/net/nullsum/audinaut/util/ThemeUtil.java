@@ -19,11 +19,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.util.Log;
 
 import net.nullsum.audinaut.R;
-import net.nullsum.audinaut.activity.SettingsActivity;
-import net.nullsum.audinaut.activity.SubsonicFragmentActivity;
 
 public final class ThemeUtil {
     private static final String THEME_DARK = "dark";

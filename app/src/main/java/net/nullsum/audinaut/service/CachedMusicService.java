@@ -30,7 +30,6 @@ import net.nullsum.audinaut.domain.MusicFolder;
 import net.nullsum.audinaut.domain.Playlist;
 import net.nullsum.audinaut.domain.SearchCritera;
 import net.nullsum.audinaut.domain.SearchResult;
-import net.nullsum.audinaut.domain.User;
 import net.nullsum.audinaut.util.FileUtil;
 import net.nullsum.audinaut.util.ProgressListener;
 import net.nullsum.audinaut.util.SilentBackgroundTask;

@@ -17,12 +17,6 @@ package net.nullsum.audinaut.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import net.nullsum.audinaut.domain.User;
-import net.nullsum.audinaut.service.MusicServiceFactory;
 
 public final class UserUtil {
     private static String getCurrentUsername(Context context, int instance) {
