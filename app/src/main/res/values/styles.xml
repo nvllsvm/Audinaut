@@ -19,32 +19,6 @@
         <item name="background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 
-    <style name="NotificationButton.ExpandedBase">
-        <item name="android:padding">2dip</item>
-        <item name="background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:scaleType">fitCenter</item>
-    </style>
-
-    <style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
-        <item name="android:padding">10dip</item>
-    </style>
-
-    <style name="NotificationText.Title" parent="@android:style/TextAppearance.Material.Notification.Title" />
-
-    <style name="NotificationText.Content" parent="@android:style/TextAppearance.Material.Notification" />
-
-    <style name="NotificationLayoutDivider">
-        <item name="divider">@drawable/notification_divider</item>
-    </style>
-
-    <style name="NotificationDivider">
-        <item name="background">@drawable/notification_divider</item>
-    </style>
-
     <style name="MoreButton" parent="@style/BasicButton">
         <item name="android:paddingRight">2dp</item>
     </style>
