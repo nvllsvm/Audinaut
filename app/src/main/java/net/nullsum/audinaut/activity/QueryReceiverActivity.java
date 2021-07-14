@@ -65,10 +65,10 @@ public class QueryReceiverActivity extends AppCompatActivity {
             intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
             if (albumId.indexOf("ar-") == 0) {
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-                albumId = albumId.replace("ar-", "");
+                albumId = albumId.replaceFirst("ar-", "");
             } else if (albumId.indexOf("so-") == 0) {
                 intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
-                albumId = albumId.replace("so-", "");
+                albumId = albumId.replaceFirst("so-", "");
             }
             intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
             if (name != null) {
