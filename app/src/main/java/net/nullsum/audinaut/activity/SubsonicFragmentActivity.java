@@ -37,8 +37,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.sothree.slidinguppanel.PanelSlideListener;
+import com.sothree.slidinguppanel.PanelState;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import net.nullsum.audinaut.R;
 import net.nullsum.audinaut.domain.MusicDirectory;
@@ -68,7 +69,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
     private static boolean infoDialogDisplayed;
     private static boolean sessionInitialized = false;
     private SlidingUpPanelLayout slideUpPanel;
-    private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
+    private PanelSlideListener panelSlideListener;
     private boolean isPanelClosing = false;
     private boolean resuming = false;
     private NowPlayingFragment nowPlayingFragment;
@@ -167,7 +168,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
         }
 
         slideUpPanel = findViewById(R.id.slide_up_panel);
-        panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
+        panelSlideListener = new PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 Util.hideKeyboard(panel);
@@ -414,7 +415,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             drawerToggle.setDrawerIndicatorEnabled(false);
         }
 
-        if (savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
+        if (savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == PanelState.EXPANDED.hashCode()) {
             panelSlideListener.onPanelStateChanged(null, null, PanelState.EXPANDED);
         }
     }
@@ -533,12 +534,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
     @Override
     public void openNowPlaying() {
-        slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        slideUpPanel.setPanelState(PanelState.EXPANDED);
     }
 
     @Override
     public void closeNowPlaying() {
-        slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        slideUpPanel.setPanelState(PanelState.COLLAPSED);
         isPanelClosing = true;
     }
 
@@ -703,7 +704,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
             getImageLoader().loadImage(coverArtView, song, false, height, false);
 
             // We need to update it immediately since it won't update if updater is not running for it
-            if (nowPlayingFragment != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            if (nowPlayingFragment != null && slideUpPanel.getPanelState() == PanelState.COLLAPSED) {
                 nowPlayingFragment.onMetadataUpdate(song, fieldChange);
             }
         }
