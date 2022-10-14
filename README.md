@@ -1,4 +1,11 @@
 # Audinaut
+⚠ No longer maintained. 
+
+Although not a direct replacement, I've since moved onto syncing an Opus version
+of my entire library to my phone using [harmonize](https://github.com/nvllsvm/harmonize)
+and [Syncthing](https://syncthing.net/).
+
+--- 
 <img src="audinaut.png" align="left" width="200" hspace="10" vspace="10">
 
 A Subsonic client for Android.
